@@ -1,6 +1,8 @@
 (ns tictactoe.game-engine
   (:require [tictactoe.board :refer :all]))
 
+;;TODO - extract from game-engine
+
 (defn- in-range? [start end n]
   (and (>= n start) (< n end)))
 
