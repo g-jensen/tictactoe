@@ -1,14 +1,7 @@
 (ns tictactoe.core
-  (:require [clojure.string :as str]
-            [tictactoe.board :refer :all]))
-
-(defn board->str [board]
-  (->> (partition 3 board)
-       (map #(str/join " " %))
-       (str/join "\n")))
-
-(defn display-board [board]
-  (println (board->str board)))
+  (:require
+    [tictactoe.board :refer :all]
+    [tictactoe.ui :refer :all]))
 
 (defn in-range? [start end n]
   (and (>= n start) (< n end)))
