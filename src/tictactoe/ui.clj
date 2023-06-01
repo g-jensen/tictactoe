@@ -1,5 +1,6 @@
 (ns tictactoe.ui
-  (:require [clojure.string :as str]))
+  (:require [clojure.string :as str]
+            [tictactoe.game-engine :refer :all]))
 
 (defn board->str [board]
   (->> (partition 3 board)
@@ -8,3 +9,9 @@
 
 (defn display-board [board]
   (println (board->str board)))
+
+(defn display-winning-message [board]
+  (println (str (winner board) " has won!")))
+
+(defn get-user-move []
+  (Integer/parseInt (read-line)))

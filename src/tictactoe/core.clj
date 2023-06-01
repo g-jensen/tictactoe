@@ -4,12 +4,6 @@
     [tictactoe.ui :refer :all]
     [tictactoe.game-engine :refer :all]))
 
-(defn display-winning-message [board]
-  (println (str (winner board) " has won!")))
-
-(defn get-user-move []
-  (Integer/parseInt (read-line)))
-
 ;;TODO - test main
 (defn -main [& args]
   (loop [board empty-board]
