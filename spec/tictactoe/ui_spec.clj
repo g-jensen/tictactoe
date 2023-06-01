@@ -12,4 +12,12 @@
     (should= "_ _ _\n_ _ _\n_ _ _\n"
              (with-out-str (display-board empty-board)))
     (should= "x _ _\n_ _ _\n_ _ _\n"
-             (with-out-str (display-board first-move-board)))))
+             (with-out-str (display-board first-move-board))))
+
+  (it "displays the winning message"
+    (should= "x has won!\n" (with-out-str (display-winning-message
+                                        [\x \x \x \o \o \_ \_ \_ \_])))
+    (should= "o has won!\n" (with-out-str (display-winning-message
+                                            [\o \o \o \x \x \_ \x \_ \_])))
+    (should= "x has won!\n" (with-out-str (display-winning-message
+                                            [\o \o \_ \x \x \x \_ \_ \_])))))
