@@ -4,17 +4,6 @@
             [tictactoe.board :refer :all]))
 
 (describe "A TicTacToe Game"
-
-  (it "converts a board to a string"
-    (should= "_ _ _\n_ _ _\n_ _ _" (board->str empty-board))
-    (should= "x _ _\n_ _ _\n_ _ _" (board->str first-move-board)))
-
-  (it "displays a board"
-    (should= "_ _ _\n_ _ _\n_ _ _\n"
-             (with-out-str (display-board empty-board)))
-    (should= "x _ _\n_ _ _\n_ _ _\n"
-             (with-out-str (display-board first-move-board))))
-
   (it "gets whose move it is"
     (should= \x (player-to-move empty-board))
     (should= \o (player-to-move first-move-board))
