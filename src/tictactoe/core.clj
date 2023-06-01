@@ -1,8 +1,6 @@
 (ns tictactoe.core
-  (:require [clojure.string :as str]))
-
-(def empty-tile \_)
-(def empty-board (vec (repeat 9 empty-tile)))
+  (:require [clojure.string :as str]
+            [tictactoe.board :refer :all]))
 
 (defn board->str [board]
   (->> (partition 3 board)

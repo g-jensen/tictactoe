@@ -1,13 +1,9 @@
 (ns tictactoe.core-spec
   (:require [speclj.core :refer :all]
-            [tictactoe.core :refer :all]))
-
-(def first-move-board (vec (cons \x (repeat 8 empty-tile))))
+            [tictactoe.core :refer :all]
+            [tictactoe.board :refer :all]))
 
 (describe "A TicTacToe Game"
-
-  (it "initializes an empty 3x3 board"
-    (should= (repeat 9 empty-tile) empty-board))
 
   (it "converts a board to a string"
     (should= "_ _ _\n_ _ _\n_ _ _" (board->str empty-board))
