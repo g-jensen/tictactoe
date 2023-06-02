@@ -1,7 +1,8 @@
 (ns tictactoe.ui-spec
   (:require [speclj.core :refer :all]
             [tictactoe.board :refer :all]
-            [tictactoe.ui :refer :all]))
+            [tictactoe.ui :refer :all]
+            [tictactoe.game-engine :refer :all]))
 
 (describe "A TicTacToe Console UI"
   (it "converts a board to a string"
@@ -20,4 +21,14 @@
     (should= "o has won!\n" (with-out-str (display-winning-message
                                             [\o \o \o \x \x \_ \x \_ \_])))
     (should= "x has won!\n" (with-out-str (display-winning-message
-                                            [\o \o \_ \x \x \x \_ \_ \_])))))
+                                            [\o \o \_ \x \x \x \_ \_ \_])))
+    (should= "tie!\n" (with-out-str (display-winning-message
+                                    [\o \x \x \x \o \o \o \x \x]))))
+
+  (it "displays the game-modes"
+    (should= "1: gamemode1\n2: gamemode2\n"
+             (with-out-str (display-game-modes
+                             [{:name "gamemode1"}
+                              {:name "gamemode2"}])))
+    (should= "1: Versus Player\n2: Versus Computer\n"
+             (with-out-str (display-game-modes game-modes)))))
