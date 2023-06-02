@@ -3,6 +3,9 @@
 
 ;;TODO - extract from game-engine
 
+(def game-modes [{:name "Versus Player"}
+                 {:name "Versus Computer"}])
+
 (defn- in-range? [start end n]
   (and (>= n start) (< n end)))
 
@@ -51,6 +54,12 @@
   (or (horizontal-win? board)
       (vertical-win? board)
       (diagonal-win? board)))
+
+(defn tie? [board]
+  (and (not (win? board)) (not (some #(= % empty-tile) board))))
+
+(defn game-over? [board]
+  (or (win? board) (tie? board)))
 
 (defn winner [board]
   (if (= \x (player-to-move board)) \o \x))
