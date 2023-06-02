@@ -2,7 +2,8 @@
   (:require [speclj.core :refer :all]
             [tictactoe.board :refer :all]
             [tictactoe.ui :refer :all]
-            [tictactoe.game-engine :refer :all]))
+            [tictactoe.move :refer :all]
+            [tictactoe.game :refer :all]))
 
 (describe "A TicTacToe Console UI"
   (it "converts a board to a string"

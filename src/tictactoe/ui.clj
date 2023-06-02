@@ -1,6 +1,6 @@
 (ns tictactoe.ui
   (:require [clojure.string :as str]
-            [tictactoe.game-engine :refer :all]))
+            [tictactoe.game :refer :all]))
 
 (defn board->str [board]
   (->> (partition 3 board)
