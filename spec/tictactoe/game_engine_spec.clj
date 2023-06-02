@@ -44,4 +44,10 @@
     (should (win? [\_ \x \_ \_ \x \_ \_ \x \_]))
     (should (win? [\_ \_ \x \_ \_ \x \_ \_ \x]))
     (should (win? [\x \_ \_ \_ \x \_ \_ \_ \x]))
-    (should (win? [\_ \_ \x \_ \x \_ \x \_ \_]))))
+    (should (win? [\_ \_ \x \_ \x \_ \x \_ \_])))
+
+  (it "checks if there is a tie"
+    (should-not (tie? empty-board))
+    (should (tie? [\o \x \x \x \o \o \o \x \x]))
+    (should (tie? [\o \x \o \o \x \x \x \o \x]))
+    (should-not (tie? [\x \x \x \o \o \_ \_ \_ \_]))))
