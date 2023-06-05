@@ -1,6 +1,7 @@
 (ns tictactoe.ui
   (:require [clojure.string :as str]
-            [tictactoe.game :refer :all]))
+            [tictactoe.game-state :refer :all]
+            [tictactoe.move :refer :all]))
 
 (defn board->str [board]
   (->> (partition 3 board)
@@ -23,3 +24,6 @@
 (defn display-game-modes-prompt [game-modes]
   (println "Pick a game-mode:")
   (display-game-modes game-modes))
+
+(defn prompt-game-mode [game-modes]
+  (:mode (get game-modes (dec (Integer/parseInt (read-line))))))

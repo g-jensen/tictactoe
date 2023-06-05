@@ -1,7 +1,7 @@
-(ns tictactoe.game-spec
+(ns tictactoe.game-state-spec
   (:require [speclj.core :refer :all]
             [tictactoe.board :refer :all]
-            [tictactoe.game :refer :all]))
+            [tictactoe.game-state :refer :all]))
 
 (describe "A TicTacToe Game State"
   (it "gets the rows of a board"
