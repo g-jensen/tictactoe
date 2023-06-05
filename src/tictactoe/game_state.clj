@@ -1,27 +1,5 @@
-(ns tictactoe.game
-  (:require [tictactoe.board :refer :all]
-            [tictactoe.move :refer :all]))
-
-(defprotocol GameMode
-  (next-board [this board]))
-
-(deftype PvPGame []
-  GameMode
-  (next-board [this board]
-    (play-move board (get-user-move))))
-
-(deftype PvCGame []
-  GameMode
-  (next-board [this board]
-    (if (= \x (player-to-move board))
-      (play-move board (get-computer-move board))
-      (play-move board (get-user-move)))))
-
-(def game-modes [{:name "Versus Player" :mode (->PvPGame)}
-                 {:name "Versus Unbeatable Computer" :mode (->PvCGame)}])
-
-(defn prompt-game-mode [game-modes]
-  (:mode (get game-modes (dec (Integer/parseInt (read-line))))))
+(ns tictactoe.game-state
+  (:require [tictactoe.board :refer :all]))
 
 (defn winning-line? [seq]
   (and (not= empty-tile (first seq))
@@ -51,9 +29,6 @@
   (or (horizontal-win? board)
       (vertical-win? board)
       (diagonal-win? board)))
-
-(defn winner [board]
-  (if (= \x (player-to-move board)) \o \x))
 
 (defn tie? [board]
   (and (not (win? board)) (not (some #(= % empty-tile) board))))

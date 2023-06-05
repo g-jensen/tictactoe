@@ -3,7 +3,8 @@
             [tictactoe.board :refer :all]
             [tictactoe.ui :refer :all]
             [tictactoe.move :refer :all]
-            [tictactoe.game :refer :all]))
+            [tictactoe.game-state :refer :all]
+            [tictactoe.game-mode :refer :all]))
 
 (describe "A TicTacToe Console UI"
   (it "converts a board to a string"
@@ -16,7 +17,7 @@
     (should= "x _ _\n_ _ _\n_ _ _\n"
              (with-out-str (display-board first-move-board))))
 
-  (it "displays the winning message"
+  (it "displays the game over message"
     (should= "x has won!\n" (with-out-str (display-game-over-message
                                         [\x \x \x \o \o \_ \_ \_ \_])))
     (should= "o has won!\n" (with-out-str (display-game-over-message
