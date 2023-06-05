@@ -19,6 +19,3 @@
   (doall
     (for [i (range 0 (count game-modes))]
       (println (str (inc i) ": " (:name (nth game-modes i)))))))
-
-(defn get-user-move []
-  (Integer/parseInt (read-line)))

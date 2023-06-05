@@ -22,3 +22,6 @@
   (if-not (move-valid? board index)
     board
     (assoc board index (player-to-move board))))
+
+(defn get-user-move []
+  (Integer/parseInt (read-line)))
