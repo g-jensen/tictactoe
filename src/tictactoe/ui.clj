@@ -19,3 +19,7 @@
   (doall
     (for [i (range 0 (count game-modes))]
       (println (str (inc i) ": " (:name (nth game-modes i)))))))
+
+(defn display-game-modes-prompt [game-modes]
+  (println "Pick a game mode:")
+  (display-game-modes game-modes))
