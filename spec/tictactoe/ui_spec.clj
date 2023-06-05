@@ -17,13 +17,13 @@
              (with-out-str (display-board first-move-board))))
 
   (it "displays the winning message"
-    (should= "x has won!\n" (with-out-str (display-winning-message
+    (should= "x has won!\n" (with-out-str (display-game-over-message
                                         [\x \x \x \o \o \_ \_ \_ \_])))
-    (should= "o has won!\n" (with-out-str (display-winning-message
+    (should= "o has won!\n" (with-out-str (display-game-over-message
                                             [\o \o \o \x \x \_ \x \_ \_])))
-    (should= "x has won!\n" (with-out-str (display-winning-message
+    (should= "x has won!\n" (with-out-str (display-game-over-message
                                             [\o \o \_ \x \x \x \_ \_ \_])))
-    (should= "tie!\n" (with-out-str (display-winning-message
+    (should= "tie!\n" (with-out-str (display-game-over-message
                                     [\o \x \x \x \o \o \o \x \x]))))
 
   (it "displays the game-modes"
@@ -31,5 +31,5 @@
              (with-out-str (display-game-modes
                              [{:name "gamemode1"}
                               {:name "gamemode2"}])))
-    (should= "1: Versus Player\n2: Versus Computer\n"
+    (should= "1: Versus Player\n2: Versus Unbeatable Computer\n"
              (with-out-str (display-game-modes game-modes)))))

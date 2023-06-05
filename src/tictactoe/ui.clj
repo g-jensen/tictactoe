@@ -10,7 +10,7 @@
 (defn display-board [board]
   (println (board->str board)))
 
-(defn display-winning-message [board]
+(defn display-game-over-message [board]
   (if (win? board)
     (println (str (winner board) " has won!"))
     (println "tie!")))
