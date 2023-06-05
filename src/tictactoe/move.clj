@@ -25,3 +25,6 @@
 
 (defn get-user-move []
   (Integer/parseInt (read-line)))
+
+(defn get-computer-move [board]
+  (first (filter #(= empty-tile (nth board %)) (range 0 9))))
