@@ -32,4 +32,8 @@
                              [{:name "gamemode1"}
                               {:name "gamemode2"}])))
     (should= "1: Versus Player\n2: Versus Unbeatable Computer\n"
-             (with-out-str (display-game-modes game-modes)))))
+             (with-out-str (display-game-modes game-modes))))
+
+  (it "displays the game-modes prompt"
+    (should= (str "Pick a game-mode:\n" (with-out-str (display-game-modes game-modes)))
+             (with-out-str (display-game-modes-prompt game-modes)))))
