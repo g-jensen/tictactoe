@@ -1,8 +1,8 @@
 (ns tictactoe.game-state
-  (:require [tictactoe.board :refer :all]))
+  (:require [tictactoe.board :as board]))
 
 (defn winning-line? [seq]
-  (and (not= empty-tile (first seq))
+  (and (not= board/empty-tile (first seq))
        (apply = seq)))
 
 (defn rows [board]
@@ -31,7 +31,7 @@
       (diagonal-win? board)))
 
 (defn tie? [board]
-  (and (not (win? board)) (not (some #(= % empty-tile) board))))
+  (and (not (win? board)) (not (some #(= % board/empty-tile) board))))
 
 (defn game-over? [board]
   (or (win? board) (tie? board)))
