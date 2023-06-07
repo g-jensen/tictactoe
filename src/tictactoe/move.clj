@@ -28,20 +28,10 @@
 (defn empty-indices [board]
   (filter #(= board/empty-tile (nth board %)) (range 0 9)))
 
-(defn winner [board]
-  (if (= \x (player-to-move board)) \o \x))
-
-;; TODO - move to game-state
-(defn x-wins? [board]
-  (and (game-state/win? board) (= \x (winner board))))
-
-(defn o-wins? [board]
-  (and (game-state/win? board) (= \o (winner board))))
-
 (defn score-board [board]
   (cond
-    (x-wins? board) 10
-    (o-wins? board) -10
+    (game-state/x-wins? board) 10
+    (game-state/o-wins? board) -10
     (game-state/tie? board) 0))
 
 (defn move-weight [board index]

@@ -1,7 +1,6 @@
 (ns tictactoe.ui
   (:require [clojure.string :as str]
-            [tictactoe.game-state :as game-state]
-            [tictactoe.move :as move]))
+            [tictactoe.game-state :as game-state]))
 
 (defn board->str [board]
   (->> (partition 3 board)
@@ -13,7 +12,7 @@
 
 (defn display-game-over-message [board]
   (if (game-state/win? board)
-    (println (str (move/winner board) " has won!"))
+    (println (str (game-state/winner board) " has won!"))
     (println "tie!")))
 
 (defn display-game-modes [game-modes]

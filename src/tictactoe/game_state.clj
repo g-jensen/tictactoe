@@ -30,6 +30,19 @@
       (vertical-win? board)
       (diagonal-win? board)))
 
+;; TODO - fix duplicate tile-count function for here and in move.clj
+(defn tile-count [board tile]
+  (count (filter #(= tile %) board)))
+
+(defn winner [board]
+  (max-key #(tile-count board %) \x \o))
+
+(defn x-wins? [board]
+  (and (win? board) (= \x (winner board))))
+
+(defn o-wins? [board]
+  (and (win? board) (= \o (winner board))))
+
 (defn tie? [board]
   (and (not (win? board)) (not (some #(= % board/empty-tile) board))))
 
