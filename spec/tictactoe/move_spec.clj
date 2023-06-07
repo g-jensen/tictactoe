@@ -2,6 +2,7 @@
   (:require [speclj.core :refer :all]
             [tictactoe.move :refer :all]
             [tictactoe.board :as board]
+            [tictactoe.board-spec :as board-spec]
             [tictactoe.game-state :as game-state]))
 
 (defn unbeatable-computer? [board]
@@ -14,21 +15,21 @@
 (describe "A TicTacToe Mover"
   (it "gets whose move it is"
     (should= \x (player-to-move board/empty-board))
-    (should= \o (player-to-move board/first-move-board))
+    (should= \o (player-to-move board-spec/first-move-board))
     (should= \x (player-to-move [\x \o \_ \_ \_ \_ \_ \_ \_])))
 
   (it "checks if a move is valid"
     (should (move-valid? board/empty-board 0))
     (should-not (move-valid? board/empty-board -1))
     (should-not (move-valid? board/empty-board 9))
-    (should-not (move-valid? board/first-move-board 0)))
+    (should-not (move-valid? board-spec/first-move-board 0)))
 
   (it "plays a move on a board"
     (should= board/empty-board (play-move board/empty-board -1))
     (should= board/empty-board (play-move board/empty-board 9))
-    (should= board/first-move-board (play-move board/first-move-board 0))
-    (should= board/first-move-board (play-move board/empty-board 0))
-    (should= [\x \o \_ \_ \_ \_ \_ \_ \_] (play-move board/first-move-board 1)))
+    (should= board-spec/first-move-board (play-move board-spec/first-move-board 0))
+    (should= board-spec/first-move-board (play-move board/empty-board 0))
+    (should= [\x \o \_ \_ \_ \_ \_ \_ \_] (play-move board-spec/first-move-board 1)))
 
   (for [board [[\o \o \o \_ \_] [] ]]
     (it (str "has a computer that always wins when it can " board)
