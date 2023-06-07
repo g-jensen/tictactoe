@@ -4,6 +4,12 @@
             [tictactoe.board :as board]))
 
 (describe "A TicTacToe Game State"
+
+  (it "checks if a line is a winning line"
+    (should-not (winning-line? [\_ \_ \_]))
+    (should (winning-line? [\x \x \x]))
+    (should-not (winning-line? [\x \_ \_])))
+
   (it "gets the rows of a board"
     (should= [[:a :b :c] [:d :e :f] [:g :h :i]]
              (rows [:a :b :c :d :e :f :g :h :i])))
@@ -27,6 +33,18 @@
     (should (win? [\_ \_ \x \_ \_ \x \_ \_ \x]))
     (should (win? [\x \_ \_ \_ \x \_ \_ \_ \x]))
     (should (win? [\_ \_ \x \_ \x \_ \x \_ \_])))
+
+  (it "counts the amount of times a tile is on a board"
+    (should= 9 (tile-count board/empty-board board/empty-tile))
+    (should= 0 (tile-count board/empty-board \x))
+    (should= 1 (tile-count [\x \_ \_ \_ \_ \_ \_ \_ \_] \x))
+    (should= 3 (tile-count [\x \o \o \_ \o \_ \_ \_ \_] \o)))
+
+  (it "gets who won a game"
+    (should= \x (winner [\x \x \x \o \o \_ \_ \_ \_]))
+    (should= \o (winner [\o \o \o \x \x \_ \x \_ \_]))
+    (should= \o (winner [\x \x \_ \x \_ \_ \o \o \o]))
+    (should= \x (winner [\o \o \_ \x \x \x \_ \_ \_])))
 
   (it "checks if there is a tie"
     (should-not (tie? board/empty-board))
