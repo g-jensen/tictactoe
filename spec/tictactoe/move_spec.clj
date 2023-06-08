@@ -2,15 +2,7 @@
   (:require [speclj.core :refer :all]
             [tictactoe.move :refer :all]
             [tictactoe.board :as board]
-            [tictactoe.board-spec :as board-spec]
-            [tictactoe.game-state :as game-state]))
-
-(defn unbeatable-computer? [board]
-  ;(should-not (o-wins? board))
-  (cond
-    (game-state/game-over? board) nil
-    (=  \x (player-to-move board)) (unbeatable-computer? (play-move board (get-computer-move board)))
-    :else (doall (map #(unbeatable-computer? (play-move board %)) (empty-indices board)))))
+            [tictactoe.board-spec :as board-spec]))
 
 (describe "A TicTacToe Mover"
   (it "gets whose move it is"
@@ -31,7 +23,27 @@
     (should= board-spec/first-move-board (play-move board/empty-board 0))
     (should= [\x \o \_ \_ \_ \_ \_ \_ \_] (play-move board-spec/first-move-board 1)))
 
-  (for [board [[\o \o \o \_ \_] [] ]]
-    (it (str "has a computer that always wins when it can " board)
-    #_(unbeatable-computer? empty-board)
-    (should true)#_(should (unbeatable-computer? board)))))
+  ;;TODO - test get-user-move
+  (it "gets the user's next move"
+    ())
+
+  (it "weighs the value of a move"
+    (should= 10 (move-weight [\_ \x \x \o \o \_ \_ \_ \_] 0))
+    (should= -10 (move-weight [\_ \o \o \x \x \_ \x \_ \_] 0))
+    (should= 0 (move-weight [\_ \o \x \x \o \o \o \x \x] 0))
+    (should= 10 (move-weight [\_ \_ \_ \_ \_ \_ \_ \_ \x] 7))
+    (should= 0 (move-weight [\_ \_ \_ \_ \_ \_ \_ \_ \x] 4))
+    (should= 10 (move-weight [\_ \_ \_ \_ \_ \_ \_ \o \x] 4))
+    (should= -10 (move-weight [\_ \o \o \_ \_ \x \x \_ \x] 0))
+    (should= 0 (move-weight board/empty-board 8)))
+
+  (context "An Unbeatable Computer"
+    (it "picks a corner given an empty board"
+      (should= 8 (get-computer-move board/empty-board)))
+    (it "wins given the chance"
+      (should= 6 (get-computer-move [\_ \_ \_ \_ \o \o \_ \x \x]))
+      (should= 2 (get-computer-move [\_ \_ \_ \_ \o \x \_ \o \x]))
+      (should= 0 (get-computer-move [\_ \_ \_ \o \x \_ \o \_ \x]))
+      (should= 3 (get-computer-move [\_ \_ \_ \_ \x \x \x \o \_])))
+    (it "blocks the other player from winning"
+      (should= 2 (get-computer-move [\_ \_ \_ \_ \o \_ \o \x \x])))))
