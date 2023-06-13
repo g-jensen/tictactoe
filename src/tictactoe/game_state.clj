@@ -1,8 +1,8 @@
 (ns tictactoe.game-state
-  (:require [tictactoe.board :as board]))
+  (:require [tictactoe.utils :as utils]))
 
 (defn winning-line? [seq]
-  (and (not= board/empty-tile (first seq))
+  (and (not= utils/empty-tile (first seq))
        (apply = seq)))
 
 (defn rows [board]
@@ -30,12 +30,10 @@
       (vertical-win? board)
       (diagonal-win? board)))
 
-;; TODO - fix duplicate tile-count function for here and in move.clj
-(defn tile-count [board tile]
-  (count (filter #(= tile %) board)))
-
 (defn winner [board]
-  (max-key #(tile-count board %) \x \o))
+  (if (= (utils/tile-count board \x) (utils/tile-count board \o))
+    \o
+    \x))
 
 (defn x-wins? [board]
   (and (win? board) (= \x (winner board))))
@@ -44,7 +42,8 @@
   (and (win? board) (= \o (winner board))))
 
 (defn tie? [board]
-  (and (not (win? board)) (not (some #(= % board/empty-tile) board))))
+  (and (not (win? board))
+       (not (some #(= % utils/empty-tile) board))))
 
 (defn game-over? [board]
   (or (win? board) (tie? board)))

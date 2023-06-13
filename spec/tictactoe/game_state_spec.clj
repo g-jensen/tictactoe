@@ -1,7 +1,7 @@
 (ns tictactoe.game-state-spec
   (:require [speclj.core :refer :all]
             [tictactoe.game-state :refer :all]
-            [tictactoe.board :as board]))
+            [tictactoe.utils :as utils]))
 
 (describe "A TicTacToe Game State"
 
@@ -23,7 +23,7 @@
              (diagonals [:a :b :c :d :e :f :g :h :i])))
 
   (it "checks if a player has won"
-    (should-not (win? board/empty-board))
+    (should-not (win? utils/empty-board))
     (should (win? [\x \x \x \_ \_ \_ \_ \_ \_]))
     (should (win? [\_ \_ \_ \x \x \x \_ \_ \_]))
     (should (win? [\_ \_ \_ \_ \_ \_ \x \x \x]))
@@ -34,12 +34,6 @@
     (should (win? [\x \_ \_ \_ \x \_ \_ \_ \x]))
     (should (win? [\_ \_ \x \_ \x \_ \x \_ \_])))
 
-  (it "counts the amount of times a tile is on a board"
-    (should= 9 (tile-count board/empty-board board/empty-tile))
-    (should= 0 (tile-count board/empty-board \x))
-    (should= 1 (tile-count [\x \_ \_ \_ \_ \_ \_ \_ \_] \x))
-    (should= 3 (tile-count [\x \o \o \_ \o \_ \_ \_ \_] \o)))
-
   (it "gets who won a game"
     (should= \x (winner [\x \x \x \o \o \_ \_ \_ \_]))
     (should= \o (winner [\o \o \o \x \x \_ \x \_ \_]))
@@ -47,7 +41,7 @@
     (should= \x (winner [\o \o \_ \x \x \x \_ \_ \_])))
 
   (it "checks if there is a tie"
-    (should-not (tie? board/empty-board))
+    (should-not (tie? utils/empty-board))
     (should (tie? [\o \x \x \x \o \o \o \x \x]))
     (should (tie? [\o \x \o \o \x \x \x \o \x]))
     (should-not (tie? [\x \x \x \o \o \_ \_ \_ \_]))))
