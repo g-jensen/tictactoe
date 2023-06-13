@@ -1,4 +1,5 @@
 (ns tictactoe.core
+  (:gen-class)
   (:require
     [tictactoe.ui :as ui]
     [tictactoe.game-state :as game-state]
