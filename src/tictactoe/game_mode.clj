@@ -1,20 +1,25 @@
 (ns tictactoe.game-mode
-  (:require [tictactoe.move :as move]))
+  (:require [tictactoe.move :as move]
+            [tictactoe.utils :as utils]))
 
 (defprotocol GameMode
+  (initial-board [this])
   (next-board [this board]))
 
-(deftype PvPGame []
+(defrecord PvPGame []
   GameMode
+  (initial-board [this]
+    utils/empty-board)
   (next-board [this board]
     (move/play-move board (move/get-user-move))))
 
-(deftype PvCGame []
+(defrecord PvCGame [player-character]
   GameMode
+  (initial-board [this]
+    (if (= player-character \x)
+      utils/empty-board
+      (move/play-move utils/empty-board (move/get-computer-move utils/empty-board))))
   (next-board [this board]
-    (if (= \x (move/player-to-move board))
-      (move/play-move board (move/get-computer-move board))
-      (move/play-move board (move/get-user-move)))))
-
-(def game-modes [{:name "Versus Player" :mode (->PvPGame)}
-                 {:name "Versus Unbeatable Computer" :mode (->PvCGame)}])
+    (if (= player-character (move/player-to-move board))
+      (move/play-move board (move/get-user-move))
+      (move/play-move board (move/get-computer-move board)))))
