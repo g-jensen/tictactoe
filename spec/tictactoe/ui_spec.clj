@@ -1,20 +1,20 @@
 (ns tictactoe.ui-spec
   (:require [speclj.core :refer :all]
             [tictactoe.ui :refer :all]
-            [tictactoe.board :as board]
-            [tictactoe.board-spec :as board-spec]
-            [tictactoe.game-mode :as game-mode]))
+            [tictactoe.utils :as utils]
+            [tictactoe.utils-spec :as utils-spec])
+  (:import (tictactoe.game_mode PvPGame PvCGame)))
 
 (describe "A TicTacToe Console UI"
-  (it "converts a board to a string"
-    (should= "_ _ _\n_ _ _\n_ _ _" (board->str board/empty-board))
-    (should= "x _ _\n_ _ _\n_ _ _" (board->str board-spec/first-move-board)))
+  (it "displays a guide"
+    (should= "Pick a tile 1-9\n"
+             (with-out-str (display-guide))))
 
   (it "displays a board"
-    (should= "_ _ _\n_ _ _\n_ _ _\n"
-             (with-out-str (display-board board/empty-board)))
-    (should= "x _ _\n_ _ _\n_ _ _\n"
-             (with-out-str (display-board board-spec/first-move-board))))
+    (should= "_ _ _\n_ _ _\n_ _ _\n\n"
+             (with-out-str (display-board utils/empty-board)))
+    (should= "x _ _\n_ _ _\n_ _ _\n\n"
+             (with-out-str (display-board utils-spec/first-move-board))))
 
   (it "displays the game over message"
     (should= "x has won!\n" (with-out-str (display-game-over-message
@@ -26,14 +26,40 @@
     (should= "tie!\n" (with-out-str (display-game-over-message
                                     [\o \x \x \x \o \o \o \x \x]))))
 
-  (it "displays the game-modes"
-    (should= "1: game-mode1\n2: game-mode2\n"
-             (with-out-str (display-game-modes
-                             [{:name "game-mode1"}
-                              {:name "game-mode2"}])))
-    (should= "1: Versus Player\n2: Versus Unbeatable Computer\n"
-             (with-out-str (display-game-modes game-mode/game-modes))))
+  (context "Menu Navigator"
+    (it "displays the options of a menu"
+      (should= "1: Versus Player\n2: Versus Computer\n"
+               (with-out-str (display-options (:options game-mode-menu))))
+      (should= "1: Start as X\n2: Start as O\n"
+               (with-out-str (display-options (:options (get (:options game-mode-menu) 1))))))
 
-  (it "displays the game-modes prompt"
-    (should= (str "Pick a game-mode:\n" (with-out-str (display-game-modes game-mode/game-modes)))
-             (with-out-str (display-game-modes-prompt game-mode/game-modes)))))
+    (with-stubs)
+    (it "chooses an option from a menu"
+      (with-redefs [println (stub :println {:return 0})]
+
+        (with-redefs [read-line (stub :read-line {:return "1"})]
+          (should= (first (:options game-mode-menu))
+                   (choose-option game-mode-menu))
+          (should= (first (:options (second (:options game-mode-menu))))
+                   (choose-option (second (:options game-mode-menu))))
+          (should-have-invoked :read-line))
+
+        (with-redefs [read-line (stub :read-line {:return "2"})]
+          (should= (second (:options game-mode-menu))
+                   (choose-option game-mode-menu))
+          (should= (second (:options (second (:options game-mode-menu))))
+                   (choose-option (second (:options game-mode-menu))))
+          (should-have-invoked :read-line))
+        (should-have-invoked :println)))
+
+    (it "evaluates a menu"
+      (with-redefs [println (stub :println {:return 0})]
+
+        (with-redefs [read-line (stub :read-line {:return "1"})]
+          (should-be-a PvPGame (evaluate-menu game-mode-menu))
+          (should-have-invoked :read-line))
+
+        (with-redefs [read-line (stub :read-line {:return "2"})]
+          (should-be-a PvCGame (evaluate-menu game-mode-menu))
+          (should-have-invoked :read-line))
+        (should-have-invoked :println)))))

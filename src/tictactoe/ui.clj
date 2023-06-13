@@ -1,28 +1,50 @@
 (ns tictactoe.ui
-  (:require [clojure.string :as str]
-            [tictactoe.game-state :as game-state]))
+  (:require [tictactoe.utils :as utils]
+            [tictactoe.game-state :as game-state]
+            [tictactoe.game-mode :as game-mode]))
 
-(defn board->str [board]
-  (->> (partition 3 board)
-       (map #(str/join " " %))
-       (str/join "\n")))
+(defn display-guide []
+  (println "Pick a tile 1-9"))
 
 (defn display-board [board]
-  (println (board->str board)))
+  (println (utils/board->str board))
+  (println))
 
 (defn display-game-over-message [board]
   (if (game-state/win? board)
     (println (str (game-state/winner board) " has won!"))
     (println "tie!")))
 
-(defn display-game-modes [game-modes]
-  (doall
-    (for [i (range 0 (count game-modes))]
-      (println (str (inc i) ": " (:name (nth game-modes i)))))))
+(def game-mode-menu {:name "TicTacToe Game\nPick a game-mode:"
+                     :options [{:name "Versus Player"
+                                :options []
+                                :value (game-mode/->PvPGame)}
+                               {:name "Versus Computer"
+                                :options [{:name "Start as X"
+                                           :options []
+                                           :value (game-mode/->PvCGame \x)}
+                                          {:name "Start as O"
+                                           :options []
+                                           :value (game-mode/->PvCGame \o)}]}]})
 
-(defn display-game-modes-prompt [game-modes]
-  (println "Pick a game-mode:")
-  (display-game-modes game-modes))
 
-(defn prompt-game-mode [game-modes]
-  (:mode (get game-modes (dec (Integer/parseInt (read-line))))))
+
+(defn display-options [options]
+  (doall (map #(println (str (inc %) ": " (:name (get options %))))
+              (range 0 (count options)))))
+
+(defn choose-option [menu]
+  (loop []
+    (println (:name menu))
+    (display-options (:options menu))
+    (let [input (read-line)]
+      (if (utils/input-valid? input (:options menu))
+        (get (:options menu) (dec (Integer/parseInt input)))
+        (recur)))))
+
+(defn evaluate-menu [menu]
+  (loop [menu menu]
+    (let [value (get menu :value)]
+      (if-not (nil? value)
+        value
+        (recur (choose-option menu))))))
