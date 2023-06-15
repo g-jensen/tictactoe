@@ -40,7 +40,18 @@
 
 (def move-weight (memoize move-weight))
 
-(defn get-computer-move [board]
+(defmulti get-computer-move (fn [difficulty board] difficulty))
+(defmethod get-computer-move :hard [_ board]
   (if (= \x (player-to-move board))
     (apply max-key #(move-weight board %) (utils/empty-indices board))
     (apply min-key #(move-weight board %) (utils/empty-indices board))))
+
+(defmethod get-computer-move :medium [_ board]
+  (if (>= (rand) 0.7)
+    (first (utils/empty-indices board))
+    (get-computer-move :hard board)))
+
+(defmethod get-computer-move :easy [_ board]
+  (if (>= (rand) 0.2)
+    (first (utils/empty-indices board))
+    (get-computer-move :hard board)))
