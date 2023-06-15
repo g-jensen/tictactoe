@@ -15,17 +15,26 @@
     (println (str (game-state/winner board) " has won!"))
     (println "tie!")))
 
-(def game-mode-menu {:name "TicTacToe Game\nPick a game-mode:"
-                     :options [{:name "Versus Player"
-                                :options []
-                                :value (game-mode/->PvPGame)}
-                               {:name "Versus Computer"
-                                :options [{:name "Start as X"
-                                           :options []
-                                           :value (game-mode/->PvCGame \x)}
-                                          {:name "Start as O"
-                                           :options []
-                                           :value (game-mode/->PvCGame \o)}]}]})
+(def character-picker-options
+  [{:name "Start as X"
+    :options []
+    :value (game-mode/->PvCGame \x)}
+   {:name "Start as O"
+    :options []
+    :value (game-mode/->PvCGame \o)}])
+
+(def game-mode-menu
+  {:name "TicTacToe Game\nPick a game-mode:"
+     :options [{:name "Versus Player"
+                :options []
+                :value (game-mode/->PvPGame)}
+               {:name "Versus Computer"
+                :options [{:name "Easy"
+                           :options character-picker-options}
+                          {:name "Medium"
+                           :options character-picker-options}
+                          {:name "Hard"
+                           :options character-picker-options}]}]})
 
 
 

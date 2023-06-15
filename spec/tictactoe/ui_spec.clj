@@ -30,7 +30,7 @@
     (it "displays the options of a menu"
       (should= "1: Versus Player\n2: Versus Computer\n"
                (with-out-str (display-options (:options game-mode-menu))))
-      (should= "1: Start as X\n2: Start as O\n"
+      (should= "1: Easy\n2: Medium\n3: Hard\n"
                (with-out-str (display-options (:options (get (:options game-mode-menu) 1))))))
 
     (with-stubs)
