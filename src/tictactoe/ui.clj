@@ -23,20 +23,24 @@
     :options []
     :value (game-mode/->PvCGame \o difficulty)}])
 
+(def versus-options
+   [{:name "Versus Player"
+     :options []
+     :value (game-mode/->PvPGame)}
+    {:name "Versus Computer"
+     :options [{:name "Easy"
+                :options (character-picker-options :easy)}
+               {:name "Medium"
+                :options (character-picker-options :medium)}
+               {:name "Hard"
+                :options (character-picker-options :hard)}]}])
+
 (def game-mode-menu
-  {:name "TicTacToe Game\nPick a game-mode:"
-     :options [{:name "Versus Player"
-                :options []
-                :value (game-mode/->PvPGame)}
-               {:name "Versus Computer"
-                :options [{:name "Easy"
-                           :options (character-picker-options :easy)}
-                          {:name "Medium"
-                           :options (character-picker-options :medium)}
-                          {:name "Hard"
-                           :options (character-picker-options :hard)}]}]})
-
-
+  {:name "TicTacToe Game\nPick a board size:"
+   :options [{:name "3x3 board"
+              :options versus-options}
+             {:name "4x4 board"
+              :options versus-options}]})
 
 (defn display-options [options]
   (doall (map #(println (str (inc %) ": " (:name (get options %))))

@@ -28,9 +28,9 @@
 
   (context "Menu Navigator"
     (it "displays the options of a menu"
-      (should= "1: Versus Player\n2: Versus Computer\n"
+      (should= "1: 3x3 board\n2: 4x4 board\n"
                (with-out-str (display-options (:options game-mode-menu))))
-      (should= "1: Easy\n2: Medium\n3: Hard\n"
+      (should= "1: Versus Player\n2: Versus Computer\n"
                (with-out-str (display-options (:options (get (:options game-mode-menu) 1))))))
 
     (with-stubs)
