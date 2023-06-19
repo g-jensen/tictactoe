@@ -15,11 +15,11 @@
   (filter #(= empty-tile (nth board %)) (range 0 (count board))))
 
 (defn input-valid? [input options]
-  (and (= 1 (count input))
-       (Character/isDigit (first input))
+  (and (not (empty? input))
+       (every? #(Character/isDigit %) input)
        (in-range? 1 (inc (count options)) (Integer/parseInt input))))
 
 (defn board->str [board]
-  (->> (partition 3 board)
+  (->> (partition (int (Math/sqrt (count board))) board)
        (map #(str/join " " %))
        (str/join "\n")))

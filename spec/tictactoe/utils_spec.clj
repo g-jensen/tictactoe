@@ -2,7 +2,8 @@
   (:require [speclj.core :refer :all]
             [tictactoe.utils :refer :all]))
 
-(def first-move-board (vec (cons \x (repeat 8 empty-tile))))
+(defn first-move-board [n]
+  (vec (cons \x (repeat (dec (* n n)) empty-tile))))
 
 (describe "TicTacToe Utilities"
   (it "initializes an empty 3x3 board"
@@ -23,7 +24,7 @@
 
   (it "gets the indices of the empty tiles of a board"
     (should= (range 0 9) (empty-indices (empty-board 3)))
-    (should= (range 1 9) (empty-indices first-move-board))
+    (should= (range 1 9) (empty-indices (first-move-board 3)))
     (should= [0 1 2] (empty-indices [\_ \_ \_ \o \o \o])))
 
   (it "checks if input is valid"
@@ -34,8 +35,11 @@
     (should-not (input-valid? "2" [:a]))
     (should-not (input-valid? "-1" [:a]))
     (should (input-valid? "2" [:a :b :c]))
-    (should (input-valid? "3" [:a :b :c])))
+    (should (input-valid? "3" [:a :b :c]))
+    (should (input-valid? "10" (repeat 16 0))))
 
   (it "converts a board to a string"
     (should= "_ _ _\n_ _ _\n_ _ _" (board->str (empty-board 3)))
-    (should= "x _ _\n_ _ _\n_ _ _" (board->str first-move-board))))
+    (should= "x _ _\n_ _ _\n_ _ _" (board->str (first-move-board 3)))
+    (should= "_ _ _ _\n_ _ _ _\n_ _ _ _\n_ _ _ _" (board->str (empty-board 4)))
+    (should= "x _ _ _\n_ _ _ _\n_ _ _ _\n_ _ _ _" (board->str (first-move-board 4)))))

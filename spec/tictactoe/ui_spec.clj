@@ -14,7 +14,7 @@
     (should= "_ _ _\n_ _ _\n_ _ _\n\n"
              (with-out-str (display-board (utils/empty-board 3))))
     (should= "x _ _\n_ _ _\n_ _ _\n\n"
-             (with-out-str (display-board utils-spec/first-move-board))))
+             (with-out-str (display-board (utils-spec/first-move-board 3)))))
 
   (it "displays the game over message"
     (should= "x has won!\n" (with-out-str (display-game-over-message
