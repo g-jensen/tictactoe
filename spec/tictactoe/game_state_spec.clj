@@ -12,15 +12,21 @@
 
   (it "gets the rows of a board"
     (should= [[:a :b :c] [:d :e :f] [:g :h :i]]
-             (rows [:a :b :c :d :e :f :g :h :i])))
+             (rows [:a :b :c :d :e :f :g :h :i]))
+    (should= [[:a :b :c :d] [:e :f :g :h] [:i :j :k :l] [:m :n :o :p]]
+             (rows [:a :b :c :d :e :f :g :h :i :j :k :l :m :n :o :p])))
 
   (it "gets the columns of a board"
     (should= [[:a :d :g] [:b :e :h] [:c :f :i]]
-             (columns [:a :b :c :d :e :f :g :h :i])))
+             (columns [:a :b :c :d :e :f :g :h :i]))
+    (should= [[:a :e :i :m] [:b :f :j :n] [:c :g :k :o] [:d :h :l :p]]
+             (columns [:a :b :c :d :e :f :g :h :i :j :k :l :m :n :o :p])))
 
   (it "gets the diagonals of a board"
     (should= [[:a :e :i] [:c :e :g]]
-             (diagonals [:a :b :c :d :e :f :g :h :i])))
+             (diagonals [:a :b :c :d :e :f :g :h :i]))
+    (should= [[:a :f :k :p] [:d :g :j :m]]
+             (diagonals [:a :b :c :d :e :f :g :h :i :j :k :l :m :n :o :p])))
 
   (it "checks if a player has won"
     (should-not (win? (utils/empty-board 3)))

@@ -5,16 +5,20 @@
   (and (not= utils/empty-tile (first seq))
        (apply = seq)))
 
+(defn board-size [board]
+  (int (Math/sqrt (count board))))
+
 (defn rows [board]
-  (partition 3 board))
+  (partition (board-size board) board))
 
 (defn columns [board]
-  (for [i (range 0 3)]
+  (for [i (range 0 (board-size board))]
     (map #(nth % i) (rows board))))
 
 (defn diagonals [board]
-  [(map #(nth board (* 4 %)) (range 0 3))
-   (map #(nth board (* 2 (inc %))) (range 0 3))])
+  (let [size (board-size board)]
+    [(map #(nth board (* (inc size) %)) (range 0 size))
+     (map #(nth board (* (dec size) (inc %))) (range 0 size))]))
 
 (defn- horizontal-win? [board]
   (boolean (some true? (map winning-line? (rows board)))))
