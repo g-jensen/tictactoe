@@ -2,7 +2,8 @@
   (:require [clojure.string :as str]))
 
 (def empty-tile \_)
-(def empty-board (vec (repeat 9 empty-tile)))
+(defn empty-board [n]
+  (vec (repeat (* n n) empty-tile)))
 
 (defn tile-count [board tile]
   (count (filter #(= tile %) board)))

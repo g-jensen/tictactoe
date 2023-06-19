@@ -7,21 +7,21 @@
 (describe "A TicTacToe Mover"
 
   (it "gets whose move it is"
-    (should= \x (player-to-move utils/empty-board))
+    (should= \x (player-to-move (utils/empty-board 3)))
     (should= \o (player-to-move utils-spec/first-move-board))
     (should= \x (player-to-move [\x \o \_ \_ \_ \_ \_ \_ \_])))
 
   (it "checks if a move is valid"
-    (should (move-valid? utils/empty-board 0))
-    (should-not (move-valid? utils/empty-board -1))
-    (should-not (move-valid? utils/empty-board 9))
+    (should (move-valid? (utils/empty-board 3) 0))
+    (should-not (move-valid? (utils/empty-board 3) -1))
+    (should-not (move-valid? (utils/empty-board 3) 9))
     (should-not (move-valid? utils-spec/first-move-board 0)))
 
   (it "plays a move on a board"
-    (should= utils/empty-board (play-move utils/empty-board -1))
-    (should= utils/empty-board (play-move utils/empty-board 9))
+    (should= (utils/empty-board 3) (play-move (utils/empty-board 3) -1))
+    (should= (utils/empty-board 3) (play-move (utils/empty-board 3) 9))
     (should= utils-spec/first-move-board (play-move utils-spec/first-move-board 0))
-    (should= utils-spec/first-move-board (play-move utils/empty-board 0))
+    (should= utils-spec/first-move-board (play-move (utils/empty-board 3) 0))
     (should= [\x \o \_ \_ \_ \_ \_ \_ \_] (play-move utils-spec/first-move-board 1)))
 
   (with-stubs)
@@ -57,10 +57,10 @@
         (should= 0 (move-weight [\_ \_ \_ \_ \_ \_ \_ \_ \x] 4))
         (should= 10 (move-weight [\_ \_ \_ \_ \_ \_ \_ \o \x] 4))
         (should= -10 (move-weight [\_ \o \o \_ \_ \x \x \_ \x] 0))
-        (should= 0 (move-weight utils/empty-board 8)))
+        (should= 0 (move-weight (utils/empty-board 3) 8)))
 
       (it "picks a corner given an empty board"
-        (should= 8 (get-computer-move :hard utils/empty-board)))
+        (should= 8 (get-computer-move :hard (utils/empty-board 3))))
 
       (it "wins given the chance"
         (should= 6 (get-computer-move :hard [\_ \_ \_ \_ \o \o \_ \x \x]))
@@ -76,24 +76,24 @@
 
       (it "has a 70% chance to play the Hard Mode move"
         (with-redefs [rand (stub :rand {:return 0.6})]
-          (should= (get-computer-move :hard utils/empty-board)
-                   (get-computer-move :medium utils/empty-board))
+          (should= (get-computer-move :hard (utils/empty-board 3))
+                   (get-computer-move :medium (utils/empty-board 3)))
           (should-have-invoked :rand))
 
         (with-redefs [rand (stub :rand {:return 0.69})]
-          (should= (get-computer-move :hard utils/empty-board)
-                   (get-computer-move :medium utils/empty-board))
+          (should= (get-computer-move :hard (utils/empty-board 3))
+                   (get-computer-move :medium (utils/empty-board 3)))
           (should-have-invoked :rand))
 
         (with-redefs [rand (stub :rand {:return 0.3})]
-          (should= (get-computer-move :hard utils/empty-board)
-                   (get-computer-move :medium utils/empty-board))
+          (should= (get-computer-move :hard (utils/empty-board 3))
+                   (get-computer-move :medium (utils/empty-board 3)))
           (should-have-invoked :rand)))
 
       (it "has a 30% chance to pick the first empty tile on the board"
         (with-redefs [rand (stub :rand {:return 0.8})]
           (should= 0
-                   (get-computer-move :medium utils/empty-board))
+                   (get-computer-move :medium (utils/empty-board 3)))
           (should-have-invoked :rand))
 
         (with-redefs [rand (stub :rand {:return 0.7})]
@@ -109,19 +109,19 @@
     (context "Easy Mode"
       (it "has a 20% chance to pick the Hard Mode move"
         (with-redefs [rand (stub :rand {:return 0.1})]
-          (should= (get-computer-move :hard utils/empty-board)
-                   (get-computer-move :easy utils/empty-board))
+          (should= (get-computer-move :hard (utils/empty-board 3))
+                   (get-computer-move :easy (utils/empty-board 3)))
           (should-have-invoked :rand))
 
         (with-redefs [rand (stub :rand {:return 0.19})]
-          (should= (get-computer-move :hard utils/empty-board)
-                   (get-computer-move :easy utils/empty-board))
+          (should= (get-computer-move :hard (utils/empty-board 3))
+                   (get-computer-move :easy (utils/empty-board 3)))
           (should-have-invoked :rand)))
 
       (it "has a 80% chance to pick the first empty tile on the board"
         (with-redefs [rand (stub :rand {:return 0.3})]
           (should= 0
-                   (get-computer-move :easy utils/empty-board))
+                   (get-computer-move :easy (utils/empty-board 3)))
           (should-have-invoked :rand))
 
         (with-redefs [rand (stub :rand {:return 0.6})]

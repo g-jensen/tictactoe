@@ -12,7 +12,7 @@
 
   (it "displays a board"
     (should= "_ _ _\n_ _ _\n_ _ _\n\n"
-             (with-out-str (display-board utils/empty-board)))
+             (with-out-str (display-board (utils/empty-board 3))))
     (should= "x _ _\n_ _ _\n_ _ _\n\n"
              (with-out-str (display-board utils-spec/first-move-board))))
 

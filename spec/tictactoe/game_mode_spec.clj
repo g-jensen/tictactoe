@@ -10,12 +10,12 @@
   (context "PvPGame"
 
     (it "gets the initial board"
-      (should= utils/empty-board (initial-board (->PvPGame))))
+      (should= (utils/empty-board 3) (initial-board (->PvPGame))))
 
     (it "gets the next board"
       (with-redefs [read-line (stub :read-line {:return "1"})]
         (should= [\x \_ \_ \_ \_ \_ \_ \_ \_]
-                 (next-board (->PvPGame) utils/empty-board))
+                 (next-board (->PvPGame) (utils/empty-board 3)))
         (should-have-invoked :read-line))
 
       (with-redefs [read-line (stub :read-line {:return "2"})]
@@ -25,15 +25,15 @@
 
   (context "PvCGame"
     (it "gets the initial board"
-      (should= utils/empty-board (initial-board (->PvCGame \x :hard)))
+      (should= (utils/empty-board 3) (initial-board (->PvCGame \x :hard)))
       (should= [\_ \_ \_ \_ \_ \_ \_ \_ \x] (initial-board (->PvCGame \o :hard))))
 
     (it "gets the next board"
       (with-redefs [read-line (stub :read-line {:return "1"})]
         (should= [\x \_ \_ \_ \_ \_ \_ \_ \_]
-                 (next-board (->PvCGame \x :hard) utils/empty-board))
+                 (next-board (->PvCGame \x :hard) (utils/empty-board 3)))
         (should-have-invoked :read-line))
 
       ;; TODO - ask if I should put a vector literal here or if this is good
-      (should= (move/play-move utils/empty-board (move/get-computer-move :hard utils/empty-board))
-               (next-board (->PvCGame \o :hard) utils/empty-board)))))
+      (should= (move/play-move (utils/empty-board 3) (move/get-computer-move :hard (utils/empty-board 3)))
+               (next-board (->PvCGame \o :hard) (utils/empty-board 3))))))

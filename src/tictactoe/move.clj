@@ -8,7 +8,7 @@
     \o))
 
 (defn move-valid? [board index]
-  (and (utils/in-range? 0 9 index)
+  (and (utils/in-range? 0 (count board) index)
        (= (nth board index) utils/empty-tile)))
 
 (defn play-move [board index]
@@ -18,7 +18,7 @@
 
 (defn get-user-move []
   (let [input (read-line)]
-    (if (utils/input-valid? input utils/empty-board)
+    (if (utils/input-valid? input (utils/empty-board 3))
       (dec (Integer/parseInt input))
       -1)))
 

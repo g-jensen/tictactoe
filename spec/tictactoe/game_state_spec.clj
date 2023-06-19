@@ -23,7 +23,7 @@
              (diagonals [:a :b :c :d :e :f :g :h :i])))
 
   (it "checks if a player has won"
-    (should-not (win? utils/empty-board))
+    (should-not (win? (utils/empty-board 3)))
     (should (win? [\x \x \x \_ \_ \_ \_ \_ \_]))
     (should (win? [\_ \_ \_ \x \x \x \_ \_ \_]))
     (should (win? [\_ \_ \_ \_ \_ \_ \x \x \x]))
@@ -41,7 +41,7 @@
     (should= \x (winner [\o \o \_ \x \x \x \_ \_ \_])))
 
   (it "checks if there is a tie"
-    (should-not (tie? utils/empty-board))
+    (should-not (tie? (utils/empty-board 3)))
     (should (tie? [\o \x \x \x \o \o \o \x \x]))
     (should (tie? [\o \x \o \o \x \x \x \o \x]))
     (should-not (tie? [\x \x \x \o \o \_ \_ \_ \_]))))

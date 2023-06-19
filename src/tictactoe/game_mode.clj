@@ -9,7 +9,7 @@
 (defrecord PvPGame []
   GameMode
   (initial-board [this]
-    utils/empty-board)
+    (utils/empty-board 3))
   (next-board [this board]
     (move/play-move board (move/get-user-move))))
 
@@ -17,8 +17,8 @@
   GameMode
   (initial-board [this]
     (if (= player-character \x)
-      utils/empty-board
-      (move/play-move utils/empty-board (move/get-computer-move difficulty utils/empty-board))))
+      (utils/empty-board 3)
+      (move/play-move (utils/empty-board 3) (move/get-computer-move difficulty (utils/empty-board 3)))))
   (next-board [this board]
     (if (= player-character (move/player-to-move board))
       (move/play-move board (move/get-user-move))

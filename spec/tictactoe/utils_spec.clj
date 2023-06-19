@@ -6,11 +6,11 @@
 
 (describe "TicTacToe Utilities"
   (it "initializes an empty 3x3 board"
-    (should= (repeat 9 empty-tile) empty-board))
+    (should= (repeat 9 empty-tile) (empty-board 3)))
 
   (it "counts the amount of times a tile is on a board"
-    (should= 9 (tile-count empty-board empty-tile))
-    (should= 0 (tile-count empty-board \x))
+    (should= 9 (tile-count (empty-board 3) empty-tile))
+    (should= 0 (tile-count (empty-board 3) \x))
     (should= 1 (tile-count [\x \_ \_ \_ \_ \_ \_ \_ \_] \x))
     (should= 3 (tile-count [\x \o \o \_ \o \_ \_ \_ \_] \o)))
 
@@ -22,7 +22,7 @@
     (should-not (in-range? 0 10 11)))
 
   (it "gets the indices of the empty tiles of a board"
-    (should= (range 0 9) (empty-indices empty-board))
+    (should= (range 0 9) (empty-indices (empty-board 3)))
     (should= (range 1 9) (empty-indices first-move-board))
     (should= [0 1 2] (empty-indices [\_ \_ \_ \o \o \o])))
 
@@ -37,5 +37,5 @@
     (should (input-valid? "3" [:a :b :c])))
 
   (it "converts a board to a string"
-    (should= "_ _ _\n_ _ _\n_ _ _" (board->str empty-board))
+    (should= "_ _ _\n_ _ _\n_ _ _" (board->str (empty-board 3)))
     (should= "x _ _\n_ _ _\n_ _ _" (board->str first-move-board))))
