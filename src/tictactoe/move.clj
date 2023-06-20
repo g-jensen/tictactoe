@@ -1,6 +1,6 @@
 (ns tictactoe.move
   (:require [tictactoe.utils :as utils]
-            [tictactoe.game-state :as game-state]))
+            [tictactoe.board-state :as game-state]))
 
 (defn player-to-move [board]
   (if (= (utils/tile-count board \x) (utils/tile-count board \o))

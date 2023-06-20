@@ -1,7 +1,7 @@
 (ns tictactoe.ui
   (:require [tictactoe.database :as database]
             [tictactoe.utils :as utils]
-            [tictactoe.game-state :as game-state]
+            [tictactoe.board-state :as game-state]
             [tictactoe.game-mode :as game-mode]
             [tictactoe.move :as move]))
 

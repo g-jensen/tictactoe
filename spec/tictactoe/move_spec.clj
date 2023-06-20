@@ -1,7 +1,7 @@
 (ns tictactoe.move_spec
   (:require [speclj.core :refer :all]
             [tictactoe.move :refer :all]
-            [tictactoe.game-state :as game-state]
+            [tictactoe.board-state :as game-state]
             [tictactoe.utils :as utils]
             [tictactoe.utils-spec :as utils-spec]))
 

@@ -2,7 +2,7 @@
   (:gen-class)
   (:require
     [tictactoe.ui :as ui]
-    [tictactoe.game-state :as game-state]
+    [tictactoe.board-state :as game-state]
     [tictactoe.game-mode :as game-mode]
     [tictactoe.database :as database]))
 
