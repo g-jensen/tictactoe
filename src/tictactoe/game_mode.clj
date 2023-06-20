@@ -4,22 +4,25 @@
 
 (defprotocol GameMode
   (initial-board [this])
-  (next-board [this board]))
+  (next-board [this board])
+  (to-string [this]))
 
-(defrecord PvPGame [size]
+(defrecord PvPGame [size init-board]
   GameMode
   (initial-board [this]
-    (utils/empty-board size))
+    init-board)
   (next-board [this board]
-    (move/play-move board (move/get-user-move board))))
+    (move/play-move board (move/get-user-move board)))
+  (to-string [this]
+    "PvPGame"))
 
-(defrecord PvCGame [size player-character difficulty]
+(defrecord PvCGame [size init-board difficulty]
   GameMode
   (initial-board [this]
-    (if (= player-character \x)
-      (utils/empty-board size)
-      (move/play-move (utils/empty-board size) (move/get-computer-move difficulty (utils/empty-board size)))))
+    init-board)
   (next-board [this board]
-    (if (= player-character (move/player-to-move board))
+    (if (= (move/player-to-move init-board) (move/player-to-move board))
       (move/play-move board (move/get-user-move board))
-      (move/play-move board (move/get-computer-move difficulty board)))))
+      (move/play-move board (move/get-computer-move difficulty board))))
+  (to-string [this]
+    (str "PvCGame " difficulty)))

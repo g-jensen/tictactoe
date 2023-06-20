@@ -28,9 +28,9 @@
 
   (context "Menu Navigator"
     (it "displays the options of a menu"
-      (should= "1: 3x3 board\n2: 4x4 board\n"
+      (should= "1: New Game\n2: Load Game\n"
                (with-out-str (display-options (:options game-mode-menu))))
-      (should= "1: Versus Player\n2: Versus Computer\n"
+      (should= "1: New Game\n"
                (with-out-str (display-options (:options (get (:options game-mode-menu) 1))))))
 
     (with-stubs)
@@ -47,8 +47,6 @@
         (with-redefs [read-line (stub :read-line {:return "2"})]
           (should= (second (:options game-mode-menu))
                    (choose-option game-mode-menu))
-          (should= (second (:options (second (:options game-mode-menu))))
-                   (choose-option (second (:options game-mode-menu))))
           (should-have-invoked :read-line))
         (should-have-invoked :println)))
 
@@ -56,10 +54,6 @@
       (with-redefs [println (stub :println {:return 0})]
 
         (with-redefs [read-line (stub :read-line {:return "1"})]
-          (should-be-a PvPGame (evaluate-menu game-mode-menu))
-          (should-have-invoked :read-line))
-
-        (with-redefs [read-line (stub :read-line {:return "2"})]
-          (should-be-a PvCGame (evaluate-menu game-mode-menu))
+          (should-be-a PvPGame (:game-mode (evaluate-menu game-mode-menu)))
           (should-have-invoked :read-line))
         (should-have-invoked :println)))))
