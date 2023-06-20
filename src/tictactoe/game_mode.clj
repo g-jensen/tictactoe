@@ -6,20 +6,20 @@
   (initial-board [this])
   (next-board [this board]))
 
-(defrecord PvPGame []
+(defrecord PvPGame [size]
   GameMode
   (initial-board [this]
-    (utils/empty-board 3))
+    (utils/empty-board size))
   (next-board [this board]
-    (move/play-move board (move/get-user-move))))
+    (move/play-move board (move/get-user-move board))))
 
-(defrecord PvCGame [player-character difficulty]
+(defrecord PvCGame [size player-character difficulty]
   GameMode
   (initial-board [this]
     (if (= player-character \x)
-      (utils/empty-board 3)
-      (move/play-move (utils/empty-board 3) (move/get-computer-move difficulty (utils/empty-board 3)))))
+      (utils/empty-board size)
+      (move/play-move (utils/empty-board size) (move/get-computer-move difficulty (utils/empty-board size)))))
   (next-board [this board]
     (if (= player-character (move/player-to-move board))
-      (move/play-move board (move/get-user-move))
+      (move/play-move board (move/get-user-move board))
       (move/play-move board (move/get-computer-move difficulty board)))))

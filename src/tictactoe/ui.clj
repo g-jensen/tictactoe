@@ -15,32 +15,32 @@
     (println (str (game-state/winner board) " has won!"))
     (println "tie!")))
 
-(defn character-picker-options [difficulty]
+(defn character-picker-options [state]
   [{:name "Start as X"
     :options []
-    :value (game-mode/->PvCGame \x difficulty)}
+    :value (game-mode/->PvCGame (:size state) \x (:difficulty state))}
    {:name "Start as O"
     :options []
-    :value (game-mode/->PvCGame \o difficulty)}])
+    :value (game-mode/->PvCGame (:size state) \o (:difficulty state))}])
 
-(def versus-options
+(defn versus-options [state]
    [{:name "Versus Player"
      :options []
-     :value (game-mode/->PvPGame)}
+     :value (game-mode/->PvPGame (:size state))}
     {:name "Versus Computer"
      :options [{:name "Easy"
-                :options (character-picker-options :easy)}
+                :options (character-picker-options (assoc state :difficulty :easy))}
                {:name "Medium"
-                :options (character-picker-options :medium)}
+                :options (character-picker-options (assoc state :difficulty :medium))}
                {:name "Hard"
-                :options (character-picker-options :hard)}]}])
+                :options (character-picker-options (assoc state :difficulty :hard))}]}])
 
 (def game-mode-menu
   {:name "TicTacToe Game\nPick a board size:"
    :options [{:name "3x3 board"
-              :options versus-options}
+              :options (versus-options {:size 3})}
              {:name "4x4 board"
-              :options versus-options}]})
+              :options (versus-options {:size 4})}]})
 
 (defn display-options [options]
   (doall (map #(println (str (inc %) ": " (:name (get options %))))
