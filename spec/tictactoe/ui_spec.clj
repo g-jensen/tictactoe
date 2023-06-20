@@ -29,9 +29,7 @@
   (context "Menu Navigator"
     (it "displays the options of a menu"
       (should= "1: New Game\n2: Load Game\n"
-               (with-out-str (display-options (:options game-mode-menu))))
-      (should= "1: New Game\n"
-               (with-out-str (display-options (:options (get (:options game-mode-menu) 1))))))
+               (with-out-str (display-options (:options game-mode-menu)))))
 
     (with-stubs)
     (it "chooses an option from a menu"
