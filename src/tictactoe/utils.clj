@@ -1,5 +1,6 @@
 (ns tictactoe.utils
-  (:require [clojure.string :as str]))
+  (:require [clojure.string :as str])
+  (:import (java.util Date)))
 
 (def empty-tile \_)
 (defn empty-board [n]
@@ -23,3 +24,6 @@
   (->> (partition (int (Math/sqrt (count board))) board)
        (map #(str/join " " %))
        (str/join "\n")))
+
+(defn now []
+  (str (Date.)))
