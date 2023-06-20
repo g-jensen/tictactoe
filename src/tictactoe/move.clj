@@ -1,6 +1,6 @@
 (ns tictactoe.move
   (:require [tictactoe.utils :as utils]
-            [tictactoe.board-state :as game-state]))
+            [tictactoe.board-state :as board-state]))
 
 (defn player-to-move [board]
   (if (= (utils/tile-count board \x) (utils/tile-count board \o))
@@ -18,20 +18,20 @@
 
 (defn get-user-move [board]
   (let [input (read-line)]
-    (if (utils/input-valid? input (utils/empty-board (game-state/board-size board)))
+    (if (utils/input-valid? input (utils/empty-board (board-state/board-size board)))
       (dec (Integer/parseInt input))
       -1)))
 
 (defn score-board [board]
   (cond
-    (game-state/x-wins? board) 10
-    (game-state/o-wins? board) -10
-    (game-state/tie? board) 0))
+    (board-state/x-wins? board) 10
+    (board-state/o-wins? board) -10
+    (board-state/tie? board) 0))
 
 (defn move-weight [board index depth]
   (let [board (play-move board index)]
     (cond
-      (game-state/game-over? board)
+      (board-state/game-over? board)
         (score-board board)
       (zero? depth)
         0
@@ -44,7 +44,7 @@
 
 (defmulti get-computer-move (fn [difficulty board] difficulty))
 (defmethod get-computer-move :hard [_ board]
-  (let [depth (if (= 3 (game-state/board-size board)) 10 4)]
+  (let [depth (if (= 3 (board-state/board-size board)) 10 4)]
     (if (= \x (player-to-move board))
       (apply max-key #(move-weight board % depth) (utils/empty-indices board))
       (apply min-key #(move-weight board % depth) (utils/empty-indices board)))))

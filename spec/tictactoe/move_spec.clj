@@ -1,18 +1,8 @@
 (ns tictactoe.move_spec
   (:require [speclj.core :refer :all]
             [tictactoe.move :refer :all]
-            [tictactoe.board-state :as game-state]
             [tictactoe.utils :as utils]
             [tictactoe.utils-spec :as utils-spec]))
-
-(defn every-computer-move [board]
-  (cond
-    (game-state/game-over? board)
-      [board]
-    (= \x (player-to-move board))
-      (cons board (every-computer-move (play-move board (get-computer-move :hard board))))
-    :else
-      (apply concat (map #(every-computer-move (play-move board %)) (utils/empty-indices board)))))
 
 
 (describe "A TicTacToe Mover"

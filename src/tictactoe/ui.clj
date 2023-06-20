@@ -1,7 +1,7 @@
 (ns tictactoe.ui
   (:require [tictactoe.database :as database]
             [tictactoe.utils :as utils]
-            [tictactoe.board-state :as game-state]
+            [tictactoe.board-state :as board-state]
             [tictactoe.game-mode :as game-mode]
             [tictactoe.move :as move]))
 
@@ -13,8 +13,8 @@
   (println))
 
 (defn display-game-over-message [board]
-  (if (game-state/win? board)
-    (println (str (game-state/winner board) " has won!"))
+  (if (board-state/win? board)
+    (println (str (board-state/winner board) " has won!"))
     (println "tie!")))
 
 (defn character-picker-options [state]
@@ -48,10 +48,10 @@
     {:name (apply str [(:date game) ": " (:board game)])
       :options []
       :value (cond
-               (= (:game-mode game) "PvPGame") {:game-mode (game-mode/->PvPGame (game-state/board-size (:board game)) (:board game)) :old-date (:date game)}
-               (= (:game-mode game) "PvCGame :easy") {:game-mode (game-mode/->PvCGame (game-state/board-size (:board game)) (:board game) :easy) :old-date (:date game)}
-               (= (:game-mode game) "PvCGame :medium") {:game-mode (game-mode/->PvCGame (game-state/board-size (:board game)) (:board game) :medium) :old-date (:date game)}
-               (= (:game-mode game) "PvCGame :hard") {:game-mode (game-mode/->PvCGame (game-state/board-size (:board game)) (:board game) :hard) :old-date (:date game)})})))
+               (= (:game-mode game) "PvPGame") {:game-mode (game-mode/->PvPGame (board-state/board-size (:board game)) (:board game)) :old-date (:date game)}
+               (= (:game-mode game) "PvCGame :easy") {:game-mode (game-mode/->PvCGame (board-state/board-size (:board game)) (:board game) :easy) :old-date (:date game)}
+               (= (:game-mode game) "PvCGame :medium") {:game-mode (game-mode/->PvCGame (board-state/board-size (:board game)) (:board game) :medium) :old-date (:date game)}
+               (= (:game-mode game) "PvCGame :hard") {:game-mode (game-mode/->PvCGame (board-state/board-size (:board game)) (:board game) :hard) :old-date (:date game)})})))
 
 (def game-mode-menu
   {:name    "TicTacToe Game"

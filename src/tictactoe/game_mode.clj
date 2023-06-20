@@ -1,6 +1,5 @@
 (ns tictactoe.game-mode
-  (:require [tictactoe.move :as move]
-            [tictactoe.utils :as utils]))
+  (:require [tictactoe.move :as move]))
 
 (defprotocol GameMode
   (initial-board [this])
