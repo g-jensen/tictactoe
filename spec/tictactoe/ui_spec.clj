@@ -8,7 +8,7 @@
 (describe "A TicTacToe Console UI"
   (it "displays a guide"
     (should= "Pick a tile 1-9\n"
-             (with-out-str (display-guide))))
+             (with-out-str (display-guide (utils/empty-board 3)))))
 
   (it "displays a board"
     (should= "_ _ _\n_ _ _\n_ _ _\n\n"

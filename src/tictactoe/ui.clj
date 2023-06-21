@@ -5,8 +5,8 @@
             [tictactoe.game-mode :as game-mode]
             [tictactoe.move :as move]))
 
-(defn display-guide []
-  (println "Pick a tile 1-9"))
+(defn display-guide [board]
+  (println (str "Pick a tile 1-" (count board))))
 
 (defn display-board [board]
   (println (utils/board->str board))
