@@ -7,4 +7,4 @@
   (loop [state (game-state/initial-state)]
     (if (game-state/over? state)
       (game-state/clean-up state)
-      (recur (game-state/update state)))))
+      (recur (game-state/update-state state)))))

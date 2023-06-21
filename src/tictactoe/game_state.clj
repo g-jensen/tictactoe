@@ -13,7 +13,7 @@
     (as-> (assoc state :date date) state
           (assoc state :board board))))
 
-(defn update [state]
+(defn update-state [state]
   (let [game-mode (:game-mode state)
         board (:board state)
         date (:date state)

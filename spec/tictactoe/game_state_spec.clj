@@ -9,14 +9,32 @@
 (def menu-eval-pvp-3x3 {:game-mode pvp-game-3x3
                         :old-date "Tue Jun 20 17:05:25 EDT 2023"})
 
+(def init-state-pvp-3x3 {:game-mode pvp-game-3x3
+                         :old-date "Tue Jun 20 17:05:25 EDT 2023"
+                         :date "Tue Jun 20 17:05:30 EDT 2023"
+                         :board (utils/empty-board 3)})
+
 (describe "A TicTacToe Game State"
 
   (with-stubs)
   (it "gets the initial game state"
     (with-redefs [ui/evaluate-menu (stub :evaluate-menu {:return menu-eval-pvp-3x3})
                   utils/now (stub :now {:return "Tue Jun 20 17:05:30 EDT 2023"})]
+      (should= init-state-pvp-3x3
+               (initial-state))))
+
+  (it "gets the updated state"
+    (with-redefs [read-line (stub :read-line {:return "1"})
+                  println (stub :println {:return 0})]
       (should= {:game-mode pvp-game-3x3
                 :old-date "Tue Jun 20 17:05:25 EDT 2023"
                 :date "Tue Jun 20 17:05:30 EDT 2023"
-                :board (utils/empty-board 3)}
-               (initial-state)))))
+                :board [\x \_ \_ \_ \_ \_ \_ \_ \_]}
+               (update-state init-state-pvp-3x3))))
+
+  (it "checks if the game-state is over"
+    (should-not (over? init-state-pvp-3x3))
+    (should (over? {:game-mode pvp-game-3x3
+                    :old-date "Tue Jun 20 17:05:25 EDT 2023"
+                    :date "Tue Jun 20 17:05:30 EDT 2023"
+                    :board [\x \x \x \o \o \_ \_ \_ \_]}))))
