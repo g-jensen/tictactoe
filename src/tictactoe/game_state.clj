@@ -1,6 +1,6 @@
 (ns tictactoe.game-state
   (:require [tictactoe.board-state :as board-state]
-            [tictactoe.database :as database]
+            [tictactoe.database.database :as database]
             [tictactoe.ui :as ui]
             [tictactoe.utils :as utils]
             [tictactoe.game-mode :as game-mode]))

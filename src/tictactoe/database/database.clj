@@ -1,4 +1,4 @@
-(ns tictactoe.database
+(ns tictactoe.database.database
   (:require [clojure.string :as str]
             [tictactoe.game-mode :as game-mode]))
 
@@ -16,6 +16,7 @@
     (spit database-file (delete-date data date))))
 
 (defn fetch-all-games []
+  (spit database-file "" :append true)
   (let [data (slurp database-file)]
     (if-not (empty? data)
       (map read-string (str/split-lines data)))))
