@@ -71,7 +71,7 @@
    :options [{:name "File Persistence"
               :options (load-type-options {:database (FileDatabase. "games.txt")})}
              {:name "SQL Persistence"
-              :options (load-type-options {:database (SQLDatabase. "test.db")})}]})
+              :options (load-type-options {:database (SQLDatabase. "games.db")})}]})
 
 (defn display-options [options]
   (doall (map #(println (str (inc %) ": " (:name (get options %))))
