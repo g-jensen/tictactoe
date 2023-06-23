@@ -28,7 +28,7 @@
 
   (context "Menu Navigator"
     (it "displays the options of a menu"
-      (should= "1: New Game\n2: Load Game\n"
+      (should= "1: File Persistence\n2: SQL Persistence\n"
                (with-out-str (display-options (:options game-mode-menu)))))
 
     (with-stubs)

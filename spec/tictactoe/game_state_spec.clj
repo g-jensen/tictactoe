@@ -3,14 +3,17 @@
             [tictactoe.game-mode :as game-mode]
             [tictactoe.game-state :refer :all]
             [tictactoe.ui :as ui]
-            [tictactoe.utils :as utils]))
+            [tictactoe.utils :as utils]
+            [tictactoe.database :as database]))
 
 (def pvp-game-3x3 (game-mode/->PvPGame 3 (utils/empty-board 3)))
 (def menu-eval-pvp-3x3 {:gamemode pvp-game-3x3
+                        :database (database/->FileDatabase "games.txt")
                         :old-date "Tue Jun 20 17:05:25 EDT 2023"})
 
 (def init-state-pvp-3x3 {:gamemode pvp-game-3x3
                          :old-date "Tue Jun 20 17:05:25 EDT 2023"
+                         :database (database/->FileDatabase "games.txt")
                          :date "Tue Jun 20 17:05:30 EDT 2023"
                          :board (utils/empty-board 3)})
 
@@ -25,11 +28,13 @@
 
   (it "gets the updated state"
     (with-redefs [read-line (stub :read-line {:return "1"})
-                  println (stub :println {:return 0})]
+                  println (stub :println {:return 0})
+                  database/update-game (stub :update-game {:return 0})]
       (should= {:gamemode pvp-game-3x3
                 :old-date "Tue Jun 20 17:05:25 EDT 2023"
                 :date "Tue Jun 20 17:05:30 EDT 2023"
-                :board [\x \_ \_ \_ \_ \_ \_ \_ \_]}
+                :board [\x \_ \_ \_ \_ \_ \_ \_ \_]
+                :database (database/->FileDatabase "games.txt")}
                (update-state init-state-pvp-3x3))))
 
   (it "checks if the game-state is over"
