@@ -1,26 +1,29 @@
 (ns tictactoe.game-state
   (:require [tictactoe.board-state :as board-state]
-            [tictactoe.database.database :as database]
+            [tictactoe.database :as database]
             [tictactoe.ui :as ui]
             [tictactoe.utils :as utils]
-            [tictactoe.game-mode :as game-mode]))
+            [tictactoe.game-mode :as game-mode])
+  (:import (tictactoe.database SQLDatabase)))
 
 (defn initial-state []
   (let [state (ui/evaluate-menu ui/game-mode-menu)
         date (utils/now)
-        board (:init-board (:game-mode state))]
+        board (:init-board (:gamemode state))]
     (ui/display-guide board)
     (as-> (assoc state :date date) state
-          (assoc state :board board))))
+          (assoc state :board board)
+          (assoc state :database (SQLDatabase. "test.db")))))
 
 (defn update-state [state]
-  (let [game-mode (:game-mode state)
+  (let [game-mode (:gamemode state)
         board (:board state)
         date (:date state)
-        old-date (:old-date state)]
+        old-date (:old-date state)
+        database (:database state)]
     (ui/display-board board)
-    (database/delete-game old-date)
-    (database/update-game date board game-mode)
+    (database/delete-game database old-date)
+    (database/update-game database date board game-mode)
     (assoc state :board (game-mode/next-board game-mode board))))
 
 (defn over? [state]
@@ -29,7 +32,8 @@
 
 (defn clean-up [state]
   (let [board (:board state)
-        date (:date state)]
+        date (:date state)
+        database (:database state)]
     (ui/display-board board)
     (ui/display-game-over-message board)
-    (database/delete-game date)))
+    (database/delete-game database date)))

@@ -1,6 +1,6 @@
-(ns tictactoe.database.database-spec
+(ns tictactoe.database-spec
   (:require [speclj.core :refer :all]
-            [tictactoe.database.database :refer :all]))
+            [tictactoe.database :refer :all]))
 
 (describe "A TicTacToe Database"
 
