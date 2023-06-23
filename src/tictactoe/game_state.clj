@@ -3,8 +3,7 @@
             [tictactoe.database :as database]
             [tictactoe.ui :as ui]
             [tictactoe.utils :as utils]
-            [tictactoe.game-mode :as game-mode])
-  (:import (tictactoe.database SQLDatabase)))
+            [tictactoe.game-mode :as game-mode]))
 
 (defn initial-state []
   (let [state (ui/evaluate-menu ui/game-mode-menu)
@@ -12,8 +11,7 @@
         board (:init-board (:gamemode state))]
     (ui/display-guide board)
     (as-> (assoc state :date date) state
-          (assoc state :board board)
-          (assoc state :database (SQLDatabase. "test.db")))))
+          (assoc state :board board))))
 
 (defn update-state [state]
   (let [game-mode (:gamemode state)

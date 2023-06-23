@@ -45,27 +45,33 @@
     :options (versus-options (assoc state :size 4))}])
 
 (defn load-game-options [state]
-  (let [db (SQLDatabase. "test.db")]
+  (let [db (:database state)]
     (database/initialize db)
     (vec (for [game (database/fetch-all-games db)]
       {:name (apply str [(:date game) ": " (:board game)])
        :options []
        :value (cond
-                (= (:gamemode game) "PvPGame") {:gamemode (game-mode/->PvPGame (board-state/board-size (:board game)) (:board game)) :old-date (:date game) :database db}
-                (= (:gamemode game) "PvCGame :easy") {:gamemode (game-mode/->PvCGame (board-state/board-size (:board game)) (:board game) :easy) :old-date (:date game) :database db}
-                (= (:gamemode game) "PvCGame :medium") {:gamemode (game-mode/->PvCGame (board-state/board-size (:board game)) (:board game) :medium) :old-date (:date game) :database db}
-                (= (:gamemode game) "PvCGame :hard") {:gamemode (game-mode/->PvCGame (board-state/board-size (:board game)) (:board game) :hard) :old-date (:date game) :database db})}))))
+                (= (:gamemode game) "PvPGame") {:gamemode (game-mode/->PvPGame (board-state/board-size (:board game)) (:board game)) :old-date (:date game)}
+                (= (:gamemode game) "PvCGame :easy") {:gamemode (game-mode/->PvCGame (board-state/board-size (:board game)) (:board game) :easy) :old-date (:date game)}
+                (= (:gamemode game) "PvCGame :medium") {:gamemode (game-mode/->PvCGame (board-state/board-size (:board game)) (:board game) :medium) :old-date (:date game)}
+                (= (:gamemode game) "PvCGame :hard") {:gamemode (game-mode/->PvCGame (board-state/board-size (:board game)) (:board game) :hard) :old-date (:date game)})}))))
+
+(defn load-type-options [state]
+  [{:name    "New Game"
+    :options (board-size-options state)}
+   {:name    "Load Game"
+    :options (let [opts (load-game-options state)]
+               (if (empty? opts)
+                 [{:name    "New Game"
+                   :options (board-size-options state)}]
+                 opts))}])
 
 (def game-mode-menu
-  {:name    "TicTacToe Game"
-   :options [{:name    "New Game"
-              :options (board-size-options {})}
-             {:name    "Load Game"
-              :options (let [opts (load-game-options {})]
-                         (if (empty? opts)
-                           [{:name    "New Game"
-                             :options (board-size-options {})}]
-                           opts))}]})
+  {:name "TicTacToe Game\nChoose Database Persistence"
+   :options [{:name "File Persistence"
+              :options (load-type-options {:database (FileDatabase. "games.txt")})}
+             {:name "SQL Persistence"
+              :options (load-type-options {:database (SQLDatabase. "test.db")})}]})
 
 (defn display-options [options]
   (doall (map #(println (str (inc %) ": " (:name (get options %))))
