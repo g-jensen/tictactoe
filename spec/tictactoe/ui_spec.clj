@@ -52,6 +52,6 @@
       (with-redefs [println (stub :println {:return 0})]
 
         (with-redefs [read-line (stub :read-line {:return "1"})]
-          (should-be-a PvPGame (:game-mode (evaluate-menu game-mode-menu)))
+          (should-be-a PvPGame (:gamemode (evaluate-menu game-mode-menu)))
           (should-have-invoked :read-line))
         (should-have-invoked :println)))))

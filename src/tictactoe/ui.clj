@@ -3,7 +3,8 @@
             [tictactoe.utils :as utils]
             [tictactoe.board-state :as board-state]
             [tictactoe.game-mode :as game-mode]
-            [tictactoe.move :as move]))
+            [tictactoe.move :as move])
+  (:import (tictactoe.database FileDatabase SQLDatabase)))
 
 (defn display-guide [board]
   (println (str "Pick a tile 1-" (count board))))
@@ -20,15 +21,15 @@
 (defn character-picker-options [state]
   [{:name "Start as X"
     :options []
-    :value {:game-mode (game-mode/->PvCGame (:size state) (utils/empty-board (:size state)) (:difficulty state))}}
+    :value {:gamemode (game-mode/->PvCGame (:size state) (utils/empty-board (:size state)) (:difficulty state))}}
    {:name    "Start as O"
     :options []
-    :value {:game-mode (game-mode/->PvCGame (:size state) (move/play-move (utils/empty-board (:size state)) (move/get-computer-move (:difficulty state) (utils/empty-board (:size state)))) (:difficulty state))}}])
+    :value {:gamemode (game-mode/->PvCGame (:size state) (move/play-move (utils/empty-board (:size state)) (move/get-computer-move (:difficulty state) (utils/empty-board (:size state)))) (:difficulty state))}}])
 
 (defn versus-options [state]
   [{:name     "Versus Player"
      :options []
-     :value {:game-mode (game-mode/->PvPGame (:size state) (utils/empty-board (:size state)))}}
+     :value {:gamemode (game-mode/->PvPGame (:size state) (utils/empty-board (:size state)))}}
     {:name    "Versus Computer"
      :options [{:name    "Easy"
                 :options (character-picker-options (assoc state :difficulty :easy))}
@@ -44,14 +45,16 @@
     :options (versus-options (assoc state :size 4))}])
 
 (defn load-game-options [state]
-  (vec (for [game (database/fetch-all-games)]
-    {:name (apply str [(:date game) ": " (:board game)])
-      :options []
-      :value (cond
-               (= (:game-mode game) "PvPGame") {:game-mode (game-mode/->PvPGame (board-state/board-size (:board game)) (:board game)) :old-date (:date game)}
-               (= (:game-mode game) "PvCGame :easy") {:game-mode (game-mode/->PvCGame (board-state/board-size (:board game)) (:board game) :easy) :old-date (:date game)}
-               (= (:game-mode game) "PvCGame :medium") {:game-mode (game-mode/->PvCGame (board-state/board-size (:board game)) (:board game) :medium) :old-date (:date game)}
-               (= (:game-mode game) "PvCGame :hard") {:game-mode (game-mode/->PvCGame (board-state/board-size (:board game)) (:board game) :hard) :old-date (:date game)})})))
+  (let [db (SQLDatabase. "test.db")]
+    (database/initialize db)
+    (vec (for [game (database/fetch-all-games db)]
+      {:name (apply str [(:date game) ": " (:board game)])
+       :options []
+       :value (cond
+                (= (:gamemode game) "PvPGame") {:gamemode (game-mode/->PvPGame (board-state/board-size (:board game)) (:board game)) :old-date (:date game) :database db}
+                (= (:gamemode game) "PvCGame :easy") {:gamemode (game-mode/->PvCGame (board-state/board-size (:board game)) (:board game) :easy) :old-date (:date game) :database db}
+                (= (:gamemode game) "PvCGame :medium") {:gamemode (game-mode/->PvCGame (board-state/board-size (:board game)) (:board game) :medium) :old-date (:date game) :database db}
+                (= (:gamemode game) "PvCGame :hard") {:gamemode (game-mode/->PvCGame (board-state/board-size (:board game)) (:board game) :hard) :old-date (:date game) :database db})}))))
 
 (def game-mode-menu
   {:name    "TicTacToe Game"
