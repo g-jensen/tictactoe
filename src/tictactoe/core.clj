@@ -6,5 +6,6 @@
 (defn -main [& args]
   (loop [state (game-state/initial-state)]
     (if (game-state/over? state)
-      (game-state/clean-up state)
+      (do (game-state/clean-up state)
+          (recur (game-state/initial-state)))
       (recur (game-state/update-state state)))))
