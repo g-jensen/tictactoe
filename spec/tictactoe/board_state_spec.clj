@@ -3,7 +3,7 @@
             [tictactoe.board-state :refer :all]
             [tictactoe.utils :as utils]))
 
-(describe "A TicTacToe Game State"
+(describe "A TicTacToe Board State"
 
   (it "checks if a line is a winning line"
     (should-not (winning-line? [\_ \_ \_]))
