@@ -1,12 +1,8 @@
 (ns tictactoe.ui
-  (:require [tictactoe.database :as database]
-            [tictactoe.utils :as utils]
+  (:require [tictactoe.utils :as utils]
             [tictactoe.board-state :as board-state]
-            [tictactoe.game-mode :as game-mode]
-            [tictactoe.move :as move]
             [quil.core :as q]
-            [quil.middleware :as m])
-  (:import (tictactoe.database FileDatabase SQLDatabase)))
+            [quil.middleware :as m]))
 
 (defprotocol UI
   (initialize [this])

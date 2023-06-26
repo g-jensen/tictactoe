@@ -1,7 +1,9 @@
 (ns tictactoe.menu
-  (:require [tictactoe.database :as database]
+  (:require [tictactoe.board-state :as board-state]
+            [tictactoe.database :as database]
             [tictactoe.game-mode :as game-mode]
             [tictactoe.move :as move]
+            [tictactoe.ui]
             [tictactoe.utils :as utils])
   (:import (tictactoe.database FileDatabase SQLDatabase)
            (tictactoe.ui ConsoleUI QuilUI)))
