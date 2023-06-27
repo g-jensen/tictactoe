@@ -3,10 +3,8 @@
             [tictactoe.database :as database]
             [tictactoe.game-mode :as game-mode]
             [tictactoe.move :as move]
-            [tictactoe.ui]
             [tictactoe.utils :as utils])
-  (:import (tictactoe.database FileDatabase SQLDatabase)
-           (tictactoe.ui ConsoleUI QuilUI)))
+  (:import (tictactoe.database FileDatabase SQLDatabase)))
 
 (defn display-options [options]
   (doall (map #(println (str (inc %) ": " (:name (get options %))))
@@ -57,7 +55,7 @@
 (defn load-game-options [state]
   (let [db (:database state)]
     (database/initialize db)
-    (vec (for [game (database/fetch-all-games db)]
+     (vec (for [game (database/fetch-all-games db)]
            {:name (apply str [(:date game) ": " (:board game)])
             :options []
             :value (cond
@@ -84,8 +82,14 @@
     :options (load-type-options (assoc state :database (SQLDatabase. "games.db")))}])
 
 (def game-mode-menu
-  {:name    "Choose UI Type"
-   :options [{:name    "Console UI"
-              :options (database-options {:ui (ConsoleUI.)})}
-             {:name    "Quil UI"
-              :options (database-options {:ui (QuilUI.)})}]})
+  {:name    "Choose Database Type"
+   :options (database-options {})})
+
+(def ui-picker-menu
+  {:name "Choose UI Type"
+   :options [{:name "Console UI"
+              :options []
+              :value :console}
+             {:name "Quil UI"
+              :options []
+              :value :quil}]})
