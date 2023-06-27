@@ -10,15 +10,13 @@
 (def pvp-game-3x3 (game-mode/->PvPGame 3 (utils/empty-board 3)))
 (def menu-eval-pvp-3x3 {:gamemode pvp-game-3x3
                         :database (database/->FileDatabase "games.txt")
-                        :old-date "Tue Jun 20 17:05:25 EDT 2023"
-                        :ui (ui/->ConsoleUI)})
+                        :old-date "Tue Jun 20 17:05:25 EDT 2023"})
 
 (def init-state-pvp-3x3 {:gamemode pvp-game-3x3
                          :old-date "Tue Jun 20 17:05:25 EDT 2023"
                          :database (database/->FileDatabase "games.txt")
                          :date "Tue Jun 20 17:05:30 EDT 2023"
-                         :board (utils/empty-board 3)
-                         :ui (ui/->ConsoleUI)})
+                         :board (utils/empty-board 3)})
 
 (describe "A TicTacToe Game State"
 
@@ -38,7 +36,6 @@
                 :date "Tue Jun 20 17:05:30 EDT 2023"
                 :board [\x \_ \_ \_ \_ \_ \_ \_ \_]
                 :database (database/->FileDatabase "games.txt")
-                :ui (ui/->ConsoleUI)
                 :over? false}
                (update-state init-state-pvp-3x3))))
 
