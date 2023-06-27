@@ -44,10 +44,11 @@
 
 (defmulti get-computer-move (fn [difficulty board] difficulty))
 (defmethod get-computer-move :hard [_ board]
-  (let [depth (if (= 3 (board-state/board-size board)) 10 4)]
+  (let [depth (if (= 3 (board-state/board-size board)) 10 4)
+        empty-indices (utils/empty-indices board)]
     (if (= \x (player-to-move board))
-      (apply max-key #(move-weight board % depth) (utils/empty-indices board))
-      (apply min-key #(move-weight board % depth) (utils/empty-indices board)))))
+      (apply max-key #(move-weight board % depth) empty-indices)
+      (apply min-key #(move-weight board % depth) empty-indices))))
 
 (defmethod get-computer-move :medium [_ board]
   (if (>= (rand) 0.7)

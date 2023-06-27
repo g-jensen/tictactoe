@@ -19,5 +19,5 @@
                                             [\o \o \o \x \x \_ \x \_ \_])))
     (should= "x has won!\n\nPlay Again:\n" (with-out-str (print-game-over-message
                                             [\o \o \_ \x \x \x \_ \_ \_])))
-    (should= "tie!\n\nAdPlay Again:\n" (with-out-str (print-game-over-message
+    (should= "tie!\n\nPlay Again:\n" (with-out-str (print-game-over-message
                                     [\o \x \x \x \o \o \o \x \x])))))
