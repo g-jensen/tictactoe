@@ -6,7 +6,7 @@
 ;TODO - make more specific like "displays the UI options"
 (describe "A TicTacToe Menu"
   (it "displays the options of a menu"
-    (should= "1: Console UI\n2: Quil UI\n"
+    (should= "1: File Persistence\n2: SQL Persistence\n"
              (with-out-str (display-options (:options game-mode-menu)))))
 
   (with-stubs)
