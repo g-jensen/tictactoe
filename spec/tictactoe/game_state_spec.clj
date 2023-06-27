@@ -4,24 +4,27 @@
             [tictactoe.game-state :refer :all]
             [tictactoe.ui :as ui]
             [tictactoe.utils :as utils]
-            [tictactoe.database :as database]))
+            [tictactoe.database :as database]
+            [tictactoe.menu :as menu]))
 
 (def pvp-game-3x3 (game-mode/->PvPGame 3 (utils/empty-board 3)))
 (def menu-eval-pvp-3x3 {:gamemode pvp-game-3x3
                         :database (database/->FileDatabase "games.txt")
-                        :old-date "Tue Jun 20 17:05:25 EDT 2023"})
+                        :old-date "Tue Jun 20 17:05:25 EDT 2023"
+                        :ui (ui/->ConsoleUI)})
 
 (def init-state-pvp-3x3 {:gamemode pvp-game-3x3
                          :old-date "Tue Jun 20 17:05:25 EDT 2023"
                          :database (database/->FileDatabase "games.txt")
                          :date "Tue Jun 20 17:05:30 EDT 2023"
-                         :board (utils/empty-board 3)})
+                         :board (utils/empty-board 3)
+                         :ui (ui/->ConsoleUI)})
 
 (describe "A TicTacToe Game State"
 
   (with-stubs)
   (it "gets the initial game state"
-    (with-redefs [ui/evaluate-menu (stub :evaluate-menu {:return menu-eval-pvp-3x3})
+    (with-redefs [menu/evaluate-menu (stub :evaluate-menu {:return menu-eval-pvp-3x3})
                   utils/now (stub :now {:return "Tue Jun 20 17:05:30 EDT 2023"})]
       (should= init-state-pvp-3x3
                (initial-state))))
@@ -34,7 +37,9 @@
                 :old-date "Tue Jun 20 17:05:25 EDT 2023"
                 :date "Tue Jun 20 17:05:30 EDT 2023"
                 :board [\x \_ \_ \_ \_ \_ \_ \_ \_]
-                :database (database/->FileDatabase "games.txt")}
+                :database (database/->FileDatabase "games.txt")
+                :ui (ui/->ConsoleUI)
+                :over? false}
                (update-state init-state-pvp-3x3))))
 
   (it "checks if the game-state is over"
