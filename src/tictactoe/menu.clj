@@ -1,9 +1,8 @@
 (ns tictactoe.menu
-  (:require [tictactoe.board-state :as board-state]
+  (:require [tictactoe.move :as move]
+            [tictactoe.utils :as utils]
             [tictactoe.database :as database]
-            [tictactoe.game-mode :as game-mode]
-            [tictactoe.move :as move]
-            [tictactoe.utils :as utils])
+            [tictactoe.board-state :as board-state])
   (:import (tictactoe.database FileDatabase SQLDatabase)))
 
 (defn display-options [options]
@@ -26,70 +25,122 @@
         value
         (recur (choose-option menu))))))
 
-(defn character-picker-options [state]
-  [{:name "Start as X"
-    :options []
-    :value (assoc state :gamemode (game-mode/->PvCGame (:size state) (utils/empty-board (:size state)) (:difficulty state)))}
-   {:name    "Start as O"
-    :options []
-    :value (assoc state :gamemode (game-mode/->PvCGame (:size state) (move/play-move (utils/empty-board (:size state)) (move/get-computer-move (:difficulty state) (utils/empty-board (:size state)))) (:difficulty state)))}])
+(defmulti next-state :state)
+(defmethod next-state :default [state input]
+  {:state :database})
 
-(defn versus-options [state]
-  [{:name    "Versus Player"
-    :options []
-    :value   (assoc state :gamemode (game-mode/->PvPGame (:size state) (utils/empty-board (:size state))))}
-   {:name    "Versus Computer"
-    :options [{:name    "Easy"
-               :options (character-picker-options (assoc state :difficulty :easy))}
-              {:name "Medium"
-               :options (character-picker-options (assoc state :difficulty :medium))}
-              {:name "Hard"
-               :options (character-picker-options (assoc state :difficulty :hard))}]}])
+(defmethod next-state :ui [state input]
+  (cond
+    (= "1" input) :console
+    (= "2" input) :quil
+    :else state))
 
-(defn board-size-options [state]
-  [{:name "3x3 board"
-    :options (versus-options (assoc state :size 3))}
-   {:name "4x4 board"
-    :options (versus-options (assoc state :size 4))}])
+(defmethod next-state :database [state input]
+  (cond
+    (= "1" input) (assoc state :database (FileDatabase. "games.txt") :state :load-type)
+    (= "2" input) (assoc state :database (SQLDatabase. "games.db") :state :load-type)
+    :else state))
 
-(defn load-game-options [state]
-  (let [db (:database state)]
-    (database/initialize db)
-     (vec (for [game (database/fetch-all-games db)]
-           {:name (apply str [(:date game) ": " (:board game)])
-            :options []
-            :value (cond
-                     (= (:gamemode game) "PvPGame") (merge state {:gamemode (game-mode/->PvPGame (board-state/board-size (:board game)) (:board game)) :old-date (:date game)})
-                     (= (:gamemode game) "PvCGame :easy") (merge state {:gamemode (game-mode/->PvCGame (board-state/board-size (:board game)) (:board game) :easy) :old-date (:date game)})
-                     (= (:gamemode game) "PvCGame :medium") (merge state {:gamemode (game-mode/->PvCGame (board-state/board-size (:board game)) (:board game) :medium) :old-date (:date game)})
-                     (= (:gamemode game) "PvCGame :hard") (merge state {:gamemode (game-mode/->PvCGame (board-state/board-size (:board game)) (:board game) :hard) :old-date (:date game)}))}))))
+(defmethod next-state :load-type [state input]
+  (cond
+    (= "1" input) (assoc state :load-type :new :state :board-size)
+    (= "2" input) (assoc state :load-type :load :state :select-game)
+    :else state))
 
+(defmethod next-state :board-size [state input]
+  (cond
+    (= "1" input) (assoc state :board-size 3
+                               :board (utils/empty-board 3)
+                               :state :versus-type)
+    (= "2" input) (assoc state :board-size 4
+                               :state :versus-type
+                               :board (utils/empty-board 4))
+    :else state))
 
-(defn load-type-options [state]
-  [{:name    "New Game"
-    :options (board-size-options state)}
-   {:name    "Load Game"
-    :options (let [opts (load-game-options state)]
-               (if (empty? opts)
-                 [{:name    "New Game"
-                   :options (board-size-options state)}]
-                 opts))}])
+(defmethod next-state :versus-type [state input]
+  (cond
+    (= "1" input) (assoc state :versus-type :pvp :state :done)
+    (= "2" input) (assoc state :versus-type :pvc :state :difficulty)
+    :else state))
 
-(defn database-options [state]
-  [{:name    "File Persistence"
-    :options (load-type-options (assoc state :database (FileDatabase. "games.txt")))}
-   {:name    "SQL Persistence"
-    :options (load-type-options (assoc state :database (SQLDatabase. "games.db")))}])
+(defmethod next-state :difficulty [state input]
+  (cond
+    (= "1" input) (assoc state :difficulty :easy :state :character)
+    (= "2" input) (assoc state :difficulty :medium :state :character)
+    (= "3" input) (assoc state :difficulty :hard :state :character)
+    :else state))
 
-(def game-mode-menu
-  {:name    "Choose Database Type"
-   :options (database-options {})})
+(defmethod next-state :character [state input]
+  (let [empty-board (utils/empty-board (:board-size state))]
+    (cond
+      (= "1" input) (assoc state :character \x
+                                 :board empty-board
+                                 :state :done)
+      (= "2" input) (assoc state :character \o
+                                 :board (move/play-move empty-board
+                                                        (move/get-computer-move
+                                                          (:difficulty state)
+                                                          empty-board))
+                                 :state :done)
+      :else state)))
 
-(def ui-picker-menu
-  {:name "Choose UI Type"
-   :options [{:name "Console UI"
-              :options []
-              :value :console}
-             {:name "Quil UI"
-              :options []
-              :value :quil}]})
+(defmethod next-state :select-game [state input]
+  (database/initialize (:database state))
+  (let [games (database/fetch-all-games (:database state))
+        choice (if (utils/input-valid? input games) (dec (Integer/parseInt input)) -1)
+        game (nth games choice nil)]
+    (cond
+      (empty? games)
+        (assoc state :state :board-size)
+      (not (nil? game))
+        (assoc state :board-size (board-state/board-size (:board game))
+                     :board (:board game)
+                     :versus-type (:mode (:gamemode game))
+                     :difficulty (:difficulty (:gamemode game))
+                     :old-date (:date game)
+                     :state :done)
+      :else
+        state)))
+
+(defmulti ui-components :state)
+
+(defmethod ui-components :ui [state]
+  {:label "UI Type"
+   :options ["1. Console UI" "2. Quil UI"]})
+
+(defmethod ui-components :database [state]
+  {:label "Database"
+   :options ["1. File Database" "2. SQL Database"]})
+
+(defmethod ui-components :load-type [state]
+  {:label "Load Type"
+   :options ["1. New Game" "2. Load Game"]})
+
+(defn number-options [options]
+  (map #(str (inc %) ". " (nth options %)) (range 0 (count options))))
+
+(defmethod ui-components :select-game [state]
+  (database/initialize (:database state))
+  (let [games (database/fetch-all-games (:database state))]
+    (if (empty? games)
+      {:label "Game"
+       :options ["1. New Game"]}
+      {:label "Game"
+       :options (number-options (map #(str (:date %) ": " (:board %))
+                                     (database/fetch-all-games (:database state))))})))
+
+(defmethod ui-components :board-size [state]
+  {:label "Board Size"
+   :options ["1. 3x3" "2. 4x4"]})
+
+(defmethod ui-components :versus-type [state]
+  {:label "Versus Type"
+   :options ["1. Versus Player" "2. Versus Computer"]})
+
+(defmethod ui-components :difficulty [state]
+  {:label "Difficulty"
+   :options ["1. Easy" "2. Medium" "3. Hard"]})
+
+(defmethod ui-components :character [state]
+  {:label "Starting Character"
+   :options ["1. x" "2. o"]})
