@@ -2,8 +2,11 @@
   (:require [tictactoe.move :as move]
             [tictactoe.utils :as utils]
             [tictactoe.database :as database]
+            [tictactoe.file-database]
+            [tictactoe.sql-database]
             [tictactoe.board-state :as board-state])
-  (:import (tictactoe.database FileDatabase SQLDatabase)))
+  (:import (tictactoe.file_database FileDatabase)
+           (tictactoe.sql_database SQLDatabase)))
 
 (defmulti next-state :state)
 

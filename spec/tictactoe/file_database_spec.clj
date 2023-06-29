@@ -1,9 +1,8 @@
-(ns tictactoe.database-spec
+(ns tictactoe.file-database-spec
   (:require [speclj.core :refer :all]
-            [tictactoe.database :refer :all]))
+            [tictactoe.file-database :refer :all]))
 
-(describe "A TicTacToe Database"
-
+(describe "A File Database"
   (it "deletes a specific object with a given date from a string"
     (should= (str "{:date \"Tue Jun 19 12:46:29 EDT 1729\", :board [\\_ \\_ \\_ \\x \\_ \\_ \\o \\x \\_]}\n"
                   "{:date \"Tue Jun 19 12:46:35 EDT 1729\", :board [\\_ \\_ \\_ \\x \\_ \\_ \\o \\x \\_]}")
