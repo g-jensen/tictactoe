@@ -5,27 +5,8 @@
             [tictactoe.board-state :as board-state])
   (:import (tictactoe.database FileDatabase SQLDatabase)))
 
-(defn display-options [options]
-  (doall (map #(println (str (inc %) ": " (:name (get options %))))
-              (range 0 (count options)))))
-
-(defn choose-option [menu]
-  (loop []
-    (println (:name menu))
-    (display-options (:options menu))
-    (let [input (read-line)]
-      (if (utils/input-valid? input (:options menu))
-        (get (:options menu) (dec (Integer/parseInt input)))
-        (recur)))))
-
-(defn evaluate-menu [menu]
-  (loop [menu menu]
-    (let [value (get menu :value)]
-      (if-not (nil? value)
-        value
-        (recur (choose-option menu))))))
-
 (defmulti next-state :state)
+
 (defmethod next-state :default [state input]
   {:state :database})
 
