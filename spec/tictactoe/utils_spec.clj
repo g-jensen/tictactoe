@@ -28,6 +28,7 @@
     (should= [0 1 2] (empty-indices [\_ \_ \_ \o \o \o])))
 
   (it "checks if input is valid"
+    (should-not (input-valid? nil [:a]))
     (should-not (input-valid? "" []))
     (should (input-valid? "1" [:a]))
     (should-not (input-valid? "g" [:a]))
