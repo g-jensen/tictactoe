@@ -33,10 +33,10 @@
       (if-not (empty? data)
         (as-> (str/split-lines data) games
               (map read-string games)
-              (conj games {:date date :board board :gamemode (game-mode/to-string game-mode)})
+              (conj games {:date date :board board :gamemode (game-mode/to-map game-mode)})
               (str/join "\n" games)
               (spit file-name (str games "\n")))
-        (spit file-name (str {:date date :board board :gamemode (game-mode/to-string game-mode)} "\n"))))))
+        (spit file-name (str {:date date :board board :gamemode (game-mode/to-map game-mode)} "\n"))))))
 
 (defn sql-db [file-name]
   {:classname "org.sqlite.JDBC" :subprotocol "sqlite" :subname file-name})
@@ -48,9 +48,10 @@
                     "CREATE TABLE IF NOT EXISTS GAMES
                     (DATE text,
                      BOARD blob,
-                     GAMEMODE text)"))
+                     GAMEMODE blob)"))
   (fetch-all-games [this]
-    (map #(assoc % :board (read-string (:board %)))
+    (map #(assoc % :board (read-string (:board %))
+                   :gamemode (read-string (:gamemode %)))
          (query (sql-db file-name) ["select * from games"])))
   (delete-game [this date]
     (execute! (sql-db file-name) ["DELETE FROM games WHERE date = ?" date]))
@@ -58,4 +59,4 @@
     (delete-game this date)
     (insert! (sql-db file-name) :games {:date date
                                         :board board
-                                        :gamemode (game-mode/to-string game-mode)})))
+                                        :gamemode (game-mode/to-map game-mode)})))
