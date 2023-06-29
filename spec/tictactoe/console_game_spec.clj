@@ -1,14 +1,15 @@
 (ns tictactoe.console-game-spec
   (:require [speclj.core :refer :all]
             [tictactoe.console-game :refer :all]
-            [tictactoe.database :as database]
+            [tictactoe.database]
+            [tictactoe.file-database :as file-database]
             [tictactoe.game-mode :as game-mode]
             [tictactoe.utils :as utils]
             [tictactoe.utils-spec :as utils-spec]))
 
 (def file-3x3-pvp
   {:state :done
-   :database (database/->FileDatabase "games.txt")
+   :database (file-database/->FileDatabase "games.txt")
    :load-type :new
    :board-size 3
    :board (utils/empty-board 3)
@@ -16,7 +17,7 @@
 
 (def file-4x4-pvp
   {:state :done
-   :database (database/->FileDatabase "games.txt")
+   :database (file-database/->FileDatabase "games.txt")
    :load-type :new
    :board-size 4
    :board (utils/empty-board 4)
@@ -24,7 +25,7 @@
 
 (def file-3x3-pvc
   {:state :done
-   :database (database/->FileDatabase "games.txt")
+   :database (file-database/->FileDatabase "games.txt")
    :load-type :new
    :board-size 3
    :board (utils/empty-board 3)

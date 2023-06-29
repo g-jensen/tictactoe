@@ -2,8 +2,11 @@
   (:require [speclj.core :refer :all]
             [tictactoe.menu :refer :all]
             [tictactoe.database :as database]
+            [tictactoe.file-database]
+            [tictactoe.sql-database]
             [tictactoe.utils :as utils])
-  (:import (tictactoe.database FileDatabase SQLDatabase)))
+  (:import (tictactoe.file_database FileDatabase)
+           (tictactoe.sql_database SQLDatabase)))
 
 (def games
   [{:date "the-date", :board [\x \_ \_ \_ \_ \_ \_ \_ \_], :gamemode {:mode :pvp}}
