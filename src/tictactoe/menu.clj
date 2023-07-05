@@ -14,10 +14,10 @@
 
 (defmethod gs/next-state :database [state input]
   (cond
-    (= "1" input) (do (database/initialize (FileDatabase. "games.txt"))
-                      (assoc state :database (FileDatabase. "games.txt") :state :load-type))
-    (= "2" input) (do (database/initialize (SQLDatabase. "games.db"))
-                      (assoc state :database (SQLDatabase. "games.db") :state :load-type))
+    (= "1" input) (do (gs/db-initialize {:database :file})
+                      (assoc state :database :file :state :load-type))
+    (= "2" input) (do (gs/db-initialize {:database :sql})
+                      (assoc state :database :sql :state :load-type))
     :else state))
 
 (defmethod gs/next-state :load-type [state input]
@@ -64,7 +64,7 @@
       :else state)))
 
 (defmethod gs/next-state :select-game [state input]
-  (let [games (database/fetch-all-games (:database state))
+  (let [games (gs/db-fetch-games state)
         choice (if (utils/input-valid? input games) (dec (Integer/parseInt input)) -1)
         game (nth games choice nil)]
     (cond
@@ -96,13 +96,13 @@
   (map #(str (inc %) ". " (nth options %)) (range 0 (count options))))
 
 (defmethod gs/ui-components :select-game [state]
-  (let [games (database/fetch-all-games (:database state))]
+  (let [games (gs/db-fetch-games state)]
     (if (empty? games)
       {:label "Game"
        :options ["1. New Game"]}
       {:label "Game"
        :options (number-options (map #(str (:date %) ": " (:board %))
-                                     (database/fetch-all-games (:database state))))})))
+                                     (gs/db-fetch-games state)))})))
 
 (defmethod gs/ui-components :board-size [state]
   {:label "Board Size"

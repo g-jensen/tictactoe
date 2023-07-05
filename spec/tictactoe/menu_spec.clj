@@ -18,9 +18,9 @@
     (should= {:state :database} (gs/next-state {} nil)))
 
   (it "selects the database state"
-    (should= (FileDatabase. "games.txt") (:database (gs/next-state {:state :database} "1")))
+    (should= :file (:database (gs/next-state {:state :database} "1")))
     (should= :load-type (:state (gs/next-state {:state :database} "1")))
-    (should= (SQLDatabase. "games.db") (:database (gs/next-state {:state :database} "2")))
+    (should= :sql (:database (gs/next-state {:state :database} "2")))
     (should= :load-type (:state (gs/next-state {:state :database} "2")))
     (should= {:state :database} (gs/next-state {:state :database} "3")))
 
@@ -33,8 +33,8 @@
 
   (with-stubs)
   (it "selects a game from a database"
-    (with-redefs [database/fetch-all-games (stub :fetch-all-games {:return games})
-                  database/initialize (stub :initialize {:return 0})]
+    (with-redefs [gs/db-fetch-games (stub :fetch-all-games {:return games})
+                  gs/db-initialize (stub :initialize {:return 0})]
       (should= {:board-size 3
                 :board [\x \_ \_ \_ \_ \_ \_ \_ \_]
                 :versus-type :pvp
@@ -51,8 +51,8 @@
       (should= {:state :select-game} (gs/next-state {:state :select-game} nil))))
 
   (it "selects a new game if the database is empty"
-    (with-redefs [database/fetch-all-games (stub :fetch-all-games {:return []})
-                  database/initialize (stub :initialize {:return 0})]
+    (with-redefs [gs/db-fetch-games (stub :fetch-all-games {:return []})
+                  gs/db-initialize  (stub :initialize {:return 0})]
       (should= {:state :board-size} (gs/next-state {:state :select-game} "1"))))
 
   (it "selects the board size state"
@@ -106,16 +106,16 @@
              (gs/ui-components {:state :load-type})))
 
   (it "stores the ui components to select a game from a database"
-    (with-redefs [database/fetch-all-games (stub :fetch-all-games {:return games})
-                  database/initialize (stub :initialize {:return 0})]
+    (with-redefs [gs/db-fetch-games (stub :fetch-all-games {:return games})
+                  gs/db-initialize (stub :initialize {:return 0})]
       (should= {:label "Game"
                 :options ["1. the-date: [\\x \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_]"
                           "2. another-date: [\\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_]"]}
                (gs/ui-components {:state :select-game :database nil}))))
 
   (it "stores the ui components to select a new game if the database is empty"
-    (with-redefs [database/fetch-all-games (stub :fetch-all-games {:return []})
-                  database/initialize (stub :initialize {:return 0})]
+    (with-redefs [gs/db-fetch-games (stub :fetch-all-games {:return []})
+                  gs/db-initialize (stub :initialize {:return 0})]
       (should= {:label "Game"
                 :options ["1. New Game"]}
                (gs/ui-components {:state :select-game :database nil}))))

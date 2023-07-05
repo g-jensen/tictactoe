@@ -9,7 +9,7 @@
 
 (def file-3x3-pvp
   {:state :done
-   :database (file-database/->FileDatabase "games.txt")
+   :database :file
    :load-type :new
    :board-size 3
    :board (utils/empty-board 3)
@@ -17,7 +17,7 @@
 
 (def file-4x4-pvp
   {:state :done
-   :database (file-database/->FileDatabase "games.txt")
+   :database :file
    :load-type :new
    :board-size 4
    :board (utils/empty-board 4)
@@ -25,7 +25,7 @@
 
 (def file-3x3-pvc
   {:state :done
-   :database (file-database/->FileDatabase "games.txt")
+   :database :file
    :load-type :new
    :board-size 3
    :board (utils/empty-board 3)

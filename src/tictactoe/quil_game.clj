@@ -4,8 +4,7 @@
             [tictactoe.board-state :as board-state]
             [tictactoe.database :as database]
             [tictactoe.game-mode :as game-mode]
-            [tictactoe.game-state :as game-state]
-            [tictactoe.menu :as menu]
+            [tictactoe.game-state :as gs]
             [tictactoe.move :as move]
             [tictactoe.utils :as utils])
   (:import (tictactoe.game_mode PvCGame)))
@@ -27,7 +26,7 @@
 (defn quil-setup []
   (q/frame-rate 30)
   (q/background 200)
-  (menu/next-state {:state :done} nil))
+  (gs/next-state {:state :done} nil))
 
 (defn board-index-to-coords [index size]
   [(* 50 (inc (quot index size))) (+ 50 (* 50 (inc (mod index size))))])
@@ -40,7 +39,7 @@
              (quil-button (board-index-to-coords i size) [50 50] (str (nth board (+ (* size y) x))))))))
 
 (defn quil-draw-buttons [state]
-  (let [components (menu/ui-components state)
+  (let [components (gs/ui-components state)
         label (:label components)
         options (:options components)]
     (do (q/text label 5 20)
@@ -60,11 +59,11 @@
                  (range 0 (count board)))))
 
 (defn click-button [state data]
-  (let [options (:options (menu/ui-components state))
+  (let [options (:options (gs/ui-components state))
         choice (picked-option [(:x data) (:y data)] options)]
     (if (nil? choice)
       state
-      (menu/next-state state (str (inc choice))))))
+      (gs/next-state state (str (inc choice))))))
 
 (defn click-tile [state data]
   (let [tile (picked-tile [(:x data) (:y data)] (:board state))
@@ -75,8 +74,8 @@
         gamemode (:gamemode state)]
     (if (nil? tile)
       state
-      (do (database/delete-game database old-date)
-          (database/update-game database date board gamemode)
+      (do (gs/db-delete-game state old-date)
+          (gs/db-update-game state date board gamemode)
           (assoc state :board (move/play-move (:board state) tile))))))
 
 (defn computer-turn? [state]
@@ -113,11 +112,11 @@
             gamemode (:gamemode state)
             board (:board state)]
         (if (computer-turn? state)
-          (do (database/delete-game database old-date)
-              (database/update-game database date board gamemode)
+          (do (gs/db-delete-game state old-date)
+              (gs/db-update-game state date board gamemode)
               (assoc state :board (game-mode/next-board gamemode board)))
           (if (board-state/game-over? board)
-            (do (database/delete-game database date)
+            (do (gs/db-delete-game state date)
                 (assoc state :over? true))
             state))))
     state))
@@ -130,7 +129,7 @@
         (quil-setup)
         (click-tile state data)))))
 
-(defmethod game-state/run-tictactoe :quil [_]
+(defmethod gs/run-tictactoe :quil [_]
   (q/defsketch tictactoe
                :title "TicTacToe Game"
                :settings #(q/smooth 2)

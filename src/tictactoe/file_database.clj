@@ -1,6 +1,7 @@
 (ns tictactoe.file-database
   (:require [clojure.string :as str]
             [tictactoe.database :refer :all]
+            [tictactoe.game-state :as gs]
             [tictactoe.game-mode :as game-mode]))
 
 (defn delete-date [string date]
@@ -10,27 +11,27 @@
           (remove #(= date (:date %)) games)
           (str/join "\n" games))))
 
-(defrecord FileDatabase [file-name]
-  Database
-  (initialize [this]
-    (spit file-name "" :append true))
+(def file-name "games.txt")
 
-  (fetch-all-games [this]
-    (let [data (slurp file-name)]
-      (if-not (empty? data)
-        (map read-string (str/split-lines data)))))
+(defmethod gs/db-initialize :file [_]
+  (spit file-name "" :append true))
 
-  (delete-game [this date]
-    (let [data (slurp file-name)]
-      (spit file-name (delete-date data date))))
+(defmethod gs/db-fetch-games :file [_]
+  (let [data (slurp file-name)]
+    (if-not (empty? data)
+      (map read-string (str/split-lines data)))))
 
-  (update-game [this date board game-mode]
-    (delete-game this date)
-    (let [data (slurp file-name)]
-      (if-not (empty? data)
-        (as-> (str/split-lines data) games
-              (map read-string games)
-              (conj games {:date date :board board :gamemode (game-mode/to-map game-mode)})
-              (str/join "\n" games)
-              (spit file-name (str games "\n")))
-        (spit file-name (str {:date date :board board :gamemode (game-mode/to-map game-mode)} "\n"))))))
+(defmethod gs/db-delete-game :file [_ date]
+  (let [data (slurp file-name)]
+    (spit file-name (delete-date data date))))
+
+(defmethod gs/db-update-game :file [state date board game-mode]
+  (gs/db-delete-game state date)
+  (let [data (slurp file-name)]
+    (if-not (empty? data)
+      (as-> (str/split-lines data) games
+            (map read-string games)
+            (conj games {:date date :board board :gamemode (game-mode/to-map game-mode)})
+            (str/join "\n" games)
+            (spit file-name (str games "\n")))
+      (spit file-name (str {:date date :board board :gamemode (game-mode/to-map game-mode)} "\n")))))
