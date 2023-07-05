@@ -2,7 +2,6 @@
   (:require [speclj.core :refer :all]
             [tictactoe.console-game :refer :all]
             [tictactoe.database]
-            [tictactoe.file-database :as file-database]
             [tictactoe.game-mode :as game-mode]
             [tictactoe.utils :as utils]
             [tictactoe.utils-spec :as utils-spec]))

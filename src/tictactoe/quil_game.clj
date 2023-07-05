@@ -2,7 +2,7 @@
   (:require [quil.core :as q]
             [quil.middleware :as m]
             [tictactoe.board-state :as board-state]
-            [tictactoe.database :as database]
+            [tictactoe.database]
             [tictactoe.game-mode :as game-mode]
             [tictactoe.game-state :as gs]
             [tictactoe.move :as move]

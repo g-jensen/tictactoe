@@ -1,13 +1,11 @@
 (ns tictactoe.menu
   (:require [tictactoe.move :as move]
             [tictactoe.utils :as utils]
-            [tictactoe.database :as database]
             [tictactoe.game-state :as gs]
+            [tictactoe.database]
             [tictactoe.file-database]
             [tictactoe.sql-database]
-            [tictactoe.board-state :as board-state])
-  (:import (tictactoe.file_database FileDatabase)
-           (tictactoe.sql_database SQLDatabase)))
+            [tictactoe.board-state :as board-state]))
 
 (defmethod gs/next-state :default [state input]
   {:state :database})

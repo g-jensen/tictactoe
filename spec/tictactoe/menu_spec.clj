@@ -1,13 +1,11 @@
 (ns tictactoe.menu-spec
   (:require [speclj.core :refer :all]
             [tictactoe.menu :refer :all]
-            [tictactoe.database :as database]
+            [tictactoe.database]
             [tictactoe.game-state :as gs]
             [tictactoe.file-database]
             [tictactoe.sql-database]
-            [tictactoe.utils :as utils])
-  (:import (tictactoe.file_database FileDatabase)
-           (tictactoe.sql_database SQLDatabase)))
+            [tictactoe.utils :as utils]))
 
 (def games
   [{:date "the-date", :board [\x \_ \_ \_ \_ \_ \_ \_ \_], :gamemode {:mode :pvp}}
