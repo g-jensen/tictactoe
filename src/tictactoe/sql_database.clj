@@ -25,5 +25,5 @@
 (defmethod gs/db-update-game :sql [state date board game-mode]
   (gs/db-delete-game state date)
   (insert! sql-db :games {:date date
-                                      :board board
-                                      :gamemode (game-mode/to-map game-mode)}))
+                          :board board
+                          :gamemode (game-mode/to-map game-mode)}))

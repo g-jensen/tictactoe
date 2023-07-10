@@ -8,7 +8,7 @@
             [tictactoe.board-state :as board-state]))
 
 (defmethod gs/next-state :default [state input]
-  {:state :database})
+  (assoc state :state :database))
 
 (defmethod gs/next-state :database [state input]
   (cond
@@ -71,6 +71,7 @@
       (not (nil? game))
         (assoc state :board-size (board-state/board-size (:board game))
                      :board (:board game)
+                     :character (move/player-to-move (:board game))
                      :versus-type (:mode (:gamemode game))
                      :difficulty (:difficulty (:gamemode game))
                      :old-date (:date game)
