@@ -36,12 +36,14 @@
       (should= {:board-size 3
                 :board [\x \_ \_ \_ \_ \_ \_ \_ \_]
                 :versus-type :pvp
+                :character \o
                 :difficulty nil
                 :old-date "the-date"
                 :state :done} (gs/next-state {:state :select-game} "1"))
       (should= {:board-size 4
                 :board [\_ \_ \_ \_ \_ \_ \_ \_ \_ \_ \_ \_ \_ \_ \_ \_]
                 :versus-type :pvc
+                :character \x
                 :difficulty :hard
                 :old-date "another-date"
                 :state :done} (gs/next-state {:state :select-game} "2"))
