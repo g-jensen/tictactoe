@@ -3,11 +3,8 @@
             [quil.middleware :as m]
             [tictactoe.board-state :as board-state]
             [tictactoe.database]
-            [tictactoe.game-mode :as game-mode]
             [tictactoe.game-state :as gs]
-            [tictactoe.move :as move]
-            [tictactoe.utils :as utils])
-  (:import (tictactoe.game_mode PvCGame)))
+            [tictactoe.move :as move]))
 
 (defn point-in-rect? [point rect]
   (let [[x1 y1] point
@@ -23,10 +20,10 @@
   (q/fill 0)
   (q/text text x y))
 
-(defn quil-setup []
+(defn quil-setup [state]
   (q/frame-rate 30)
   (q/background 200)
-  (gs/next-state {:state :done} nil))
+  (gs/next-state state nil))
 
 (defn board-index-to-coords [index size]
   [(* 50 (inc (quot index size))) (+ 50 (* 50 (inc (mod index size))))])
@@ -66,76 +63,46 @@
       (gs/next-state state (str (inc choice))))))
 
 (defn click-tile [state data]
-  (let [tile (picked-tile [(:x data) (:y data)] (:board state))
-        database (:database state)
-        date (:date state)
-        old-date (:old-date state)
-        board (:board state)
-        gamemode (:gamemode state)]
+  (let [tile (picked-tile [(:x data) (:y data)] (:board state))]
     (if (nil? tile)
       state
-      (do (gs/db-delete-game state old-date)
-          (gs/db-update-game state date board gamemode)
-          (assoc state :board (move/play-move (:board state) tile))))))
-
-(defn computer-turn? [state]
-  (and (not (empty? (utils/empty-indices (:board state))))
-       (instance? PvCGame (:gamemode state))
-       (not= (move/player-to-move (:init-board (:gamemode state)))
-             (move/player-to-move (:board state)))))
-
-(defn init-gamemode [state]
-  (let [size (:board-size state)
-        difficulty (:difficulty state)]
-    (if (= :pvp (:versus-type state))
-      (game-mode/->PvPGame size (:board state))
-      (game-mode/->PvCGame size (:board state) difficulty))))
+      (assoc state :board (move/play-move (:board state) tile)))))
 
 (defn quil-draw [state]
   (q/fill 200)
   (q/rect 0 0 384 384)
   (q/fill 0)
   (q/text-size 20)
-  (if (and (not= :done (:state state)))
+  (if (not= :done (:state state))
     (quil-draw-buttons state)
     (quil-draw-board (:board state)))
   (if (:over? state)
     (quil-button [50 300] [120 50] "Play Again?")))
 
-(defn quil-update [state]
-  (if (= :done (:state state))
-    (if (not (:gamemode state))
-      (assoc state :gamemode (init-gamemode state))
-      (let [database (:database state)
-            date (:date state)
-            old-date (:old-date state)
-            gamemode (:gamemode state)
-            board (:board state)]
-        (if (computer-turn? state)
-          (do (gs/db-delete-game state old-date)
-              (gs/db-update-game state date board gamemode)
-              (assoc state :board (game-mode/next-board gamemode board)))
-          (if (board-state/game-over? board)
-            (do (gs/db-delete-game state date)
-                (assoc state :over? true))
-            state))))
-    state))
-
 (defn quil-mouse-clicked [state data]
   (if-not (= :done (:state state))
     (click-button state data)
-    (let [play-again? (point-in-rect? [(:x data) (:y data)] [50 300 120 50])]
+    (let [play-again? (point-in-rect? [(:x data) (:y data)] [50 300 120 50])
+          state (click-tile state data)]
       (if (and (:over? state) play-again?)
-        (quil-setup)
-        (click-tile state data)))))
+        (do (gs/next-state {:ui :quil} nil))
+        (do (gs/db-save-game (gs/next-board state))
+            state)))))
 
-(defmethod gs/run-tictactoe :quil [_]
+(defmethod gs/next-board :quil [state]
+  (let [board (:board state)
+        difficulty (:difficulty state)]
+    (if (gs/computer-turn? state)
+      (assoc state :board (move/play-move board (move/get-computer-move difficulty board)))
+      state)))
+
+(defmethod gs/run-tictactoe :quil [state]
   (q/defsketch tictactoe
                :title "TicTacToe Game"
                :settings #(q/smooth 2)
-               :setup quil-setup
+               :setup #(quil-setup state)
                :draw quil-draw
-               :update quil-update
+               :update gs/update-state
                :mouse-clicked quil-mouse-clicked
                :size [384 384]
                :middleware [m/fun-mode]))

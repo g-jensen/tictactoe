@@ -1,5 +1,6 @@
 (ns tictactoe.console-game-spec
   (:require [speclj.core :refer :all]
+            [tictactoe.game-state :as gs]
             [tictactoe.console-game :refer :all]
             [tictactoe.database]
             [tictactoe.game-mode :as game-mode]
@@ -36,26 +37,26 @@
 
   (it "initializes a gamemode"
     (should= (game-mode/->PvPGame 3 (utils/empty-board 3))
-             (init-gamemode {:versus-type :pvp :board-size 3 :board (utils/empty-board 3)}))
+             (gs/init-gamemode {:versus-type :pvp :board-size 3 :board (utils/empty-board 3)}))
     (should= (game-mode/->PvPGame 4 (utils/empty-board 4))
-             (init-gamemode {:versus-type :pvp :board-size 4 :board (utils/empty-board 4)}))
+             (gs/init-gamemode {:versus-type :pvp :board-size 4 :board (utils/empty-board 4)}))
     (should= (game-mode/->PvCGame 3 (utils/empty-board 3) :hard)
-             (init-gamemode {:versus-type :pvc
+             (gs/init-gamemode {:versus-type :pvc
                              :board-size 3
                              :difficulty :hard
                              :board (utils/empty-board 3)}))
     (should= (game-mode/->PvCGame 3 (utils/empty-board 3) :medium)
-             (init-gamemode {:versus-type :pvc
+             (gs/init-gamemode {:versus-type :pvc
                              :board-size 3
                              :difficulty :medium
                              :board (utils/empty-board 3)}))
     (should= (game-mode/->PvCGame 3 (utils/empty-board 3) :easy)
-             (init-gamemode {:versus-type :pvc
+             (gs/init-gamemode {:versus-type :pvc
                              :board-size 3
                              :difficulty :easy
                              :board (utils/empty-board 3)}))
     (should= (game-mode/->PvCGame 4 (utils/empty-board 4) :hard)
-             (init-gamemode {:versus-type :pvc
+             (gs/init-gamemode {:versus-type :pvc
                              :board-size 4
                              :difficulty :hard
                              :board (utils/empty-board 4)})))
