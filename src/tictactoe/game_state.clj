@@ -6,24 +6,15 @@
   (:import (tictactoe.game_mode PvCGame)))
 
 (defmulti run-tictactoe :ui)
-
 (defmulti next-state :state)
-
 (defmulti ui-components :state)
-
 (defmulti db-initialize :database)
-
 (defmulti db-fetch-games :database)
-
 (defmulti db-delete-game :database)
-
 (defmulti db-update-game (fn [state _ _ _] (:database state)))
-
-(defmulti db-save-game :database)
-
 (defmulti next-board :ui)
 
-(defmethod db-save-game :default [state]
+(defn db-save-game [state]
   (db-delete-game state (:old-date state))
   (db-update-game state (:date state) (:board state) (:gamemode state)))
 
