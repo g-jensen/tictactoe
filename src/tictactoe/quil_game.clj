@@ -4,7 +4,8 @@
             [tictactoe.board-state :as board-state]
             [tictactoe.database]
             [tictactoe.game-state :as gs]
-            [tictactoe.move :as move]))
+            [tictactoe.move :as move]
+            [tictactoe.utils :as utils]))
 
 (defn point-in-rect? [point rect]
   (let [[x1 y1] point
@@ -25,15 +26,27 @@
   (q/background 200)
   (gs/next-state state nil))
 
-(defn board-index-to-coords [index size]
-  [(* 50 (inc (quot index size))) (+ 50 (* 50 (inc (mod index size))))])
+(defn add-points [[x1 y1] [x2 y2]]
+  [(+ x1 x2) (+ y1 y2)])
+
+(defn sub-points [[x1 y1] [x2 y2]]
+  [(- x1 x2) (- y1 y2)])
+
+(defn board-index-to-coords [index size tile-size]
+  [(* tile-size (inc (quot index size))) (+ tile-size (* tile-size (inc (mod index size))))])
+
+(defn draw-tiles [board pos tile-size]
+  (let [board-size (board-state/board-size board)]
+    (for [i (range 0 (count board))
+          :let [x (mod i board-size)
+                y (quot i board-size)]]
+      (quil-button (add-points pos (board-index-to-coords i board-size tile-size)) [tile-size tile-size] (str (nth board (+ (* board-size y) x)))))))
 
 (defn quil-draw-board [board]
-  (let [size (board-state/board-size board)]
-    (doall (for [i (range 0 (count board))
-                 :let [x (mod i size)
-                       y (quot i size)]]
-             (quil-button (board-index-to-coords i size) [50 50] (str (nth board (+ (* size y) x))))))))
+  (if (utils/board-3d? board)
+    (doall (for [i (range 0 (count board))]
+             (doall (draw-tiles (nth board i) [0 (* i 90)] 30))))
+    (doall (draw-tiles board [0 0] 50))))
 
 (defn quil-draw-buttons [state]
   (let [components (gs/ui-components state)
@@ -51,9 +64,18 @@
   (first (filter #(point-in-rect? mouse-pos [5 (* 20 (+ % 3)) 150 20])
                  (range 0 (count options)))))
 
+(defn clicked-tiles [mouse-pos board tile-size]
+  (filter #(point-in-rect? mouse-pos
+                           (concat (board-index-to-coords % (board-state/board-size board) tile-size) [tile-size tile-size]))
+          (range 0 (count board))))
+
 (defn picked-tile [mouse-pos board]
-  (first (filter #(point-in-rect? mouse-pos (concat (board-index-to-coords % (board-state/board-size board)) [50 50]))
-                 (range 0 (count board)))))
+  (if (utils/board-3d? board)
+    (first (apply concat (for [i (range 0 (count board))]
+                           (map #(+ (* i 9) %)
+                                (clicked-tiles (sub-points mouse-pos [0 (* i 90)])
+                                               (nth board i) 30)))))
+    (first (clicked-tiles mouse-pos board 50))))
 
 (defn click-button [state data]
   (let [options (:options (gs/ui-components state))

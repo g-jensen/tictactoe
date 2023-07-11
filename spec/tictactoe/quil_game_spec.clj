@@ -13,11 +13,11 @@
     (should (point-in-rect? [1 -1] [0 0 1 1])))
 
   (it "converts a board index to coordinates"
-    (should= [50 100] (board-index-to-coords 0 20))
-    (should= [50 100] (board-index-to-coords 0 10))
-    (should= [50 150] (board-index-to-coords 1 20))
-    (should= [50 200] (board-index-to-coords 2 20))
-    (should= [50 250] (board-index-to-coords 3 10)))
+    (should= [50 100] (board-index-to-coords 0 20 50))
+    (should= [50 100] (board-index-to-coords 0 10 50))
+    (should= [50 150] (board-index-to-coords 1 20 50))
+    (should= [50 200] (board-index-to-coords 2 20 50))
+    (should= [50 250] (board-index-to-coords 3 10 50)))
 
   (it "clicks a button"
     (should= :database (:state (click-button {:state :database} {:x 0 :y 0})))
