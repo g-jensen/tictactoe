@@ -10,23 +10,54 @@
     (should (winning-line? [\x \x \x]))
     (should-not (winning-line? [\x \_ \_])))
 
+  (it "gets the size of a board"
+    (should= 3 (board-size (utils/empty-board 3)))
+    (should= 4 (board-size (utils/empty-board 4)))
+    (should= 3 (board-size (repeat 3 (utils/empty-board 3)))))
+
   (it "gets the rows of a board"
     (should= [[:a :b :c] [:d :e :f] [:g :h :i]]
              (rows [:a :b :c :d :e :f :g :h :i]))
     (should= [[:a :b :c :d] [:e :f :g :h] [:i :j :k :l] [:m :n :o :p]]
-             (rows [:a :b :c :d :e :f :g :h :i :j :k :l :m :n :o :p])))
+             (rows [:a :b :c :d :e :f :g :h :i :j :k :l :m :n :o :p]))
+    (should= [[:a :b :c] [:d :e :f] [:g :h :i]
+              [:j :k :l] [:m :n :o] [:p :q :r]
+              [:s :t :u] [:v :w :x] [:y :z :aa]
+              [:a :j :s] [:b :k :t] [:c :l :u]
+              [:d :m :v] [:e :n :w] [:f :o :x]
+              [:g :p :y] [:h :q :z] [:i :r :aa]]
+             (rows [[:a :b :c :d :e :f :g :h :i]
+                    [:j :k :l :m :n :o :p :q :r]
+                    [:s :t :u :v :w :x :y :z :aa]])))
 
   (it "gets the columns of a board"
     (should= [[:a :d :g] [:b :e :h] [:c :f :i]]
              (columns [:a :b :c :d :e :f :g :h :i]))
     (should= [[:a :e :i :m] [:b :f :j :n] [:c :g :k :o] [:d :h :l :p]]
-             (columns [:a :b :c :d :e :f :g :h :i :j :k :l :m :n :o :p])))
+             (columns [:a :b :c :d :e :f :g :h :i :j :k :l :m :n :o :p]))
+    (should= [[:a :d :g] [:b :e :h] [:c :f :i]
+              [:j :m :p] [:k :n :q] [:l :o :r]
+              [:s :v :y] [:t :w :z] [:u :x :aa]
+              [:a :b :c] [:j :k :l] [:s :t :u]
+              [:d :e :f] [:m :n :o] [:v :w :x]
+              [:g :h :i] [:p :q :r] [:y :z :aa]]
+             (columns [[:a :b :c :d :e :f :g :h :i]
+                       [:j :k :l :m :n :o :p :q :r]
+                       [:s :t :u :v :w :x :y :z :aa]])))
 
   (it "gets the diagonals of a board"
     (should= [[:a :e :i] [:c :e :g]]
              (diagonals [:a :b :c :d :e :f :g :h :i]))
     (should= [[:a :f :k :p] [:d :g :j :m]]
-             (diagonals [:a :b :c :d :e :f :g :h :i :j :k :l :m :n :o :p])))
+             (diagonals [:a :b :c :d :e :f :g :h :i :j :k :l :m :n :o :p]))
+    (should=   [[:a :e :i] [:c :e :g]
+                [:j :n :r] [:l :n :p]
+                [:s :w :aa] [:u :w :y]
+                [:a :n :aa] [:u :n :g]
+                [:c :n :y] [:s :n :i]]
+             (diagonals [[:a :b :c :d :e :f :g :h :i]
+                         [:j :k :l :m :n :o :p :q :r]
+                         [:s :t :u :v :w :x :y :z :aa]])))
 
   (it "checks if a player has won"
     (should-not (win? (utils/empty-board 3)))

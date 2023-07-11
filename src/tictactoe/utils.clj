@@ -6,8 +6,13 @@
 (defn empty-board [n]
   (vec (repeat (* n n) empty-tile)))
 
+(defn board-3d? [board]
+  (coll? (first board)))
+
 (defn tile-count [board tile]
-  (count (filter #(= tile %) board)))
+  (if (board-3d? board)
+    (apply + (map #(tile-count % tile) board))
+    (count (filter #(= tile %) board))))
 
 (defn in-range? [start end n]
   (and (>= n start) (< n end)))
@@ -27,6 +32,3 @@
 
 (defn now []
   (str (Date.)))
-
-(defn board-3d? [board]
-  (coll? (first board)))
