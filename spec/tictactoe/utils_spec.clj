@@ -13,7 +13,8 @@
     (should= 9 (tile-count (empty-board 3) empty-tile))
     (should= 0 (tile-count (empty-board 3) \x))
     (should= 1 (tile-count [\x \_ \_ \_ \_ \_ \_ \_ \_] \x))
-    (should= 3 (tile-count [\x \o \o \_ \o \_ \_ \_ \_] \o)))
+    (should= 3 (tile-count [\x \o \o \_ \o \_ \_ \_ \_] \o))
+    (should= 27 (tile-count (repeat 3 (empty-board 3)) empty-tile)))
 
   (it "checks if a number is in a range"
     (should (in-range? 0 10 0))
