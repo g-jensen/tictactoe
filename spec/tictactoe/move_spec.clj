@@ -35,28 +35,6 @@
               [\_ \_ \_ \_ \_ \_ \_ \_ \_]]
              (play-move (repeat 3 (utils/empty-board 3)) 0)))
 
-  (with-stubs)
-  (it "gets the user's next move"
-    (with-redefs [read-line (stub :read-line {:return "1"})]
-      (should= 0 (get-user-move (utils/empty-board 3)))
-      (should-have-invoked :read-line))
-
-    (with-redefs [read-line (stub :read-line {:return "2"})]
-      (should= 1 (get-user-move (utils/empty-board 3)))
-      (should-have-invoked :read-line))
-
-    (with-redefs [read-line (stub :read-line {:return "0"})]
-      (should= -1 (get-user-move (utils/empty-board 3)))
-      (should-have-invoked :read-line))
-
-    (with-redefs [read-line (stub :read-line {:return "10"})]
-      (should= -1 (get-user-move (utils/empty-board 3)))
-      (should-have-invoked :read-line))
-
-    (with-redefs [read-line (stub :read-line {:return "g"})]
-      (should= -1 (get-user-move (utils/empty-board 3)))
-      (should-have-invoked :read-line)))
-
   (context "A Computer"
     (context "Hard Mode"
 

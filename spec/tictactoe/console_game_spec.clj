@@ -96,8 +96,29 @@
              (with-out-str (console-draw {:board [\x \o \x \o \x \o \x \_ \_]
                                           :over? true}))))
 
+  (it "gets the user's next move"
+    (with-redefs [read-line (stub :read-line {:return "1"})]
+      (should= 0 (get-user-move (utils/empty-board 3)))
+      (should-have-invoked :read-line))
+
+    (with-redefs [read-line (stub :read-line {:return "2"})]
+      (should= 1 (get-user-move (utils/empty-board 3)))
+      (should-have-invoked :read-line))
+
+    (with-redefs [read-line (stub :read-line {:return "0"})]
+      (should= -1 (get-user-move (utils/empty-board 3)))
+      (should-have-invoked :read-line))
+
+    (with-redefs [read-line (stub :read-line {:return "10"})]
+      (should= -1 (get-user-move (utils/empty-board 3)))
+      (should-have-invoked :read-line))
+
+    (with-redefs [read-line (stub :read-line {:return "g"})]
+      (should= -1 (get-user-move (utils/empty-board 3)))
+      (should-have-invoked :read-line)))
+
   (it "gets the next board"
-    (with-redefs [move/get-user-move (stub :get-user-move {:return 0})]
+    (with-redefs [get-user-move (stub :get-user-move {:return 0})]
       (should= (assoc console-empty-board :board [\x \_ \_ \_ \_ \_ \_ \_ \_])
                (gs/next-board console-empty-board))
       (should= (assoc console-pvc-x :board [\x \_ \_ \_ \o \_ \_ \_ \_])

@@ -40,12 +40,22 @@
     (if over?
       (print-game-over-message board))))
 
+(defn get-user-move [board]
+  (let [input (read-line)
+        board-size (board-state/board-size board)
+        empty-board (if (utils/board-3d? board)
+                      (flatten (repeat board-size (utils/empty-board board-size)))
+                      (utils/empty-board board-size))]
+    (if (utils/input-valid? input empty-board)
+      (dec (Integer/parseInt input))
+      -1)))
+
 (defmethod gs/next-board :console [state]
   (let [board (:board state)
         difficulty (:difficulty state)]
     (if (gs/computer-turn? state)
       (assoc state :board (move/play-move board (move/get-computer-move difficulty board)))
-      (assoc state :board (move/play-move board (move/get-user-move board))))))
+      (assoc state :board (move/play-move board (get-user-move board))))))
 
 (defmethod gs/run-tictactoe :console [state]
   (loop [state (merge state (initial-state))]
