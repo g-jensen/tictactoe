@@ -40,9 +40,15 @@
 
 (def move-weight (memoize move-weight))
 
+(defn initial-depth [board]
+  (cond
+    (utils/board-3d? board) 2
+    (= 3 (board-state/board-size board)) 10
+    :else 4))
+
 (defmulti get-computer-move (fn [difficulty board] difficulty))
 (defmethod get-computer-move :hard [_ board]
-  (let [depth (if (= 3 (board-state/board-size board)) 10 4)
+  (let [depth (initial-depth board)
         empty-indices (utils/empty-indices board)]
     (if (= \x (player-to-move board))
       (apply max-key #(move-weight board % depth) empty-indices)
