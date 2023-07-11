@@ -33,6 +33,9 @@
         [s t u v w x y z aa] (nth board 2)]
     [[a k u d n x g q aa] [c k s f n v i q y]]))
 
+(defn all-planes [board]
+  (concat board (diagonal-planes board) (rotated-planes board)))
+
 (defn diagonals [board]
   (if (utils/board-3d? board)
     (apply concat (map #(diagonals %) (concat board (diagonal-planes board))))
@@ -67,7 +70,8 @@
 
 (defn tie? [board]
   (if (utils/board-3d? board)
-    (some true? (map #(tie? %) board))
+    (and (every? #(= utils/empty-tile %) (flatten board))
+         (some true? (map #(tie? %) (all-planes board))))
     (and (not (win? board))
          (not (some #(= % utils/empty-tile) board)))))
 
