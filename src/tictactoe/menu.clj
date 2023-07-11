@@ -63,7 +63,9 @@
     :else state))
 
 (defmethod gs/next-state :character [state input]
-  (let [empty-board (utils/empty-board (:board-size state))]
+  (let [empty-board (if (= 3 (:dimension state))
+                      (:board state)
+                      (utils/empty-board (:board-size state)))]
     (cond
       (= "1" input) (assoc state :character \x
                                  :board empty-board
