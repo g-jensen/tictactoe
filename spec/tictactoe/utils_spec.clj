@@ -43,4 +43,8 @@
     (should= "_ _ _\n_ _ _\n_ _ _" (board->str (empty-board 3)))
     (should= "x _ _\n_ _ _\n_ _ _" (board->str (first-move-board 3)))
     (should= "_ _ _ _\n_ _ _ _\n_ _ _ _\n_ _ _ _" (board->str (empty-board 4)))
-    (should= "x _ _ _\n_ _ _ _\n_ _ _ _\n_ _ _ _" (board->str (first-move-board 4)))))
+    (should= "x _ _ _\n_ _ _ _\n_ _ _ _\n_ _ _ _" (board->str (first-move-board 4))))
+
+  (it "checks if a board is 3 dimensional"
+    (should-not (board-3d? (empty-board 3)))
+    (should (board-3d? (repeat 3 (empty-board 3))))))

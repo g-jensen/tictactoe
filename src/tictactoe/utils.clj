@@ -27,3 +27,6 @@
 
 (defn now []
   (str (Date.)))
+
+(defn board-3d? [board]
+  (coll? (first board)))
