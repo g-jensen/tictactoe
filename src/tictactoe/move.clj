@@ -41,10 +41,12 @@
 (def move-weight (memoize move-weight))
 
 (defn initial-depth [board]
-  (cond
-    (utils/board-3d? board) 2
-    (= 3 (board-state/board-size board)) 10
-    :else 4))
+  (let [size (board-state/board-size board)]
+    (cond
+      (utils/board-3d? board) 2
+      (= 3 size) 10
+      (= 4 size) 4
+      :else 2)))
 
 (defmulti get-computer-move (fn [difficulty board] difficulty))
 (defmethod get-computer-move :hard [_ board]
