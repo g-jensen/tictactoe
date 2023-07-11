@@ -15,10 +15,10 @@
 (defn empty-indices [board]
   (filter #(= empty-tile (nth board %)) (range 0 (count board))))
 
-(defn input-valid? [input options]
-  (and (not (empty? input))
-       (every? #(Character/isDigit %) input)
-       (in-range? 1 (inc (count options)) (Integer/parseInt input))))
+(defn input-valid?
+  ([input] (and (not (empty? input)) (every? #(Character/isDigit %) input)))
+  ([input options] (and (input-valid? input)
+                        (in-range? 1 (inc (count options)) (Integer/parseInt input)))))
 
 (defn board->str [board]
   (->> (partition (int (Math/sqrt (count board))) board)

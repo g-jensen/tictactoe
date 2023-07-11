@@ -20,8 +20,17 @@
 
 (defmethod gs/next-state :load-type [state input]
   (cond
-    (= "1" input) (assoc state :load-type :new :state :board-size)
+    (= "1" input) (assoc state :load-type :new :state :dimension)
     (= "2" input) (assoc state :load-type :load :state :select-game)
+    :else state))
+
+(defmethod gs/next-state :dimension [state input]
+  (cond
+    (= "1" input) (assoc state :dimension 2
+                               :state :board-size)
+    (= "2" input) (assoc state :dimension 3
+                               :board (repeat 3 (utils/empty-board 3))
+                               :state :versus-type)
     :else state))
 
 (defmethod gs/next-state :board-size [state input]
@@ -30,8 +39,14 @@
                                :board (utils/empty-board 3)
                                :state :versus-type)
     (= "2" input) (assoc state :board-size 4
-                               :state :versus-type
-                               :board (utils/empty-board 4))
+                               :board (utils/empty-board 4)
+                               :state :versus-type)
+    (= "3" input) (assoc state :board-size 5
+                               :board (utils/empty-board 5)
+                               :state :versus-type)
+    (= "4" input) (assoc state :board-size 6
+                               :board (utils/empty-board 6)
+                               :state :versus-type)
     :else state))
 
 (defmethod gs/next-state :versus-type [state input]
@@ -91,6 +106,10 @@
   {:label "Load Type"
    :options ["1. New Game" "2. Load Game"]})
 
+(defmethod gs/ui-components :dimension [state]
+  {:label "Dimension"
+   :options ["1. 2D" "2. 3D (3x3x3)"]})
+
 (defn number-options [options]
   (map #(str (inc %) ". " (nth options %)) (range 0 (count options))))
 
@@ -105,7 +124,7 @@
 
 (defmethod gs/ui-components :board-size [state]
   {:label "Board Size"
-   :options ["1. 3x3" "2. 4x4"]})
+   :options ["1. 3" "2. 4" "3. 5" "4. 6"]})
 
 (defmethod gs/ui-components :versus-type [state]
   {:label "Versus Type"

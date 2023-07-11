@@ -24,10 +24,19 @@
 
   (it "selects the load type state"
     (should= :new (:load-type (gs/next-state {:state :load-type} "1")))
-    (should= :board-size (:state (gs/next-state {:state :load-type} "1")))
+    (should= :dimension (:state (gs/next-state {:state :load-type} "1")))
     (should= :load (:load-type (gs/next-state {:state :load-type} "2")))
     (should= :select-game (:state (gs/next-state {:state :load-type} "2")))
     (should= {:state :load-type} (gs/next-state {:state :load-type} "3")))
+
+  (it "selects the dimension"
+    (should= 2 (:dimension (gs/next-state {:state :dimension} "1")))
+    (should= :board-size (:state (gs/next-state {:state :dimension} "1")))
+    (should= 3 (:dimension (gs/next-state {:state :dimension} "2")))
+    (should= :versus-type (:state (gs/next-state {:state :dimension} "2")))
+    (should= (repeat 3 (utils/empty-board 3))
+             (:board (gs/next-state {:state :dimension} "2")))
+    (should= {:state :dimension} (gs/next-state {:state :dimension} "3")))
 
   (with-stubs)
   (it "selects a game from a database"
@@ -56,11 +65,10 @@
       (should= {:state :board-size} (gs/next-state {:state :select-game} "1"))))
 
   (it "selects the board size state"
-    (should= 3 (:board-size (gs/next-state {:state :board-size} "1")))
-    (should= :versus-type (:state (gs/next-state {:state :board-size} "1")))
-    (should= 4 (:board-size (gs/next-state {:state :board-size} "2")))
-    (should= :versus-type (:state (gs/next-state {:state :board-size} "2")))
-    (should= {:state :board-size} (gs/next-state {:state :board-size} "3")))
+    (should= {:state :board-size} (gs/next-state {:state :board-size} "10"))
+    (should= 5 (:board-size (gs/next-state {:state :board-size} "3")))
+    (should= :versus-type (:state (gs/next-state {:state :board-size} "3")))
+    (should= 6 (:board-size (gs/next-state {:state :board-size} "4"))))
 
   (it "selects the versus type state"
     (should= :pvp (:versus-type (gs/next-state {:state :versus-type} "1")))
@@ -105,6 +113,11 @@
               :options ["1. New Game" "2. Load Game"]}
              (gs/ui-components {:state :load-type})))
 
+  (it "stores the ui components to select the dimension"
+    (should= {:label "Dimension"
+              :options ["1. 2D" "2. 3D (3x3x3)"]}
+             (gs/ui-components {:state :dimension})))
+
   (it "stores the ui components to select a game from a database"
     (with-redefs [gs/db-fetch-games (stub :fetch-all-games {:return games})
                   gs/db-initialize (stub :initialize {:return 0})]
@@ -122,7 +135,7 @@
 
   (it "stores the ui components to select the board size"
     (should= {:label "Board Size"
-              :options ["1. 3x3" "2. 4x4"]}
+              :options ["1. 3" "2. 4" "3. 5" "4. 6"]}
              (gs/ui-components {:state :board-size})))
 
   (it "stores the ui components to select the versus type"
