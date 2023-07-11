@@ -8,13 +8,17 @@
     \o))
 
 (defn move-valid? [board index]
-  (and (utils/in-range? 0 (count board) index)
-       (= (nth board index) utils/empty-tile)))
+  (let [board (if (utils/board-3d? board) (flatten board) board)]
+    (and (utils/in-range? 0 (count board) index)
+         (= (nth board index) utils/empty-tile))))
 
 (defn play-move [board index]
   (if-not (move-valid? board index)
     board
-    (assoc board index (player-to-move board))))
+    (if (utils/board-3d? board)
+      (partition (count (first board))
+                 (assoc (vec (flatten board)) index (player-to-move board)))
+      (assoc board index (player-to-move board)))))
 
 (defn get-user-move [board]
   (let [input (read-line)]

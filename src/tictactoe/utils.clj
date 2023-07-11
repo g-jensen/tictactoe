@@ -18,7 +18,8 @@
   (and (>= n start) (< n end)))
 
 (defn empty-indices [board]
-  (filter #(= empty-tile (nth board %)) (range 0 (count board))))
+  (let [board (flatten board)]
+    (filter #(= empty-tile (nth board %)) (range 0 (count board)))))
 
 (defn input-valid?
   ([input] (and (not (empty? input)) (every? #(Character/isDigit %) input)))

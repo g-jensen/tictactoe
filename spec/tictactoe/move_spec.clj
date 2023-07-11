@@ -20,14 +20,20 @@
     (should (move-valid? (utils/empty-board 4) 0))
     (should-not (move-valid? (utils/empty-board 4) -1))
     (should-not (move-valid? (utils/empty-board 4) 16))
-    (should-not (move-valid? (utils-spec/first-move-board 4) 0)))
+    (should-not (move-valid? (utils-spec/first-move-board 4) 0))
+    (should (move-valid? (repeat 3 (utils/empty-board 3)) 0))
+    (should-not (move-valid? (repeat 3 (utils/empty-board 3)) 28)))
 
   (it "plays a move on a board"
     (should= (utils/empty-board 3) (play-move (utils/empty-board 3) -1))
     (should= (utils/empty-board 3) (play-move (utils/empty-board 3) 9))
     (should= (utils-spec/first-move-board 3) (play-move (utils-spec/first-move-board 3) 0))
     (should= (utils-spec/first-move-board 3) (play-move (utils/empty-board 3) 0))
-    (should= [\x \o \_ \_ \_ \_ \_ \_ \_] (play-move (utils-spec/first-move-board 3) 1)))
+    (should= [\x \o \_ \_ \_ \_ \_ \_ \_] (play-move (utils-spec/first-move-board 3) 1))
+    (should= [[\x \_ \_ \_ \_ \_ \_ \_ \_]
+              [\_ \_ \_ \_ \_ \_ \_ \_ \_]
+              [\_ \_ \_ \_ \_ \_ \_ \_ \_]]
+             (play-move (repeat 3 (utils/empty-board 3)) 0)))
 
   (with-stubs)
   (it "gets the user's next move"

@@ -26,7 +26,8 @@
   (it "gets the indices of the empty tiles of a board"
     (should= (range 0 9) (empty-indices (empty-board 3)))
     (should= (range 1 9) (empty-indices (first-move-board 3)))
-    (should= [0 1 2] (empty-indices [\_ \_ \_ \o \o \o])))
+    (should= [0 1 2] (empty-indices [\_ \_ \_ \o \o \o]))
+    (should= (range 0 27) (empty-indices (repeat 3 (empty-board 3)))))
 
   (it "checks if input is valid"
     (should-not (input-valid? nil [:a]))
