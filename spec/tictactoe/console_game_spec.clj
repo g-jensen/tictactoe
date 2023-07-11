@@ -4,8 +4,10 @@
             [tictactoe.console-game :refer :all]
             [tictactoe.database]
             [tictactoe.game-mode :as game-mode]
+            [tictactoe.move :as move]
             [tictactoe.utils :as utils]
-            [tictactoe.utils-spec :as utils-spec]))
+            [tictactoe.utils-spec :as utils-spec])
+  (:import (tictactoe.game_mode PvCGame)))
 
 (def file-3x3-pvp
   {:state :done
@@ -33,34 +35,16 @@
    :difficulty :hard
    :character \x})
 
+(def console-empty-board {:ui :console
+                          :board (utils/empty-board 3)})
+
+(def console-pvc-x {:ui :console
+                    :gamemode (PvCGame. 3 [] :hard)
+                    :board [\x \_ \_ \_ \_ \_ \_ \_ \_]
+                    :character \x
+                    :difficulty :hard})
+
 (describe "A Console TicTacToe Game"
-
-  (it "initializes a gamemode"
-    (should= (game-mode/->PvPGame 3 (utils/empty-board 3))
-             (gs/init-gamemode {:versus-type :pvp :board-size 3 :board (utils/empty-board 3)}))
-    (should= (game-mode/->PvPGame 4 (utils/empty-board 4))
-             (gs/init-gamemode {:versus-type :pvp :board-size 4 :board (utils/empty-board 4)}))
-    (should= (game-mode/->PvCGame 3 (utils/empty-board 3) :hard)
-             (gs/init-gamemode {:versus-type :pvc
-                             :board-size 3
-                             :difficulty :hard
-                             :board (utils/empty-board 3)}))
-    (should= (game-mode/->PvCGame 3 (utils/empty-board 3) :medium)
-             (gs/init-gamemode {:versus-type :pvc
-                             :board-size 3
-                             :difficulty :medium
-                             :board (utils/empty-board 3)}))
-    (should= (game-mode/->PvCGame 3 (utils/empty-board 3) :easy)
-             (gs/init-gamemode {:versus-type :pvc
-                             :board-size 3
-                             :difficulty :easy
-                             :board (utils/empty-board 3)}))
-    (should= (game-mode/->PvCGame 4 (utils/empty-board 4) :hard)
-             (gs/init-gamemode {:versus-type :pvc
-                             :board-size 4
-                             :difficulty :hard
-                             :board (utils/empty-board 4)})))
-
   (with-stubs)
   (it "calculates the initial state of a file-based 3x3 pvp game"
     (with-redefs [evaluate-menu (stub :evaluate-menu {:return file-3x3-pvp})
@@ -97,4 +81,20 @@
     (should= "x has won!\n\nPlay Again:\n" (with-out-str (print-game-over-message
                                                            [\o \o \_ \x \x \x \_ \_ \_])))
     (should= "tie!\n\nPlay Again:\n" (with-out-str (print-game-over-message
-                                                     [\o \x \x \x \o \o \o \x \x])))))
+                                                     [\o \x \x \x \o \o \o \x \x]))))
+
+  (it "draws the state"
+    (should= "_ _ _\n_ _ _\n_ _ _\n\n"
+             (with-out-str (console-draw {:board (utils/empty-board 3)})))
+    (should= "x _ _\n_ _ _\n_ _ _\n\n"
+             (with-out-str (console-draw {:board [\x \_ \_ \_ \_ \_ \_ \_ \_]})))
+    (should= "x o x\no x o\nx _ _\n\nx has won!\n\nPlay Again:\n"
+             (with-out-str (console-draw {:board [\x \o \x \o \x \o \x \_ \_]
+                                          :over? true}))))
+
+  (it "gets the next board"
+    (with-redefs [move/get-user-move (stub :get-user-move {:return 0})]
+      (should= (assoc console-empty-board :board [\x \_ \_ \_ \_ \_ \_ \_ \_])
+               (gs/next-board console-empty-board))
+      (should= (assoc console-pvc-x :board [\x \_ \_ \_ \o \_ \_ \_ \_])
+               (gs/next-board console-pvc-x)))))
