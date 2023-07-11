@@ -65,10 +65,14 @@
       (should= {:state :board-size} (gs/next-state {:state :select-game} "1"))))
 
   (it "selects the board size state"
-    (should= {:state :board-size} (gs/next-state {:state :board-size} "10"))
-    (should= 5 (:board-size (gs/next-state {:state :board-size} "3")))
+    (should= 3 (:board-size (gs/next-state {:state :board-size} "3")))
     (should= :versus-type (:state (gs/next-state {:state :board-size} "3")))
-    (should= 6 (:board-size (gs/next-state {:state :board-size} "4"))))
+    (should= (utils/empty-board 3) (:board (gs/next-state {:state :board-size} "3")))
+    (should= 4 (:board-size (gs/next-state {:state :board-size} "4")))
+    (should= :versus-type (:state (gs/next-state {:state :board-size} "4")))
+    (should= (utils/empty-board 4) (:board (gs/next-state {:state :board-size} "4")))
+    (should= {:state :board-size} (gs/next-state {:state :board-size} "2"))
+    (should= {:state :board-size} (gs/next-state {:state :board-size} "greg")))
 
   (it "selects the versus type state"
     (should= :pvp (:versus-type (gs/next-state {:state :versus-type} "1")))
@@ -134,8 +138,8 @@
                (gs/ui-components {:state :select-game :database nil}))))
 
   (it "stores the ui components to select the board size"
-    (should= {:label "Board Size"
-              :options ["1. 3" "2. 4" "3. 5" "4. 6"]}
+    (should= {:label "Enter Board Size"
+              :options []}
              (gs/ui-components {:state :board-size})))
 
   (it "stores the ui components to select the versus type"

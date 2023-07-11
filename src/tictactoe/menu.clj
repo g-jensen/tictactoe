@@ -34,20 +34,12 @@
     :else state))
 
 (defmethod gs/next-state :board-size [state input]
-  (cond
-    (= "1" input) (assoc state :board-size 3
-                               :board (utils/empty-board 3)
-                               :state :versus-type)
-    (= "2" input) (assoc state :board-size 4
-                               :board (utils/empty-board 4)
-                               :state :versus-type)
-    (= "3" input) (assoc state :board-size 5
-                               :board (utils/empty-board 5)
-                               :state :versus-type)
-    (= "4" input) (assoc state :board-size 6
-                               :board (utils/empty-board 6)
-                               :state :versus-type)
-    :else state))
+  (let [choice (if (utils/input-valid? input) (Integer/parseInt input) -1)]
+    (if (< choice 3)
+      state
+      (assoc state :state :versus-type
+                   :board-size choice
+                   :board (utils/empty-board choice)))))
 
 (defmethod gs/next-state :versus-type [state input]
   (cond
@@ -125,8 +117,8 @@
                                      (gs/db-fetch-games state)))})))
 
 (defmethod gs/ui-components :board-size [state]
-  {:label "Board Size"
-   :options ["1. 3" "2. 4" "3. 5" "4. 6"]})
+  {:label "Enter Board Size"
+   :options []})
 
 (defmethod gs/ui-components :versus-type [state]
   {:label "Versus Type"
