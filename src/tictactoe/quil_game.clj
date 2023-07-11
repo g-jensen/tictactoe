@@ -99,12 +99,12 @@
     (quil-draw-buttons state)
     (quil-draw-board (:board state)))
   (if (:over? state)
-    (quil-button [50 300] [120 50] "Play Again?")))
+    (quil-button [150 300] [120 50] "Play Again?")))
 
 (defn quil-mouse-clicked [state data]
   (if-not (= :done (:state state))
     (click-button state data)
-    (let [play-again? (point-in-rect? [(:x data) (:y data)] [50 300 120 50])
+    (let [play-again? (point-in-rect? [(:x data) (:y data)] [150 300 120 50])
           state (click-tile state data)]
       (if (and (:over? state) play-again?)
         (do (gs/next-state {:ui :quil} nil))
