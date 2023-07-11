@@ -67,7 +67,7 @@
 
 (defn tie? [board]
   (if (utils/board-3d? board)
-    (some true (map #(tie? %) board))
+    (some true? (map #(tie? %) board))
     (and (not (win? board))
          (not (some #(= % utils/empty-tile) board)))))
 

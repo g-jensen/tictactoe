@@ -21,8 +21,12 @@
       (assoc board index (player-to-move board)))))
 
 (defn get-user-move [board]
-  (let [input (read-line)]
-    (if (utils/input-valid? input (utils/empty-board (board-state/board-size board)))
+  (let [input (read-line)
+        board-size (board-state/board-size board)
+        empty-board (if (utils/board-3d? board)
+                      (flatten (repeat board-size (utils/empty-board board-size)))
+                      (utils/empty-board board-size))]
+    (if (utils/input-valid? input empty-board)
       (dec (Integer/parseInt input))
       -1)))
 

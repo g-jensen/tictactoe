@@ -71,7 +71,11 @@
     (should= "_ _ _\n_ _ _\n_ _ _\n\n"
              (with-out-str (print-board (utils/empty-board 3))))
     (should= "x _ _\n_ _ _\n_ _ _\n\n"
-             (with-out-str (print-board (utils-spec/first-move-board 3)))))
+             (with-out-str (print-board (utils-spec/first-move-board 3))))
+    (should= (str "_ _ _\n_ _ _\n_ _ _\n\n"
+                  "_ _ _\n_ _ _\n_ _ _\n\n"
+                  "_ _ _\n_ _ _\n_ _ _\n\n")
+             (with-out-str (print-board (repeat 3 (utils/empty-board 3))))))
 
   (it "prints the game over message"
     (should= "x has won!\n\nPlay Again:\n" (with-out-str (print-game-over-message

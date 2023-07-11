@@ -22,8 +22,10 @@
           (assoc state :date (utils/now)))))
 
 (defn print-board [board]
-  (println (utils/board->str board))
-  (println))
+  (if (utils/board-3d? board)
+    (doall (map #(println (str (utils/board->str %) "\n")) board))
+    (do (println (utils/board->str board))
+        (println))))
 
 (defn print-game-over-message [board]
   (if (board-state/win? board)
