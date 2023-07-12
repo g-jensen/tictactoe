@@ -20,10 +20,10 @@
     (should= [50 250] (board-index-to-coords 3 10 50)))
 
   (it "clicks a button"
-    (should= :database (:state (click-button {:state :database} {:x 0 :y 0})))
-    (should= :load-type (:state (click-button {:state :database} {:x 5 :y 60})))
-    (should= :load-type (:state (click-button {:state :database} {:x 5 :y 80})))
-    (should= :database (:state (click-button {:state :database} {:x 5 :y 100}))))
+    (should= :database (:state (update-ui {:state :database} {:x 0 :y 0})))
+    (should= :load-type (:state (update-ui {:state :database} {:x 5 :y 60})))
+    (should= :load-type (:state (update-ui {:state :database} {:x 5 :y 80})))
+    (should= :database (:state (update-ui {:state :database} {:x 5 :y 100}))))
 
   (it "clicks a tile on a board"
     (should= (utils/empty-board 3)

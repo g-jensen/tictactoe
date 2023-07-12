@@ -7,6 +7,9 @@
             [tictactoe.move :as move]
             [tictactoe.utils :as utils]))
 
+(defmulti draw-components #(:type (gs/ui-components %)))
+(defmulti update-ui (fn [state _] (:type (gs/ui-components state))))
+
 (defn point-in-rect? [point rect]
   (let [[x1 y1] point
         [x2 y2 width height] rect]
@@ -42,23 +45,11 @@
                 y (quot i board-size)]]
       (quil-button (add-points pos (board-index-to-coords i board-size tile-size)) [tile-size tile-size] (str (nth board (+ (* board-size y) x)))))))
 
-(defn quil-draw-board [board]
+(defn draw-board [board]
   (if (utils/board-3d? board)
     (doall (for [i (range 0 (count board))]
              (doall (draw-tiles (nth board i) [0 (* i 90)] 30))))
     (doall (draw-tiles board [0 0] 50))))
-
-(defn quil-draw-buttons [state]
-  (let [components (gs/ui-components state)
-        label (:label components)
-        options (:options components)]
-    (do (q/text label 5 20)
-        (doall
-          (for [i (range 0 (count options))]
-            (quil-button
-              [5 (* 20 (+ i 3))]
-              [(* 15 (count (nth options i))) 20]
-              (nth options i)))))))
 
 (defn picked-option [mouse-pos options]
   (first (filter #(point-in-rect? mouse-pos [5 (* 20 (+ % 3)) 150 20])
@@ -77,13 +68,6 @@
                                                (nth board i) 30)))))
     (first (clicked-tiles mouse-pos board 50))))
 
-(defn click-button [state data]
-  (let [options (:options (gs/ui-components state))
-        choice (picked-option [(:x data) (:y data)] options)]
-    (if (nil? choice)
-      state
-      (gs/next-state state (str (inc choice))))))
-
 (defn click-tile [state data]
   (let [tile (picked-tile [(:x data) (:y data)] (:board state))]
     (if (nil? tile)
@@ -96,14 +80,14 @@
   (q/fill 0)
   (q/text-size 20)
   (if (not= :done (:state state))
-    (quil-draw-buttons state)
-    (quil-draw-board (:board state)))
+    (draw-components state)
+    (draw-board (:board state)))
   (if (:over? state)
     (quil-button [150 300] [120 50] "Play Again?")))
 
-(defn quil-mouse-clicked [state data]
+(defn mouse-clicked [state data]
   (if-not (= :done (:state state))
-    (click-button state data)
+    (update-ui state data)
     (let [play-again? (point-in-rect? [(:x data) (:y data)] [150 300 120 50])
           state (click-tile state data)]
       (if (and (:over? state) play-again?)
@@ -118,6 +102,53 @@
       (assoc state :board (move/play-move board (move/get-computer-move difficulty board)))
       state)))
 
+(defmethod update-ui :menu [state data]
+  (let [options (:options (gs/ui-components state))
+        choice (picked-option [(:x data) (:y data)] options)]
+    (if (nil? choice)
+      state
+      (gs/next-state state (str (inc choice))))))
+
+(defmethod draw-components :menu [state]
+  (let [comps (gs/ui-components state)
+        label (:label comps)
+        options (:options comps)]
+    (do (q/text label 5 20)
+        (doall
+          (for [i (range 0 (count options))]
+            (quil-button
+              [5 (* 20 (+ i 3))]
+              [(* 15 (count (nth options i))) 20]
+              (nth options i)))))))
+
+(defn updated-value [state data]
+  (let [valid? (:valid? (gs/ui-components state))
+        init (:initial-value (gs/ui-components state))
+        val (get state :counter-val init)]
+    (cond
+      (point-in-rect? [(:x data) (:y data)] [5 85 30 30])
+        (if (valid? (dec val)) (dec val) val)
+      (point-in-rect? [(:x data) (:y data)] [35 85 30 30])
+        (if (valid? (inc val)) (inc val) val)
+      :else
+        val)))
+
+(defmethod update-ui :counter [state data]
+  (if (point-in-rect? [(:x data) (:y data)] [5 115 60 30])
+    (gs/next-state state (str (:counter-val state)))
+    (assoc state :counter-val (updated-value state data))))
+
+(defmethod draw-components :counter [state]
+  (let [comps (gs/ui-components state)
+        label (:label comps)
+        init (:initial-value comps)
+        val (get state :counter-val init)]
+    (do (q/text label 5 20)
+        (q/text (str val) 5 50)
+        (quil-button [5 85] [30 30] "-")
+        (quil-button [35 85] [30 30] "+")
+        (quil-button [5 115] [60 30] "done"))))
+
 (defmethod gs/run-tictactoe :quil [state]
   (q/defsketch tictactoe
                :title "TicTacToe Game"
@@ -125,6 +156,6 @@
                :setup #(quil-setup state)
                :draw quil-draw
                :update gs/update-state
-               :mouse-clicked quil-mouse-clicked
+               :mouse-clicked mouse-clicked
                :size [384 384]
                :middleware [m/fun-mode]))

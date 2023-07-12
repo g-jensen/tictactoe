@@ -102,23 +102,21 @@
       (should= [\_ \_ \_ \_ \_ \_ \_ \_ \x] (:board (gs/next-state state "2")))
       (should= state (gs/next-state state "3"))))
 
-  (it "stores the ui components to select the ui"
-    (should= {:label "UI Type"
-              :options ["1. Console UI" "2. Quil UI"]}
-             (gs/ui-components {:state :ui})))
-
   (it "stores the ui components to select the database"
     (should= {:label "Database"
+              :type :menu
               :options ["1. File Database" "2. SQL Database"]}
              (gs/ui-components {:state :database})))
 
   (it "stores the ui components to select the load type"
     (should= {:label "Load Type"
+              :type :menu
               :options ["1. New Game" "2. Load Game"]}
              (gs/ui-components {:state :load-type})))
 
   (it "stores the ui components to select the dimension"
     (should= {:label "Dimension"
+              :type :menu
               :options ["1. 2D" "2. 3D (3x3x3)"]}
              (gs/ui-components {:state :dimension})))
 
@@ -126,6 +124,7 @@
     (with-redefs [gs/db-fetch-games (stub :fetch-all-games {:return games})
                   gs/db-initialize (stub :initialize {:return 0})]
       (should= {:label "Game"
+                :type :menu
                 :options ["1. the-date: [\\x \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_]"
                           "2. another-date: [\\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_]"]}
                (gs/ui-components {:state :select-game :database nil}))))
@@ -134,12 +133,15 @@
     (with-redefs [gs/db-fetch-games (stub :fetch-all-games {:return []})
                   gs/db-initialize (stub :initialize {:return 0})]
       (should= {:label "Game"
+                :type :menu
                 :options ["1. New Game"]}
                (gs/ui-components {:state :select-game :database nil}))))
 
   (it "stores the ui components to select the board size"
     (should= {:label "Enter Board Size"
-              :options []}
+              :type :counter
+              :initial-value 3
+              :valid? greater-than-two?}
              (gs/ui-components {:state :board-size})))
 
   (it "stores the ui components to select the versus type"

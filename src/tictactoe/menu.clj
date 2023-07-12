@@ -88,20 +88,19 @@
       :else
         state)))
 
-(defmethod gs/ui-components :ui [state]
-  {:label "UI Type"
-   :options ["1. Console UI" "2. Quil UI"]})
-
 (defmethod gs/ui-components :database [state]
   {:label "Database"
+   :type :menu
    :options ["1. File Database" "2. SQL Database"]})
 
 (defmethod gs/ui-components :load-type [state]
   {:label "Load Type"
+   :type :menu
    :options ["1. New Game" "2. Load Game"]})
 
 (defmethod gs/ui-components :dimension [state]
   {:label "Dimension"
+   :type :menu
    :options ["1. 2D" "2. 3D (3x3x3)"]})
 
 (defn number-options [options]
@@ -111,23 +110,33 @@
   (let [games (gs/db-fetch-games state)]
     (if (empty? games)
       {:label "Game"
+       :type :menu
        :options ["1. New Game"]}
       {:label "Game"
+       :type :menu
        :options (number-options (map #(str (:date %) ": " (:board %))
                                      (gs/db-fetch-games state)))})))
 
+(defn greater-than-two? [n]
+  (> n 2))
+
 (defmethod gs/ui-components :board-size [state]
   {:label "Enter Board Size"
-   :options []})
+   :type :counter
+   :initial-value 3
+   :valid? greater-than-two?})
 
 (defmethod gs/ui-components :versus-type [state]
   {:label "Versus Type"
+   :type :menu
    :options ["1. Versus Player" "2. Versus Computer"]})
 
 (defmethod gs/ui-components :difficulty [state]
   {:label "Difficulty"
+   :type :menu
    :options ["1. Easy" "2. Medium" "3. Hard"]})
 
 (defmethod gs/ui-components :character [state]
   {:label "Starting Character"
+   :type :menu
    :options ["1. x" "2. o"]})
