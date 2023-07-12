@@ -146,15 +146,18 @@
 
   (it "stores the ui components to select the versus type"
     (should= {:label "Versus Type"
+              :type :menu
               :options ["1. Versus Player" "2. Versus Computer"]}
              (gs/ui-components {:state :versus-type})))
 
   (it "stores the ui components to select the difficulty state"
     (should= {:label "Difficulty"
+              :type :menu
               :options ["1. Easy" "2. Medium" "3. Hard"]}
              (gs/ui-components {:state :difficulty})))
 
   (it "stores the ui components to select the character"
     (should= {:label "Starting Character"
+              :type :menu
               :options ["1. x" "2. o"]}
              (gs/ui-components {:state :character}))))
