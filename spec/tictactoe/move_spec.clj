@@ -1,5 +1,6 @@
 (ns tictactoe.move_spec
   (:require [speclj.core :refer :all]
+            [tictactoe.board-state :as board-state]
             [tictactoe.move :refer :all]
             [tictactoe.utils :as utils]
             [tictactoe.utils-spec :as utils-spec]))
@@ -36,7 +37,59 @@
              (play-move (repeat 3 (utils/empty-board 3)) 0)))
 
   (context "A Computer"
+
     (context "Hard Mode"
+
+      (context "plays the winning set of moves for 3x3x3"
+        (it "first move is the middle of the cube"
+          (should= 13 (get-3d-move (repeat 3 (utils/empty-board 3)))))
+
+        (it "second move does not allow opponent to get 2 in a row"
+          (should= 4 (get-3d-move [[\o \_ \_ \_ \_ \_ \_ \_ \_]
+                                   [\_ \_ \_ \_ \x \_ \_ \_ \_]
+                                   (utils/empty-board 3)]))
+          (should= 3 (get-3d-move [[\_ \_ \_ \_ \o \_ \_ \_ \_]
+                                   [\_ \_ \_ \_ \x \_ \_ \_ \_]
+                                   (utils/empty-board 3)]))
+          (should= 22 (get-3d-move [(utils/empty-board 3)
+                                   [\_ \_ \_ \_ \x \_ \_ \_ \_]
+                                   [\o \_ \_ \_ \_ \_ \_ \_ \_]]))
+          (should= 21 (get-3d-move [(utils/empty-board 3)
+                                    [\_ \_ \_ \_ \x \_ \_ \_ \_]
+                                    [\_ \_ \_ \_ \o \_ \_ \_ \_]]))
+          (should= 22 (get-3d-move [(utils/empty-board 3)
+                                   [\_ \o \_ \_ \x \_ \_ \_ \_]
+                                   (utils/empty-board 3)])))
+
+        (it "third move wins given the chance"
+          (should= 12 (get-3d-move [[\o \o \_ \_ \_ \_ \_ \_ \_]
+                                   [\_ \_ \_ \_ \x \x \_ \_ \_]
+                                   (utils/empty-board 3)]))
+          (should= 22 (get-3d-move [[\_ \o \_ \_ \x \_ \_ \_ \_]
+                                    [\_ \_ \o \_ \x \_ \_ \_ \_]
+                                    (utils/empty-board 3)])))
+
+        (it "third move forks opponent"
+          (should= 0 (get-3d-move [[\_ \o \_ \_ \x \_ \_ \_ \_]
+                                   [\_ \_ \_ \_ \x \_ \_ \_ \_]
+                                   [\_ \_ \_ \_ \o \_ \_ \_ \_]]))
+          (should= 6 (get-3d-move [[\o \_ \_ \_ \x \_ \_ \_ \_]
+                                   [\_ \_ \_ \_ \x \_ \_ \_ \_]
+                                   [\_ \_ \_ \_ \o \_ \_ \_ \_]]))
+          (should= 18 (get-3d-move [[\_ \_ \_ \_ \o \_ \_ \_ \_]
+                                    [\_ \_ \_ \_ \x \_ \_ \_ \_]
+                                    [\_ \o \_ \_ \x \_ \_ \_ \_]]))
+          (should= 24 (get-3d-move [[\_ \_ \_ \_ \o \_ \_ \_ \_]
+                                    [\_ \_ \_ \_ \x \_ \_ \_ \_]
+                                    [\o \_ \_ \_ \x \_ \_ \_ \_]])))
+
+        (it "fourth move wins"
+          (should= 26 (get-3d-move [[\x \o \_ \_ \x \_ \_ \_ \o]
+                                   [\_ \_ \_ \_ \x \_ \_ \_ \_]
+                                   [\_ \_ \_ \_ \o \_ \_ \_ \_]]))
+          (should= 8 (get-3d-move [[\x \o \_ \_ \x \_ \_ \_ \_]
+                                    [\_ \_ \_ \_ \x \_ \_ \_ \_]
+                                    [\_ \_ \_ \_ \o \_ \_ \_ \o]]))))
 
       (it "weighs the value of a move"
         (should= 10 (move-weight [\_ \x \x \o \o \_ \_ \_ \_] 0 5))

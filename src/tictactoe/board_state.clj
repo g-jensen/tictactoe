@@ -14,18 +14,7 @@
   (let [[a b c d e f g h i] (first board)
         [j k l m n o p q r] (second board)
         [s t u v w x y z aa] (nth board 2)]
-    [[a j s b k t c l u] [d m v e n w f o x] [g p y h q z i r aa]]))
-
-(defn rows [board]
-  (if (utils/board-3d? board)
-    (apply concat (map #(rows %) (concat board (rotated-planes board))))
-    (partition (board-size board) board)))
-
-(defn columns [board]
-  (if (utils/board-3d? board)
-    (apply concat (map #(columns %) (concat board (rotated-planes board))))
-    (for [i (range 0 (board-size board))]
-      (map #(nth % i) (rows board)))))
+    [[a d g j m p s v y] [b e h k n q t w z] [c f i l o r u x aa]]))
 
 (defn diagonal-planes [board]
   (let [[a b c d e f g h i] (first board)
@@ -34,11 +23,22 @@
     [[a k u d n x g q aa] [c k s f n v i q y]]))
 
 (defn all-planes [board]
-  (concat board (diagonal-planes board) (rotated-planes board)))
+  (concat board (rotated-planes board) (diagonal-planes board)))
+
+(defn rows [board]
+  (if (utils/board-3d? board)
+    (apply concat (map #(rows %) (all-planes board)))
+    (partition (board-size board) board)))
+
+(defn columns [board]
+  (if (utils/board-3d? board)
+    (apply concat (map #(columns %) (all-planes board)))
+    (for [i (range 0 (board-size board))]
+      (map #(nth % i) (rows board)))))
 
 (defn diagonals [board]
   (if (utils/board-3d? board)
-    (apply concat (map #(diagonals %) (concat board (diagonal-planes board))))
+    (apply concat (map #(diagonals %) (all-planes board)))
     (let [size (board-size board)]
       [(map #(nth board (* (inc size) %)) (range 0 size))
        (map #(nth board (* (dec size) (inc %))) (range 0 size))])))
