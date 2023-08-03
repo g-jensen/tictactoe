@@ -2,7 +2,6 @@
   (:require [tictactoe.move :as move]
             [tictactoe.utils :as utils]
             [tictactoe.game-state :as gs]
-            [tictactoe.database]
             [tictactoe.file-database]
             [tictactoe.sql-database]
             [tictactoe.board-state :as board-state]))
@@ -76,7 +75,7 @@
         game (nth games choice nil)]
     (cond
       (empty? games)
-        (assoc state :state :board-size)
+        (assoc state :state :dimension)
       (not (nil? game))
         (assoc state :board-size (board-state/board-size (:board game))
                      :board (:board game)

@@ -2,9 +2,7 @@
   (:require [speclj.core :refer :all]
             [tictactoe.game-state :as gs]
             [tictactoe.console-game :refer :all]
-            [tictactoe.database]
             [tictactoe.game-mode :as game-mode]
-            [tictactoe.move :as move]
             [tictactoe.utils :as utils]
             [tictactoe.utils-spec :as utils-spec])
   (:import (tictactoe.game_mode PvCGame)))

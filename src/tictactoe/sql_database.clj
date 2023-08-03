@@ -1,6 +1,5 @@
 (ns tictactoe.sql-database
-  (:require [tictactoe.database :refer :all]
-            [clojure.java.jdbc :refer :all]
+  (:require [clojure.java.jdbc :refer :all]
             [tictactoe.game-mode :as game-mode]
             [tictactoe.game-state :as gs]))
 

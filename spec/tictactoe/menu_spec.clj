@@ -1,7 +1,6 @@
 (ns tictactoe.menu-spec
   (:require [speclj.core :refer :all]
             [tictactoe.menu :refer :all]
-            [tictactoe.database]
             [tictactoe.game-state :as gs]
             [tictactoe.file-database]
             [tictactoe.sql-database]
@@ -62,7 +61,7 @@
   (it "selects a new game if the database is empty"
     (with-redefs [gs/db-fetch-games (stub :fetch-all-games {:return []})
                   gs/db-initialize  (stub :initialize {:return 0})]
-      (should= {:state :board-size} (gs/next-state {:state :select-game} "1"))))
+      (should= {:state :dimension} (gs/next-state {:state :select-game} "1"))))
 
   (it "selects the board size state"
     (should= 3 (:board-size (gs/next-state {:state :board-size} "3")))

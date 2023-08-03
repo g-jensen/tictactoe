@@ -1,6 +1,5 @@
 (ns tictactoe.file-database
   (:require [clojure.string :as str]
-            [tictactoe.database :refer :all]
             [tictactoe.game-state :as gs]
             [tictactoe.game-mode :as game-mode]))
 
