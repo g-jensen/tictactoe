@@ -7,15 +7,18 @@ java -jar tictactoe.jar
 
 ## Running In Development
 ### Prerequisite
-Install [leiningen](https://leiningen.org/)
 
 Install [sqlite](https://www.sqlite.org/download.html)
 
 ### Running main
 ```shell
-lein run
+clj -M:console
+```
+or
+```shell
+clj -M:quil
 ```
 ### Running tests
 ```shell
-lein spec -a
+clj -M:test:spec
 ```
