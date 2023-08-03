@@ -2,7 +2,11 @@
 
 ## Running Release Build
 ```shell
-java -jar tictactoe.jar
+java -jar tictactoe.jar console
+```
+or
+```shell
+java -jar tictactoe.jar quil
 ```
 
 ## Running In Development
