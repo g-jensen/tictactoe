@@ -4,7 +4,5 @@
             [tictactoe.console-game]
             [tictactoe.quil-game]))
 
-(defn main [[ui]]
+(defn -main [& [ui]]
   (game-state/run-tictactoe {:ui (keyword ui)}))
-
-(main *command-line-args*)
