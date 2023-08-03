@@ -1,54 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="JAVA_MODULE" version="4">
   <component name="BuildSystem">
-    <option name="buildSystemId" value="LEININGEN" />
-    <option name="displayName" value="tictactoe:0.1.0-SNAPSHOT" />
+    <option name="buildSystemId" value="CLOJURE_DEPS" />
+    <option name="displayName" value="tictactoe" />
   </component>
-  <component name="NewModuleRootManager">
-    <output url="file://$MODULE_DIR$/target/classes" />
-    <output-test url="file://$MODULE_DIR$/target/classes" />
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/dev-resources" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/resources" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/spec" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
-      <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Leiningen: bouncycastle/bcmail-jdk14:138" level="project" />
-    <orderEntry type="library" name="Leiningen: bouncycastle/bcprov-jdk14:138" level="project" />
-    <orderEntry type="library" name="Leiningen: cljsjs/p5:0.9.0-0" level="project" />
-    <orderEntry type="library" name="Leiningen: com.lowagie/itext:2.1.7" level="project" />
-    <orderEntry type="library" name="Leiningen: fresh:1.1.2" level="project" />
-    <orderEntry type="library" name="Leiningen: mmargs:1.2.0" level="project" />
-    <orderEntry type="library" name="Leiningen: nrepl:1.0.0" level="project" />
-    <orderEntry type="library" name="Leiningen: org.apache.xmlgraphics/batik-awt-util:1.8" level="project" />
-    <orderEntry type="library" name="Leiningen: org.apache.xmlgraphics/batik-css:1.8" level="project" />
-    <orderEntry type="library" name="Leiningen: org.apache.xmlgraphics/batik-dom:1.8" level="project" />
-    <orderEntry type="library" name="Leiningen: org.apache.xmlgraphics/batik-ext:1.8" level="project" />
-    <orderEntry type="library" name="Leiningen: org.apache.xmlgraphics/batik-svggen:1.8" level="project" />
-    <orderEntry type="library" name="Leiningen: org.apache.xmlgraphics/batik-util:1.8" level="project" />
-    <orderEntry type="library" name="Leiningen: org.apache.xmlgraphics/batik-xml:1.8" level="project" />
-    <orderEntry type="library" name="Leiningen: org.bouncycastle/bcmail-jdk14:1.38" level="project" />
-    <orderEntry type="library" name="Leiningen: org.bouncycastle/bcprov-jdk14:1.38" level="project" />
-    <orderEntry type="library" name="Leiningen: org.bouncycastle/bctsp-jdk14:1.38" level="project" />
-    <orderEntry type="library" name="Leiningen: org.clojure/clojure:1.8.0" level="project" />
-    <orderEntry type="library" name="Leiningen: org.clojure/java.jdbc:0.7.8" level="project" />
-    <orderEntry type="library" name="Leiningen: org.nrepl/incomplete:0.1.0" level="project" />
-    <orderEntry type="library" name="Leiningen: org.xerial/sqlite-jdbc:3.23.1" level="project" />
-    <orderEntry type="library" name="Leiningen: quil/gluegen-rt-fat:2.3.2" level="project" />
-    <orderEntry type="library" name="Leiningen: quil/jogl-all-fat:2.3.2" level="project" />
-    <orderEntry type="library" name="Leiningen: quil/processing-core:3.5.3" level="project" />
-    <orderEntry type="library" name="Leiningen: quil/processing-dxf:3.5.3" level="project" />
-    <orderEntry type="library" name="Leiningen: quil/processing-pdf:3.5.3" level="project" />
-    <orderEntry type="library" name="Leiningen: quil/processing-svg:3.5.3" level="project" />
-    <orderEntry type="library" name="Leiningen: quil:3.1.0" level="project" />
-    <orderEntry type="library" name="Leiningen: speclj:3.3.2" level="project" />
-    <orderEntry type="library" name="Leiningen: trptcolin/versioneer:0.1.1" level="project" />
-    <orderEntry type="library" name="Leiningen: xalan:2.7.0" level="project" />
-    <orderEntry type="library" name="Leiningen: xml-apis/xml-apis-ext:1.3.04" level="project" />
-    <orderEntry type="library" name="Leiningen: xml-apis:1.3.04" level="project" />
+    <orderEntry type="library" name="Deps: org.clojure/clojure:1.11.1" level="project" />
+    <orderEntry type="library" name="Deps: org.apache.xmlgraphics/batik-dom:1.8" level="project" />
+    <orderEntry type="library" name="Deps: quil/gluegen-rt-fat:2.3.2" level="project" />
+    <orderEntry type="library" name="Deps: org.clojure/core.specs.alpha:0.2.62" level="project" />
+    <orderEntry type="library" name="Deps: org.clojure/spec.alpha:0.3.218" level="project" />
+    <orderEntry type="library" name="Deps: org.apache.xmlgraphics/batik-xml:1.8" level="project" />
+    <orderEntry type="library" name="Deps: xml-apis/xml-apis-ext:1.3.04" level="project" />
+    <orderEntry type="library" name="Deps: org.apache.xmlgraphics/batik-svggen:1.8" level="project" />
+    <orderEntry type="library" name="Deps: quil/jogl-all-fat:2.3.2" level="project" />
+    <orderEntry type="library" name="Deps: org.apache.xmlgraphics/batik-css:1.8" level="project" />
+    <orderEntry type="library" name="Deps: org.bouncycastle/bcprov-jdk14:1.38" level="project" />
+    <orderEntry type="library" name="Deps: mmargs:1.2.0" level="project" />
+    <orderEntry type="library" name="Deps: bouncycastle/bcprov-jdk14:138" level="project" />
+    <orderEntry type="library" name="Deps: cljsjs/p5:0.9.0-0" level="project" />
+    <orderEntry type="library" name="Deps: org.bouncycastle/bcmail-jdk14:1.38" level="project" />
+    <orderEntry type="library" name="Deps: speclj:3.3.2" level="project" />
+    <orderEntry type="library" name="Deps: trptcolin/versioneer:0.1.1" level="project" />
+    <orderEntry type="library" name="Deps: xalan:2.7.0" level="project" />
+    <orderEntry type="library" name="Deps: quil/processing-dxf:3.5.3" level="project" />
+    <orderEntry type="library" name="Deps: quil/processing-core:3.5.3" level="project" />
+    <orderEntry type="library" name="Deps: com.lowagie/itext:2.1.7" level="project" />
+    <orderEntry type="library" name="Deps: fresh:1.1.2" level="project" />
+    <orderEntry type="library" name="Deps: xml-apis:2.0.2" level="project" />
+    <orderEntry type="library" name="Deps: quil/processing-svg:3.5.3" level="project" />
+    <orderEntry type="library" name="Deps: org.clojure/java.jdbc:0.7.8" level="project" />
+    <orderEntry type="library" name="Deps: bouncycastle/bcmail-jdk14:138" level="project" />
+    <orderEntry type="library" name="Deps: Local org.httpserver/jar (HttpServer.jar)" level="project" />
+    <orderEntry type="library" name="Deps: org.apache.xmlgraphics/batik-awt-util:1.8" level="project" />
+    <orderEntry type="library" name="Deps: org.apache.xmlgraphics/batik-util:1.8" level="project" />
+    <orderEntry type="library" name="Deps: quil/processing-pdf:3.5.3" level="project" />
+    <orderEntry type="library" name="Deps: org.bouncycastle/bctsp-jdk14:1.38" level="project" />
+    <orderEntry type="library" name="Deps: org.xerial/sqlite-jdbc:3.23.1" level="project" />
+    <orderEntry type="library" name="Deps: org.apache.xmlgraphics/batik-ext:1.8" level="project" />
+    <orderEntry type="library" name="Deps: quil:3.1.0" level="project" />
   </component>
 </module>
