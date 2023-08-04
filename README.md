@@ -1,5 +1,12 @@
 # tictactoe
 
+## Features
+* Any NxN board (N > 2)
+* 3x3x3 board
+* Easy, Medium, and Hard difficulty versus computer (Hard is unbeatable)
+* User Interface (Console or Graphical)
+* Database persistence (File or SQL)
+
 ## Running Release Build
 ```shell
 java -jar tictactoe.jar console
