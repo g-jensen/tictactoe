@@ -102,10 +102,11 @@
       (should= state (gs/next-state state "3"))))
 
   (it "stores the ui components to select the database"
-    (should= {:label "Database"
+    (let [db {:label "Database"
               :type :menu
-              :options ["1. File Database" "2. SQL Database"]}
-             (gs/ui-components {:state :database})))
+              :options ["1. File Database" "2. SQL Database"]}]
+      (should= db (gs/ui-components {:state :database}))
+      (should= db (gs/ui-components nil))))
 
   (it "stores the ui components to select the load type"
     (should= {:label "Load Type"

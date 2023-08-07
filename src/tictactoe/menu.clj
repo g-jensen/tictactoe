@@ -87,6 +87,9 @@
       :else
         state)))
 
+(defmethod gs/ui-components :default [_]
+  (gs/ui-components {:state :database}))
+
 (defmethod gs/ui-components :database [state]
   {:label "Database"
    :type :menu
