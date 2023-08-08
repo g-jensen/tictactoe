@@ -1,4 +1,4 @@
-(ns tictactoe.web-game-test
+(ns tictactoe.web-game-spec
   (:require [speclj.core :refer :all])
   (:require [tictactoe.utils :as utils]
             [tictactoe.web-game :refer :all])
