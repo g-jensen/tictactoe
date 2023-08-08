@@ -13,6 +13,7 @@
            :run {:main-opts ["-m" "tictactoe.core" "console"]}
            :console {:main-opts ["-m" "tictactoe.core" "console"]}
            :quil {:main-opts ["-m" "tictactoe.core" "quil"]}
+           :web {:main-opts ["-m" "tictactoe.core" "web"]}
            :test {:extra-deps {speclj/speclj {:mvn/version "3.3.2"}}
                   :extra-paths ["spec/"]}
            :spec {:main-opts ["-m" "speclj.main" "-c"]}
