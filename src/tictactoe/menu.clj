@@ -87,6 +87,38 @@
       :else
         state)))
 
+(defn- update-over [state]
+  (if (gs/over? state)
+    (do (if (:database state) (gs/clean-up state))
+        (assoc state :over? true))
+    state))
+
+(defn- update-gamemode [state]
+  (if (:gamemode state)
+    state
+    (as-> state state
+          (assoc state :gamemode (gs/init-gamemode state))
+          (assoc state :date (utils/now)))))
+
+(defn- update-computer [state]
+  (let [board (:board state)
+        difficulty (:difficulty state)]
+    (if (gs/computer-turn? state)
+      (assoc state :board (move/play-move board (move/get-computer-move difficulty board)))
+      state)))
+
+(defmethod gs/next-state :done [state input]
+  (let [board (:board state)]
+    (if (utils/input-valid? input (if (utils/board-3d? board) (flatten board) board))
+      (let [new-state (-> (assoc state :board (move/play-move board (dec (Integer/parseInt input))))
+                          (update-gamemode)
+                          (update-computer))]
+        (if (:database new-state)
+          (do (gs/db-initialize new-state)
+              (gs/db-save-game new-state)))
+        (update-over new-state))
+      state)))
+
 (defmethod gs/ui-components :default [_]
   (gs/ui-components {:state :database}))
 
@@ -142,3 +174,10 @@
   {:label "Starting Character"
    :type :menu
    :options ["1. x" "2. o"]})
+
+(defmethod gs/ui-components :done [state]
+  {:label "Board"
+   :type :board
+   :dimension (:dimension state)
+   :board-size (:board-size state)
+   :board (:board state)})

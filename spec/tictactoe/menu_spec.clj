@@ -1,5 +1,6 @@
 (ns tictactoe.menu-spec
   (:require [speclj.core :refer :all]
+            [tictactoe.game-mode :as game-mode]
             [tictactoe.menu :refer :all]
             [tictactoe.game-state :as gs]
             [tictactoe.file-database]
@@ -101,6 +102,57 @@
       (should= [\_ \_ \_ \_ \_ \_ \_ \_ \x] (:board (gs/next-state state "2")))
       (should= state (gs/next-state state "3"))))
 
+  (it "initializes the game"
+    (let [s1 {:state :done :versus-type :pvp :board-size 3 :board [\_ \_ \_ \_ \_ \_ \_ \_ \_]}]
+      (should= (game-mode/->PvPGame 3 [\x \_ \_ \_ \_ \_ \_ \_ \_])
+               (:gamemode (gs/next-state s1 "1")))))
+
+  (it "selects the tile to play"
+    (let [s1 {:state :done :board [\_ \_ \_ \_ \_ \_ \_ \_ \_] :versus-type :pvp}
+          s2 {:state :done :board [\_ \x \_ \_ \_ \_ \_ \_ \_] :versus-type :pvp}
+          s3 {:state :done :board (repeat 3 [\_ \_ \_ \_ \_ \_ \_ \_ \_]) :versus-type :pvp}]
+      (should= [\x \_ \_ \_ \_ \_ \_ \_ \_] (:board (gs/next-state s1 "1")))
+      (should= [\o \x \_ \_ \_ \_ \_ \_ \_] (:board (gs/next-state s2 "1")))
+      (should= [\_ \_ \_ \_ \_ \_ \_ \_ \_] (:board (gs/next-state s1 "10")))
+      (should= [\_ \x \_ \_ \_ \_ \_ \_ \_] (:board (gs/next-state s2 "2")))
+      (should= [[\_ \_ \_ \_ \x \_ \_ \_ \_] [\_ \_ \_ \_ \_ \_ \_ \_ \_] [\_ \_ \_ \_ \_ \_ \_ \_ \_]]
+               (:board (gs/next-state s3 "5")))))
+
+  (it "plays computer move"
+    (let [s1 {:state :done
+          :board [\_ \_ \_ \_ \_ \_ \_ \_ \_]
+          :difficulty :hard
+          :gamemode (game-mode/->PvCGame 3 (:board [\_ \_ \_ \_ \_ \_ \_ \_ \_]) :hard)}]
+      (should= [\x \_ \_ \_ \o \_ \_ \_ \_] (:board (gs/next-state s1 "1")))))
+
+  (it "sets game to over"
+    (let [s1 {:state :done
+              :board [\_ \x \x \o \o \_ \_ \_ \_]
+              :versus-type :pvp}]
+      (should= [\x \x \x \o \o \_ \_ \_ \_] (:board (gs/next-state s1 "1")))
+      (should (:over? (gs/next-state s1 "1")))))
+
+  (it "saves game to db"
+    (with-redefs [gs/db-initialize (stub :initialize {:return nil})
+                  gs/db-save-game (stub :save-game {:return nil})]
+      (let [s1 {:state :done
+                :database :file
+                :board [\_ \_ \x \o \o \x \_ \_ \_]
+                :versus-type :pvp}]
+        (gs/next-state s1 "1")
+        (should-have-invoked :save-game))))
+
+  (it "deletes game from db when over"
+    (with-redefs [gs/db-initialize (stub :initialize {:return nil})
+                  gs/db-save-game (stub :save-game {:return nil})
+                  gs/db-delete-game (stub :delete-game {:return nil})]
+      (let [s1 {:state :done
+                :database :file
+                :board [\_ \x \x \o \o \_ \_ \_ \_]
+                :versus-type :pvp}]
+        (gs/next-state s1 "1")
+        (should-have-invoked :delete-game))))
+
   (it "stores the ui components to select the database"
     (let [db {:label "Database"
               :type :menu
@@ -160,4 +212,12 @@
     (should= {:label "Starting Character"
               :type :menu
               :options ["1. x" "2. o"]}
-             (gs/ui-components {:state :character}))))
+             (gs/ui-components {:state :character})))
+
+  (it "stores the ui components to select a tile on a board"
+    (should= {:label "Board"
+              :type :board
+              :dimension 2
+              :board-size 3
+              :board [\_ \_ \_ \_ \_ \_ \_ \_ \_]}
+             (gs/ui-components {:state :done :dimension 2 :board-size 3 :board [\_ \_ \_ \_ \_ \_ \_ \_ \_]}))))
