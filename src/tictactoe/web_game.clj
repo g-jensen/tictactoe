@@ -52,8 +52,8 @@
          "<input type=\"submit\" value=\"Submit\">"
          "</form>")))
 
-(defn- repeatedly-append [n s vec]
-  (map-indexed (fn [idx opt] (if (zero? (mod (inc idx) n)) (str opt s) opt)) vec))
+(defn- repeatedly-append-offset [offset s vec]
+  (map-indexed (fn [idx opt] (if (zero? (mod (inc idx) offset)) (str opt s) opt)) vec))
 
 (defn- html-buttons [board]
   (let [board-size (board-state/board-size board)]
@@ -61,11 +61,11 @@
       (->> board
            (flatten)
            (map-indexed (fn [idx opt] (html-button (inc idx) opt)))
-           (repeatedly-append board-size "<br>")
-           (repeatedly-append (* board-size board-size) "<br>"))
+           (repeatedly-append-offset board-size "<br>")
+           (repeatedly-append-offset (* board-size board-size) "<br>"))
       (->> board
            (map-indexed (fn [idx opt] (html-button (inc idx) opt)))
-           (repeatedly-append board-size "<br>")))))
+           (repeatedly-append-offset board-size "<br>")))))
 
 (defmethod generate-html :board [state]
   (let [comps (gs/ui-components state)
