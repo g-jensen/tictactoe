@@ -14,9 +14,16 @@
       nil
       (subs (String. body) 7))))
 
+(defn parse-cookie [cookie-str]
+  (let [cookie-str (if (nil? cookie-str) "" cookie-str)
+        idx (str/index-of cookie-str "state=")]
+    (if (nil? idx)
+      nil
+      (subs cookie-str (+ 6 idx)))))
+
 (defn get-state [req]
-  (let [cookie (.get (.getHeaderFields req) "Cookie")
-        state (if (nil? cookie) {:state :database} (read-string (subs cookie 6)))
+  (let [cookie (parse-cookie (.get (.getHeaderFields req) "Cookie"))
+        state (if (nil? cookie) {:state :database} (read-string cookie))
         choice (get-choice req)]
     (cond
       (:over? state) {:state :database}
@@ -83,7 +90,7 @@
     (apply [this arg] (f arg))))
 
 (defmethod gs/run-tictactoe :web [state]
-  (let [address (InetSocketAddress. "localhost" 8082)]
+  (let [address (InetSocketAddress. "localhost" 8083)]
     (doto (HttpServer. address)
       (.initialize)
       (.onConnection (->fun handle))

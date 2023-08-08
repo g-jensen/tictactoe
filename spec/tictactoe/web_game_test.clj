@@ -119,6 +119,9 @@
                                               :board (repeat 3 (utils/empty-board 3))
                                               :board-size 3})))
 
+  (it "parses cookie"
+    (should= "{hello}" (parse-cookie "state={hello}")))
+
   (it "handles an initial GET request"
     (let [req (HttpMessage. "GET /tictactoe HTTP/1.1\r\nHost: me\r\n\r\n")
           html database-html
