@@ -20,10 +20,16 @@
                  (assoc (vec (flatten board)) index (player-to-move board)))
       (assoc board index (player-to-move board)))))
 
+(defn- x-wins? [board]
+  (and (board-state/win? board) (= \x (board-state/winner board))))
+
+(defn- o-wins? [board]
+  (and (board-state/win? board) (= \o (board-state/winner board))))
+
 (defn score-board [board]
   (cond
-    (board-state/x-wins? board) 10
-    (board-state/o-wins? board) -10
+    (x-wins? board) 10
+    (o-wins? board) -10
     (board-state/tie? board) 0))
 
 (defn move-weight [board index depth]

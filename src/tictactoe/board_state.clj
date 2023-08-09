@@ -10,19 +10,19 @@
     (board-size (first board))
     (int (Math/sqrt (count board)))))
 
-(defn rotated-planes [board]
+(defn- rotated-planes [board]
   (let [[a b c d e f g h i] (first board)
         [j k l m n o p q r] (second board)
         [s t u v w x y z aa] (nth board 2)]
     [[a d g j m p s v y] [b e h k n q t w z] [c f i l o r u x aa]]))
 
-(defn diagonal-planes [board]
+(defn- diagonal-planes [board]
   (let [[a b c d e f g h i] (first board)
         [j k l m n o p q r] (second board)
         [s t u v w x y z aa] (nth board 2)]
     [[a k u d n x g q aa] [c k s f n v i q y]]))
 
-(defn all-planes [board]
+(defn- all-planes [board]
   (concat board (rotated-planes board) (diagonal-planes board)))
 
 (defn rows [board]
@@ -61,12 +61,6 @@
   (if (= (utils/tile-count board \x) (utils/tile-count board \o))
     \o
     \x))
-
-(defn x-wins? [board]
-  (and (win? board) (= \x (winner board))))
-
-(defn o-wins? [board]
-  (and (win? board) (= \o (winner board))))
 
 (defn tie? [board]
   (if (utils/board-3d? board)
