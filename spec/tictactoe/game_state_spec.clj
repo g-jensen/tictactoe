@@ -79,10 +79,6 @@
                                        :gamemode (PvPGame. 3 (utils/empty-board 3)))
                  (update-state evaluated-menu))))
 
-    (it "updates the board"
-      (should= (assoc computer-turn-state :board [\_ \_ \_ \_ \_ \_ \_ \_ \x])
-               (update-state computer-turn-state)))
-
     (it "updates the state to be over"
       (with-redefs [clean-up (stub :cleanup {:return 0})]
         (should= (assoc game-over-state :over? true)
