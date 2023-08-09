@@ -38,14 +38,3 @@
        (instance? PvCGame (:gamemode state))
        (not= (:character state)
              (move/player-to-move (:board state)))))
-
-(defn update-state [state]
-  (if-not (= :done (:state state))
-    state
-    (if-not (:gamemode state)
-      (assoc state :gamemode (init-gamemode state)
-                   :date (utils/now))
-      (if (over? state)
-        (do (clean-up state)
-            (assoc state :over? true))
-        (next-board state)))))

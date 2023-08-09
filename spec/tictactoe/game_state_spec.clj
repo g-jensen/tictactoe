@@ -65,21 +65,4 @@
                                  :character \o}))
     (should-not (computer-turn? {:gamemode (PvCGame. 3 (utils/empty-board 3) :hard)
                              :board [\x \o \x \o \x \o \x \_ \_]
-                             :character \o})))
-
-  (with-stubs)
-  (context "updates the state"
-
-    (it "updates empty state"
-      (should= {} (update-state {})))
-
-    (it "updates the state after evaluating menus"
-      (with-redefs [utils/now (stub :now {:return "the-date"})]
-        (should= (assoc evaluated-menu :date "the-date"
-                                       :gamemode (PvPGame. 3 (utils/empty-board 3)))
-                 (update-state evaluated-menu))))
-
-    (it "updates the state to be over"
-      (with-redefs [clean-up (stub :cleanup {:return 0})]
-        (should= (assoc game-over-state :over? true)
-                 (update-state game-over-state))))))
+                             :character \o}))))
