@@ -8,10 +8,10 @@
 
 (defmethod gs/db-initialize :sql [_]
   (db-do-commands sql-db
-                  "CREATE TABLE IF NOT EXISTS GAMES
-                  (DATE text,
-                   BOARD blob,
-                   GAMEMODE blob)"))
+                  (str "CREATE TABLE IF NOT EXISTS GAMES"
+                       "(DATE text,"
+                       "BOARD blob,"
+                       "GAMEMODE blob)")))
 
 (defmethod gs/db-fetch-games :sql [_]
   (map #(assoc % :board (read-string (:board %))
@@ -25,4 +25,4 @@
   (gs/db-delete-game state date)
   (insert! sql-db :games {:date date
                           :board (str (vec board))
-                          :gamemode (game-mode/to-map game-mode)}))
+                          :gamemode (str (game-mode/to-map game-mode))}))
