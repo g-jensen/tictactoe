@@ -5,6 +5,7 @@
             [tictactoe.file-database]
             [tictactoe.menu]
             [tictactoe.utils :as utils]))
+(defmulti state->str #(:type (gs/ui-components %)))
 
 (defn board->str [board]
   (if (utils/board-3d? board)
@@ -12,8 +13,6 @@
     (->> (partition (int (Math/sqrt (count board))) board)
          (map #(str/join " " %))
          (str/join "\n"))))
-
-(defmulti state->str #(:type (gs/ui-components %)))
 
 (defmethod state->str :menu [state]
   (str (:label (gs/ui-components state)) "\n"
