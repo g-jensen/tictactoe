@@ -25,11 +25,9 @@
   (let [cookie (parse-cookie (.get (.getHeaderFields req) "Cookie"))
         state (if (nil? cookie) {:state :database} (read-string cookie))
         choice (get-choice req)]
-    (cond
-      (:over? state) {:state :database}
-      (nil? choice) state
-      :else (gs/next-state state choice))))
-
+    (if (:over? state)
+      {:state :database}
+      (gs/next-state state choice))))
 
 (defn- html-button [value inner-html]
   (str "<button type=\"submit\" name=\"choice\" value=\"" value "\">" inner-html "</button>"))

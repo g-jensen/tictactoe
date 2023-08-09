@@ -102,10 +102,15 @@
                                   (.putHeader "Cookie" "state={:state :database}")
                                   (.putHeader "Content-Length" "8")
                                   (.setBody "choice=1"))
-          r2 (doto (HttpMessage.) (.setStartLine "GET /tictactoe HTTP/1.1")
-                                  (.putHeader "Host" "me"))]
+          r2 (doto (HttpMessage.) (.setStartLine "GET /tictactoe HTTP/1.1"))
+          r3 (doto (HttpMessage.) (.setStartLine "GET /tictactoe HTTP/1.1")
+                                  (.putHeader "Cookie" "state={:over? true}"))
+          r4 (doto (HttpMessage.) (.setStartLine "GET /tictactoe HTTP/1.1")
+                                  (.putHeader "Cookie" "random={:over? true}"))]
       (should= {:database :file :state :load-type} (get-state r1))
-      (should= {:state :database} (get-state r2))))
+      (should= {:state :database} (get-state r2))
+      (should= {:state :database} (get-state r3))
+      (should= {:state :database} (get-state r4))))
 
   (it "generates HTML for a given state"
     (should= database-html (generate-html {}))
