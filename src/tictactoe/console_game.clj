@@ -4,65 +4,40 @@
             [tictactoe.game-state :as gs]
             [tictactoe.file-database]
             [tictactoe.menu]
-            [tictactoe.move :as move]
             [tictactoe.utils :as utils]))
 
-(defn evaluate-menu []
-  (loop [state {:state :database}]
-    (if (= :done (:state state))
-      state
-      (do (println (:label (gs/ui-components state)))
-          (println (str/join "\n" (:options (gs/ui-components state))))
-          (recur (gs/next-state state (read-line)))))))
-
-(defn initial-state []
-  (let [menu-state (evaluate-menu)]
-    (as-> menu-state state
-          (assoc state :gamemode (gs/init-gamemode state))
-          (assoc state :date (utils/now)))))
-
-(defn print-board [board]
+(defn board->str [board]
   (if (utils/board-3d? board)
-    (doall (map #(println (str (utils/board->str %) "\n")) board))
-    (do (println (utils/board->str board))
-        (println))))
+    (apply str (map #(str (board->str %) "\n\n") board))
+    (->> (partition (int (Math/sqrt (count board))) board)
+         (map #(str/join " " %))
+         (str/join "\n"))))
 
-(defn print-game-over-message [board]
-  (if (board-state/win? board)
-    (println (str (board-state/winner board) " has won!"))
-    (println "tie!"))
-  (println "\nPlay Again:"))
+(defmulti state->str #(:type (gs/ui-components %)))
 
-(defn console-draw [state]
-  (let [board (:board state)
-        over? (:over? state)]
-    (print-board board)
-    (if over?
-      (print-game-over-message board))))
+(defmethod state->str :menu [state]
+  (str (:label (gs/ui-components state)) "\n"
+       (str/join "\n" (:options (gs/ui-components state)))))
 
-(defn get-user-move [board]
-  (let [input (read-line)
-        board-size (board-state/board-size board)
-        empty-board (if (utils/board-3d? board)
-                      (flatten (repeat board-size (utils/empty-board board-size)))
-                      (utils/empty-board board-size))]
-    (if (utils/input-valid? input empty-board)
-      (dec (Integer/parseInt input))
-      -1)))
+(defmethod state->str :counter [state]
+  (:label (gs/ui-components state)))
 
-(defmethod gs/next-board :console [state]
-  (let [board (:board state)
-        difficulty (:difficulty state)]
-    (if (gs/computer-turn? state)
-      (assoc state :board (move/play-move board (move/get-computer-move difficulty board)))
-      (assoc state :board (move/play-move board (get-user-move board))))))
+(defn- game-over-message [board]
+  (str
+    (if (board-state/win? board)
+      (str (board-state/winner board) " has won!")
+      "tie!")
+    "\nPlay Again:"))
 
-(defmethod gs/run-tictactoe :console [state]
-  (loop [state (merge state (initial-state))]
-    (console-draw state)
+(defmethod state->str :board [state]
+  (let [board (:board state)]
+    (str (board->str board)
+         (if (:over? state)
+           (str "\n" (game-over-message board))
+           ""))))
+(defmethod gs/run-tictactoe :console [_]
+  (loop [state (gs/next-state {} nil)]
+    (println (state->str state))
     (if (:over? state)
-      (do (gs/clean-up state)
-          (recur (assoc (initial-state) :ui :console)))
-      (let [state (gs/update-state state)]
-        (gs/db-save-game state)
-        (recur state)))))
+      (recur (gs/next-state {} nil))
+      (recur (gs/next-state state (read-line))))))
