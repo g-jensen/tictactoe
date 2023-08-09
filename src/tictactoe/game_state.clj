@@ -12,7 +12,6 @@
 (defmulti db-fetch-games :database)
 (defmulti db-delete-game :database)
 (defmulti db-update-game (fn [state _ _ _] (:database state)))
-(defmulti next-board :ui)
 
 (defn db-save-game [state]
   (db-delete-game state (:old-date state))

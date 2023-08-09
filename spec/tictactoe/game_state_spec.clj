@@ -4,29 +4,6 @@
             [tictactoe.utils :as utils])
   (:import (tictactoe.game_mode PvCGame PvPGame)))
 
-(def evaluated-menu {:state :done
-                      :versus-type :pvp
-                      :board-size 3
-                      :board (utils/empty-board 3)})
-
-(def computer-turn-state {:state :done
-                          :versus-type :pvc
-                          :difficulty :hard
-                          :ui :console
-                          :character \o
-                          :board-size 3
-                          :board (utils/empty-board 3)
-                          :gamemode (PvCGame. 3 (utils/empty-board 3) :hard)})
-
-(def game-over-state {:state :done
-                      :versus-type :pvc
-                      :difficulty :hard
-                      :ui :console
-                      :character \o
-                      :board-size 3
-                      :board [\x \o \x \o \x \o \x \_ \_]
-                      :gamemode (PvCGame. 3 (utils/empty-board 3) :hard)})
-
 (describe "A TicTacToe Game State"
 
   (it "initializes a gamemode"
