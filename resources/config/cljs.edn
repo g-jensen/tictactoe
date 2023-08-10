@@ -1,0 +1,37 @@
+{:run-cmd     "phantomjs resources/public/specs/speclj.js"
+ :development {:cache-analysis true
+               :optimizations  :none
+               :output-dir     "resources/public/cljs/"
+               :output-to      "resources/public/cljs/dev.js"
+               :pretty-print   true
+               :source-map     true
+               :sources        ["spec/cljs" "src/cljs"]
+               :specs          true
+               :verbose        false
+               :watch-fn       runner.cljs/on-dev-compiled
+               }
+ :production  {
+               :cache-analysis false
+               ;:externs        ["dev/app/externs/gapi.js"]
+               :infer-externs  true
+               :optimizations  :advanced
+               :output-dir     "resources/public/cljs/"
+               :output-to      "resources/public/cljs/app.js"
+               :pretty-print   false
+               :sources        ["src/cljs"]
+               :specs          false
+               :verbose        false
+               }
+ :staging     {
+               :cache-analysis false
+               :infer-externs  true
+               :optimizations  :whitespace
+               :output-dir     "resources/public/cljs/"
+               :output-to      "resources/public/cljs/app.js"
+               :pretty-print   true
+               :pseudo-names   true
+               :sources        ["src/cljs"]
+               :specs          false
+               :verbose        false
+               }
+ }
