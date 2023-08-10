@@ -1,9 +1,7 @@
 (ns tictactoe.file-database-spec
   (:require [speclj.core :refer :all]
             [tictactoe.file-database :refer :all]
-            [tictactoe.game-state :as gs]
-            [tictactoe.utils :as utils])
-  (:import (tictactoe.game_mode PvPGame)))
+            [tictactoe.game-state :as gs]))
 
 (def sample (str "{:date \"Tue Jun 19 12:46:29 EDT 1729\", :board [\\_ \\_ \\_ \\x \\_ \\_ \\o \\x \\_] :versus-type :pvp :difficulty nil}\n"
                  "{:date \"Tue Jun 19 12:46:32 EDT 1729\", :board [\\_ \\_ \\_ \\x \\_ \\_ \\o \\x \\_] :versus-type :pvp :difficulty nil}\n"
