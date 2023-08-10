@@ -1,9 +1,9 @@
-(ns tictactoe.game-state
-  (:require [tictactoe.board-state :as board-state]
-            [tictactoe.game-mode :as game-mode]
-            [tictactoe.move :as move]
-            [tictactoe.utils :as utils])
-  (:import (tictactoe.game_mode PvCGame)))
+(ns clj.tictactoe.game-state
+  (:require [clj.tictactoe.board-state :as board-state]
+            [clj.tictactoe.game-mode :as game-mode]
+            [clj.tictactoe.move :as move]
+            [clj.tictactoe.utils :as utils])
+  (:import (clj.tictactoe.game_mode PvCGame)))
 
 (defmulti run-tictactoe :ui)
 (defmulti next-state :state)

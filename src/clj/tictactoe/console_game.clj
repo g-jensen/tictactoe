@@ -1,10 +1,10 @@
-(ns tictactoe.console-game
+(ns clj.tictactoe.console-game
   (:require [clojure.string :as str]
-            [tictactoe.board-state :as board-state]
-            [tictactoe.game-state :as gs]
-            [tictactoe.file-database]
-            [tictactoe.menu]
-            [tictactoe.utils :as utils]))
+            [clj.tictactoe.board-state :as board-state]
+            [clj.tictactoe.game-state :as gs]
+            [clj.tictactoe.file-database]
+            [clj.tictactoe.menu]
+            [clj.tictactoe.utils :as utils]))
 (defmulti state->str #(:type (gs/ui-components %)))
 
 (defn board->str [board]

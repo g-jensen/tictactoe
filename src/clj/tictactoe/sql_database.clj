@@ -1,7 +1,7 @@
-(ns tictactoe.sql-database
+(ns clj.tictactoe.sql-database
   (:require [clojure.java.jdbc :refer :all]
-            [tictactoe.game-mode :as game-mode]
-            [tictactoe.game-state :as gs]))
+            [clj.tictactoe.game-mode :as game-mode]
+            [clj.tictactoe.game-state :as gs]))
 
 (def file-name "games.db")
 (def sql-db {:classname "org.sqlite.JDBC" :subprotocol "sqlite" :subname file-name})

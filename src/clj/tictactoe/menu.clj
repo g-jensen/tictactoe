@@ -1,10 +1,10 @@
-(ns tictactoe.menu
-  (:require [tictactoe.move :as move]
-            [tictactoe.utils :as utils]
-            [tictactoe.game-state :as gs]
-            [tictactoe.file-database]
-            [tictactoe.sql-database]
-            [tictactoe.board-state :as board-state]))
+(ns clj.tictactoe.menu
+  (:require [clj.tictactoe.move :as move]
+            [clj.tictactoe.utils :as utils]
+            [clj.tictactoe.game-state :as gs]
+            [clj.tictactoe.file-database]
+            [clj.tictactoe.sql-database]
+            [clj.tictactoe.board-state :as board-state]))
 
 (defmethod gs/next-state :default [state input]
   (assoc state :state :database))

@@ -1,4 +1,4 @@
-(ns tictactoe.utils
+(ns clj.tictactoe.utils
   (:require [clojure.string :as str])
   (:import (java.util Date)))
 

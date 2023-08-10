@@ -1,9 +1,9 @@
-(ns tictactoe.quil-game
+(ns clj.tictactoe.quil-game
   (:require [quil.core :as q]
             [quil.middleware :as m]
-            [tictactoe.board-state :as board-state]
-            [tictactoe.game-state :as gs]
-            [tictactoe.utils :as utils]))
+            [clj.tictactoe.board-state :as board-state]
+            [clj.tictactoe.game-state :as gs]
+            [clj.tictactoe.utils :as utils]))
 
 (defmulti draw-components #(:type (gs/ui-components %)))
 (defmulti update-ui (fn [state _] (:type (gs/ui-components state))))

@@ -1,11 +1,11 @@
-(ns tictactoe.menu-spec
+(ns clj.tictactoe.menu-spec
   (:require [speclj.core :refer :all]
-            [tictactoe.game-mode :as game-mode]
-            [tictactoe.menu :refer :all]
-            [tictactoe.game-state :as gs]
-            [tictactoe.file-database]
-            [tictactoe.sql-database]
-            [tictactoe.utils :as utils]))
+            [clj.tictactoe.game-mode :as game-mode]
+            [clj.tictactoe.menu :refer :all]
+            [clj.tictactoe.game-state :as gs]
+            [clj.tictactoe.file-database]
+            [clj.tictactoe.sql-database]
+            [clj.tictactoe.utils :as utils]))
 
 (def games
   [{:date "the-date", :board [\x \_ \_ \_ \_ \_ \_ \_ \_], :gamemode {:mode :pvp}}

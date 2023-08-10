@@ -1,7 +1,7 @@
-(ns tictactoe.web-game-spec
+(ns clj.tictactoe.web-game-spec
   (:require [speclj.core :refer :all])
-  (:require [tictactoe.utils :as utils]
-            [tictactoe.web-game :refer :all])
+  (:require [clj.tictactoe.utils :as utils]
+            [clj.tictactoe.web-game :refer :all])
   (:import (org.httpserver HttpMessage)))
 
 (def database-html (str "Database"
@@ -150,7 +150,7 @@
                                    (.putHeader "Content-Length" (str (count html)))
                                    (.putHeader "Set-Cookie" (str "state={:state :load-type, "
                                                                         ":database :file}"))
-                                   (.setBody html))]
+                                   (.setBody (str html)))]
       (should= res (handle req))))
 
   (it "handles load-type form submit"
@@ -222,7 +222,7 @@
                                      ":dimension 2, "
                                      ":board-size 3, "
                                      ":board [\\x \\x \\x \\o \\o \\_ \\_ \\_ \\_], "
-                                     ":gamemode #tictactoe.game_mode.PvPGame{:size 3, :init-board [\\x \\x \\x \\o \\o \\_ \\_ \\_ \\_]}, "
+                                     ":gamemode #clj.tictactoe.game_mode.PvPGame{:size 3, :init-board [\\x \\x \\x \\o \\o \\_ \\_ \\_ \\_]}, "
                                      ":date \"current-date\", "
                                      ":over? true}"))
                                      (.setBody (str html)))]

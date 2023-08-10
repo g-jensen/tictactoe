@@ -1,7 +1,7 @@
-(ns tictactoe.quil-game-spec
+(ns clj.tictactoe.quil-game-spec
   (:require [speclj.core :refer :all]
-            [tictactoe.quil-game :refer :all]
-            [tictactoe.utils :as utils]))
+            [clj.tictactoe.quil-game :refer :all]
+            [clj.tictactoe.utils :as utils]))
 
 (describe "A Quil TicTacToe Game"
 

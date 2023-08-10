@@ -1,9 +1,9 @@
-(ns tictactoe.move_spec
+(ns clj.tictactoe.move_spec
   (:require [speclj.core :refer :all]
-            [tictactoe.board-state :as board-state]
-            [tictactoe.move :refer :all]
-            [tictactoe.utils :as utils]
-            [tictactoe.utils-spec :as utils-spec]))
+            [clj.tictactoe.board-state :as board-state]
+            [clj.tictactoe.move :refer :all]
+            [clj.tictactoe.utils :as utils]
+            [clj.tictactoe.utils-spec :as utils-spec]))
 
 
 (describe "A TicTacToe Mover"

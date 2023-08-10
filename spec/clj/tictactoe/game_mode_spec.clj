@@ -1,8 +1,8 @@
-(ns tictactoe.game-mode-spec
+(ns clj.tictactoe.game-mode-spec
   (:require [speclj.core :refer :all]
-            [tictactoe.game-mode :refer :all]
-            [tictactoe.utils :as utils]
-            [tictactoe.move :as move]))
+            [clj.tictactoe.game-mode :refer :all]
+            [clj.tictactoe.utils :as utils]
+            [clj.tictactoe.move :as move]))
 
 (describe "A TicTacToe Game-mode"
 

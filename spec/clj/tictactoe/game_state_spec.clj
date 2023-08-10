@@ -1,8 +1,8 @@
-(ns tictactoe.game-state-spec
+(ns clj.tictactoe.game-state-spec
   (:require [speclj.core :refer :all]
-            [tictactoe.game-state :refer :all]
-            [tictactoe.utils :as utils])
-  (:import (tictactoe.game_mode PvCGame PvPGame)))
+            [clj.tictactoe.game-state :refer :all]
+            [clj.tictactoe.utils :as utils])
+  (:import (clj.tictactoe.game_mode PvCGame PvPGame)))
 
 (describe "A TicTacToe Game State"
 
