@@ -150,7 +150,7 @@
                                    (.putHeader "Content-Length" (str (count html)))
                                    (.putHeader "Set-Cookie" (str "state={:state :load-type, "
                                                                         ":database :file}"))
-                                   (.setBody html))]
+                                   (.setBody (str html)))]
       (should= res (handle req))))
 
   (it "handles load-type form submit"
