@@ -1,9 +1,9 @@
-(ns clj.tictactoe.core
+(ns tictactoe.core
   (:gen-class)
-  (:require [clj.tictactoe.game-state :as game-state]
-            [clj.tictactoe.console-game]
-            [clj.tictactoe.quil-game]
-            [clj.tictactoe.web-game]))
+  (:require [tictactoe.game-state :as game-state]
+            [tictactoe.console-game]
+            [tictactoe.quil-game]
+            [tictactoe.web-game]))
 
 (defn -main [& [ui]]
   (game-state/run-tictactoe {:ui (keyword ui)}))
