@@ -37,3 +37,35 @@
        (instance? PvCGame (:gamemode state))
        (not= (:character state)
              (move/player-to-move (:board state)))))
+
+(defn- update-over [state]
+  (if (over? state)
+    (do (if (:database state) (clean-up state))
+        (assoc state :over? true))
+    state))
+
+(defn- update-gamemode [state]
+  (if (:gamemode state)
+    state
+    (as-> state state
+          (assoc state :gamemode (init-gamemode state))
+          (assoc state :date (utils/now)))))
+
+(defn- update-computer [state]
+  (let [board (:board state)
+        difficulty (:difficulty state)]
+    (if (computer-turn? state)
+      (assoc state :board (move/play-move board (move/get-computer-move difficulty board)))
+      state)))
+
+(defmethod next-state :done [state input]
+  (let [board (:board state)]
+    (if (utils/input-valid? input (if (utils/board-3d? board) (flatten board) board))
+      (let [new-state (-> (assoc state :board (move/play-move board (dec (Integer/parseInt input))))
+                          (update-gamemode)
+                          (update-computer))]
+        (if (:database new-state)
+          (do (db-initialize new-state)
+              (db-save-game new-state)))
+        (update-over new-state))
+      state)))
