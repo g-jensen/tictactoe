@@ -1,5 +1,4 @@
-(ns tictactoe.utils
-  (:import (java.util Date)))
+(ns tictactoe.utils)
 
 (def empty-tile \_)
 (defn empty-board [n]
@@ -26,6 +25,3 @@
 (defn input-valid?
   ([input] (and (not (empty? input)) (every? #(is-digit %) input)))
   ([input options] (and (in-range? 1 (inc (count options)) input))))
-
-(defn now []
-  (str (Date.)))

@@ -3,7 +3,8 @@
             [tictactoe.game-mode :as game-mode]
             [tictactoe.move :as move]
             [tictactoe.utils :as utils])
-  (:import (tictactoe.game_mode PvCGame)))
+  (:import (java.util Date)
+           (tictactoe.game_mode PvCGame)))
 
 (defmulti run-tictactoe :ui)
 (defmulti next-state :state)
@@ -12,6 +13,9 @@
 (defmulti db-fetch-games :database)
 (defmulti db-delete-game :database)
 (defmulti db-update-game (fn [state _ _ _] (:database state)))
+
+(defn now []
+  (str (Date.)))
 
 (defn db-save-game [state]
   (db-delete-game state (:old-date state))
@@ -49,7 +53,7 @@
     state
     (as-> state state
           (assoc state :gamemode (init-gamemode state))
-          (assoc state :date (utils/now)))))
+          (assoc state :date (now)))))
 
 (defn- update-computer [state]
   (let [board (:board state)

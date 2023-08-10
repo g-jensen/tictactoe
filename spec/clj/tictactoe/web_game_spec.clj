@@ -1,6 +1,7 @@
 (ns tictactoe.web-game-spec
   (:require [speclj.core :refer :all])
-  (:require [tictactoe.utils :as utils]
+  (:require [tictactoe.game-state :as gs]
+            [tictactoe.utils :as utils]
             [tictactoe.web-game :refer :all])
   (:import (org.httpserver HttpMessage)))
 
@@ -207,7 +208,7 @@
 
   (with-stubs)
   (it "handles game over form submit"
-    (with-redefs [utils/now (stub :now {:return "current-date"})]
+    (with-redefs [gs/now (stub :now {:return "current-date"})]
       (let [state (str "state={:state :done,:versus-type :pvp, :dimension 2, :board-size 3, :board [\\_ \\x \\x \\o \\o \\_ \\_ \\_ \\_]}")
             req (doto (HttpMessage.) (.setStartLine "POST /tictactoe HTTP/1.1")
                                      (.putHeader "Cookie" state)
