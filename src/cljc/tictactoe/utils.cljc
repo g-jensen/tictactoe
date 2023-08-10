@@ -25,3 +25,6 @@
 (defn input-valid?
   ([input] (and (not (empty? input)) (every? #(is-digit %) input)))
   ([input options] (and (in-range? 1 (inc (count options)) input))))
+
+(defn slow-sqrt [n]
+  (first (filter #(= n (* % %)))))
