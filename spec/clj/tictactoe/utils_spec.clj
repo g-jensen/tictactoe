@@ -1,6 +1,6 @@
-(ns clj.tictactoe.utils-spec
+(ns tictactoe.utils-spec
   (:require [speclj.core :refer :all]
-            [clj.tictactoe.utils :refer :all]))
+            [tictactoe.utils :refer :all]))
 
 (defn first-move-board [n]
   (vec (cons \x (repeat (dec (* n n)) empty-tile))))

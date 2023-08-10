@@ -1,8 +1,8 @@
-(ns clj.tictactoe.console-game-spec
+(ns tictactoe.console-game-spec
   (:require [speclj.core :refer :all]
-            [clj.tictactoe.console-game :refer :all]
-            [clj.tictactoe.utils :as utils]
-            [clj.tictactoe.utils-spec :as utils-spec]))
+            [tictactoe.console-game :refer :all]
+            [tictactoe.utils :as utils]
+            [tictactoe.utils-spec :as utils-spec]))
 
 (describe "A TicTacToe Console Game"
 

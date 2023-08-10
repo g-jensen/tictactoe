@@ -1,10 +1,10 @@
-(ns clj.tictactoe.sql-database-spec
+(ns tictactoe.sql-database-spec
   (:require [speclj.core :refer :all]
-            [clj.tictactoe.game-state :as gs]
-            [clj.tictactoe.sql-database :refer :all]
+            [tictactoe.game-state :as gs]
+            [tictactoe.sql-database :refer :all]
             [clojure.java.jdbc :refer :all]
-            [clj.tictactoe.utils :as utils])
-  (:import (clj.tictactoe.game_mode PvPGame)))
+            [tictactoe.utils :as utils])
+  (:import (tictactoe.game_mode PvPGame)))
 
 (def sample [{:date "Tue Jun 19 12:46:29 EDT 1729" :board "[\\_ \\_ \\_ \\x \\_ \\_ \\o \\x \\_]" :gamemode "{:mode :pvp}"}
              {:date "Tue Jun 19 12:46:32 EDT 1729" :board "[\\_ \\_ \\_ \\x \\_ \\_ \\o \\x \\_]" :gamemode "{:mode :pvp}"}

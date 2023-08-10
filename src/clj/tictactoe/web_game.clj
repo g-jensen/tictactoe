@@ -1,8 +1,8 @@
-(ns clj.tictactoe.web-game
+(ns tictactoe.web-game
   (:require [clojure.string :as str]
-            [clj.tictactoe.board-state :as board-state]
-            [clj.tictactoe.game-state :as gs]
-            [clj.tictactoe.utils :as utils])
+            [tictactoe.board-state :as board-state]
+            [tictactoe.game-state :as gs]
+            [tictactoe.utils :as utils])
   (:import (java.net InetSocketAddress)
            (java.util.function Function)
            (org.httpserver HttpMessage HttpServer)))

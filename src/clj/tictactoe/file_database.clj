@@ -1,7 +1,7 @@
-(ns clj.tictactoe.file-database
+(ns tictactoe.file-database
   (:require [clojure.string :as str]
-            [clj.tictactoe.game-state :as gs]
-            [clj.tictactoe.game-mode :as game-mode]))
+            [tictactoe.game-state :as gs]
+            [tictactoe.game-mode :as game-mode]))
 
 (defn delete-date [string date]
   (if-not (empty? string)

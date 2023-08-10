@@ -1,6 +1,6 @@
-(ns clj.tictactoe.move
-  (:require [clj.tictactoe.utils :as utils]
-            [clj.tictactoe.board-state :as board-state]))
+(ns tictactoe.move
+  (:require [tictactoe.utils :as utils]
+            [tictactoe.board-state :as board-state]))
 
 (defn player-to-move [board]
   (if (= (utils/tile-count board \x) (utils/tile-count board \o))

@@ -1,5 +1,5 @@
-(ns clj.tictactoe.board-state
-  (:require [clj.tictactoe.utils :as utils]))
+(ns tictactoe.board-state
+  (:require [tictactoe.utils :as utils]))
 
 (defn winning-line? [seq]
   (and (not= utils/empty-tile (first seq))

@@ -1,4 +1,4 @@
-(ns clj.tictactoe.game-mode)
+(ns tictactoe.game-mode)
 
 (defprotocol GameMode
   (initial-board [this])

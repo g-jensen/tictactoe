@@ -1,7 +1,7 @@
-(ns clj.tictactoe.board-state-spec
+(ns tictactoe.board-state-spec
   (:require [speclj.core :refer :all]
-            [clj.tictactoe.board-state :refer :all]
-            [clj.tictactoe.utils :as utils]))
+            [tictactoe.board-state :refer :all]
+            [tictactoe.utils :as utils]))
 
 (describe "A TicTacToe Board State"
 
