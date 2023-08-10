@@ -27,7 +27,7 @@
         choice (get-choice req)]
     (if (:over? state)
       {:state :database}
-      (gs/next-state state choice))))
+      (gs/next-state state (if-not (nil? choice) (Integer/parseInt choice))))))
 
 (defn- html-button [value inner-html]
   (str "<button type=\"submit\" name=\"choice\" value=\"" value "\">" inner-html "</button>"))

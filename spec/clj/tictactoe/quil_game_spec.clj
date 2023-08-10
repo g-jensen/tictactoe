@@ -62,16 +62,16 @@
   (context "gets the input of a click"
 
     (it "for a menu"
-      (should= "1" (get-input {:state :database} {:x 5 :y 40}))
-      (should= "2" (get-input {:state :database} {:x 5 :y 61}))
+      (should= 1 (get-input {:state :database} {:x 5 :y 40}))
+      (should= 2 (get-input {:state :database} {:x 5 :y 61}))
       (should-be-nil (get-input {:state :database} {:x 0 :y 0})))
 
-    (it "for a counters"
-      (should= "3" (get-input {:state :board-size :counter-val 3} {:x 5 :y 85}))
+    (it "for a counter"
+      (should= 3 (get-input {:state :board-size :counter-val 3} {:x 5 :y 85}))
       (should-be-nil (get-input {:state :board-size :counter-val 3} {:x 0 :y 0})))
 
     (it "for a board"
-      (should= "1" (get-input {:state :done :board (utils/empty-board 3)} {:x 50 :y 50}))
-      (should= "2" (get-input {:state :done :board (utils/empty-board 3)} {:x 50 :y 101}))
-      (should= "4" (get-input {:state :done :board (utils/empty-board 3)} {:x 101 :y 50}))
+      (should= 1 (get-input {:state :done :board (utils/empty-board 3)} {:x 50 :y 50}))
+      (should= 2 (get-input {:state :done :board (utils/empty-board 3)} {:x 50 :y 101}))
+      (should= 4 (get-input {:state :done :board (utils/empty-board 3)} {:x 101 :y 50}))
       (should-be-nil (get-input {:state :done} {:x 0 :y 0})))))

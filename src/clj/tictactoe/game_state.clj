@@ -60,8 +60,8 @@
 
 (defmethod next-state :done [state input]
   (let [board (:board state)]
-    (if (utils/input-valid? input (if (utils/board-3d? board) (flatten board) board))
-      (let [new-state (-> (assoc state :board (move/play-move board (dec (Integer/parseInt input))))
+    (if-not (nil? input)
+      (let [new-state (-> (assoc state :board (move/play-move board (dec input)))
                           (update-gamemode)
                           (update-computer))]
         (if (:database new-state)

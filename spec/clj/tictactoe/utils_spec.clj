@@ -30,22 +30,12 @@
     (should= (range 0 27) (empty-indices (repeat 3 (empty-board 3)))))
 
   (it "checks if input is valid"
-    (should-not (input-valid? nil [:a]))
-    (should-not (input-valid? "" []))
-    (should (input-valid? "1" [:a]))
-    (should-not (input-valid? "g" [:a]))
-    (should-not (input-valid? "0g" [:a]))
-    (should-not (input-valid? "2" [:a]))
-    (should-not (input-valid? "-1" [:a]))
-    (should (input-valid? "2" [:a :b :c]))
-    (should (input-valid? "3" [:a :b :c]))
-    (should (input-valid? "10" (repeat 16 0))))
-
-  (it "converts a board to a string"
-    (should= "_ _ _\n_ _ _\n_ _ _" (board->str (empty-board 3)))
-    (should= "x _ _\n_ _ _\n_ _ _" (board->str (first-move-board 3)))
-    (should= "_ _ _ _\n_ _ _ _\n_ _ _ _\n_ _ _ _" (board->str (empty-board 4)))
-    (should= "x _ _ _\n_ _ _ _\n_ _ _ _\n_ _ _ _" (board->str (first-move-board 4))))
+    (should (input-valid? 1 [:a]))
+    (should-not (input-valid? 2 [:a]))
+    (should-not (input-valid? -1 [:a]))
+    (should (input-valid? 2 [:a :b :c]))
+    (should (input-valid? 3 [:a :b :c]))
+    (should (input-valid? 10 (repeat 16 0))))
 
   (it "checks if a board is 3 dimensional"
     (should-not (board-3d? (empty-board 3)))

@@ -73,18 +73,18 @@
         inputs (filter #(point-in-rect? mouse-pos [5 (* 20 (+ % 3)) 150 20])
                       (range 0 (count options)))]
     (if-not (empty? inputs)
-      (str (inc (first inputs))))))
+      (inc (first inputs)))))
 
 (defmethod get-input :counter [state data]
   (let [mouse-pos [(:x data) (:y data)]]
     (if (point-in-rect? mouse-pos [5 115 60 30])
-      (str (:counter-val state)))))
+      (:counter-val state))))
 
 (defmethod get-input :board [state data]
   (let [mouse-pos [(:x data) (:y data)]
         input (picked-tile mouse-pos (:board state))]
     (if-not (nil? input)
-      (str (inc input)))))
+      (inc input))))
 
 (defmethod draw-components :menu [state]
   (let [comps (gs/ui-components state)
@@ -101,7 +101,7 @@
 
 (defmethod update-ui :counter [state data]
   (if (point-in-rect? [(:x data) (:y data)] [5 115 60 30])
-    (gs/next-state state (str (:counter-val state)))
+    (gs/next-state state (:counter-val state))
     (assoc state :counter-val (updated-value state data))))
 
 (defmethod draw-components :counter [state]

@@ -16,27 +16,27 @@
     (should= {:state :database} (gs/next-state {} nil)))
 
   (it "selects the database state"
-    (should= :file (:database (gs/next-state {:state :database} "1")))
-    (should= :load-type (:state (gs/next-state {:state :database} "1")))
-    (should= :sql (:database (gs/next-state {:state :database} "2")))
-    (should= :load-type (:state (gs/next-state {:state :database} "2")))
-    (should= {:state :database} (gs/next-state {:state :database} "3")))
+    (should= :file (:database (gs/next-state {:state :database} 1)))
+    (should= :load-type (:state (gs/next-state {:state :database} 1)))
+    (should= :sql (:database (gs/next-state {:state :database} 2)))
+    (should= :load-type (:state (gs/next-state {:state :database} 2)))
+    (should= {:state :database} (gs/next-state {:state :database} 3)))
 
   (it "selects the load type state"
-    (should= :new (:load-type (gs/next-state {:state :load-type} "1")))
-    (should= :dimension (:state (gs/next-state {:state :load-type} "1")))
-    (should= :load (:load-type (gs/next-state {:state :load-type} "2")))
-    (should= :select-game (:state (gs/next-state {:state :load-type} "2")))
-    (should= {:state :load-type} (gs/next-state {:state :load-type} "3")))
+    (should= :new (:load-type (gs/next-state {:state :load-type} 1)))
+    (should= :dimension (:state (gs/next-state {:state :load-type} 1)))
+    (should= :load (:load-type (gs/next-state {:state :load-type} 2)))
+    (should= :select-game (:state (gs/next-state {:state :load-type} 2)))
+    (should= {:state :load-type} (gs/next-state {:state :load-type} 3)))
 
   (it "selects the dimension"
-    (should= 2 (:dimension (gs/next-state {:state :dimension} "1")))
-    (should= :board-size (:state (gs/next-state {:state :dimension} "1")))
-    (should= 3 (:dimension (gs/next-state {:state :dimension} "2")))
-    (should= :versus-type (:state (gs/next-state {:state :dimension} "2")))
+    (should= 2 (:dimension (gs/next-state {:state :dimension} 1)))
+    (should= :board-size (:state (gs/next-state {:state :dimension} 1)))
+    (should= 3 (:dimension (gs/next-state {:state :dimension} 2)))
+    (should= :versus-type (:state (gs/next-state {:state :dimension} 2)))
     (should= (repeat 3 (utils/empty-board 3))
-             (:board (gs/next-state {:state :dimension} "2")))
-    (should= {:state :dimension} (gs/next-state {:state :dimension} "3")))
+             (:board (gs/next-state {:state :dimension} 2)))
+    (should= {:state :dimension} (gs/next-state {:state :dimension} 3)))
 
   (with-stubs)
   (it "selects a game from a database"
@@ -48,59 +48,58 @@
                 :character \o
                 :difficulty nil
                 :old-date "the-date"
-                :state :done} (gs/next-state {:state :select-game} "1"))
+                :state :done} (gs/next-state {:state :select-game} 1))
       (should= {:board-size 4
                 :board [\_ \_ \_ \_ \_ \_ \_ \_ \_ \_ \_ \_ \_ \_ \_ \_]
                 :versus-type :pvc
                 :character \x
                 :difficulty :hard
                 :old-date "another-date"
-                :state :done} (gs/next-state {:state :select-game} "2"))
-      (should= {:state :select-game} (gs/next-state {:state :select-game} "3"))
+                :state :done} (gs/next-state {:state :select-game} 2))
+      (should= {:state :select-game} (gs/next-state {:state :select-game} 3))
       (should= {:state :select-game} (gs/next-state {:state :select-game} nil))))
 
   (it "selects a new game if the database is empty"
     (with-redefs [gs/db-fetch-games (stub :fetch-all-games {:return []})
                   gs/db-initialize  (stub :initialize {:return 0})]
-      (should= {:state :dimension} (gs/next-state {:state :select-game} "1"))))
+      (should= {:state :dimension} (gs/next-state {:state :select-game} 1))))
 
   (it "selects the board size state"
-    (should= 3 (:board-size (gs/next-state {:state :board-size} "3")))
-    (should= :versus-type (:state (gs/next-state {:state :board-size} "3")))
-    (should= (utils/empty-board 3) (:board (gs/next-state {:state :board-size} "3")))
-    (should= 4 (:board-size (gs/next-state {:state :board-size} "4")))
-    (should= :versus-type (:state (gs/next-state {:state :board-size} "4")))
-    (should= (utils/empty-board 4) (:board (gs/next-state {:state :board-size} "4")))
-    (should= {:state :board-size} (gs/next-state {:state :board-size} "2"))
-    (should= {:state :board-size} (gs/next-state {:state :board-size} "greg")))
+    (should= 3 (:board-size (gs/next-state {:state :board-size} 3)))
+    (should= :versus-type (:state (gs/next-state {:state :board-size} 3)))
+    (should= (utils/empty-board 3) (:board (gs/next-state {:state :board-size} 3)))
+    (should= 4 (:board-size (gs/next-state {:state :board-size} 4)))
+    (should= :versus-type (:state (gs/next-state {:state :board-size} 4)))
+    (should= (utils/empty-board 4) (:board (gs/next-state {:state :board-size} 4)))
+    (should= {:state :board-size} (gs/next-state {:state :board-size} 2)))
 
   (it "selects the versus type state"
-    (should= :pvp (:versus-type (gs/next-state {:state :versus-type} "1")))
-    (should= :done (:state (gs/next-state {:state :versus-type} "1")))
-    (should= :pvc (:versus-type (gs/next-state {:state :versus-type} "2")))
-    (should= :difficulty (:state (gs/next-state {:state :versus-type} "2")))
-    (should= {:state :versus-type} (gs/next-state {:state :versus-type} "3")))
+    (should= :pvp (:versus-type (gs/next-state {:state :versus-type} 1)))
+    (should= :done (:state (gs/next-state {:state :versus-type} 1)))
+    (should= :pvc (:versus-type (gs/next-state {:state :versus-type} 2)))
+    (should= :difficulty (:state (gs/next-state {:state :versus-type} 2)))
+    (should= {:state :versus-type} (gs/next-state {:state :versus-type} 3)))
 
   (it "selects the difficulty state"
-    (should= :easy (:difficulty (gs/next-state {:state :difficulty} "1")))
-    (should= :character (:state (gs/next-state {:state :difficulty} "1")))
-    (should= :medium (:difficulty (gs/next-state {:state :difficulty} "2")))
-    (should= :character (:state (gs/next-state {:state :difficulty} "2")))
-    (should= :hard (:difficulty (gs/next-state {:state :difficulty} "3")))
-    (should= :character (:state (gs/next-state {:state :difficulty} "3")))
-    (should= {:state :difficulty} (gs/next-state {:state :difficulty} "4")))
+    (should= :easy (:difficulty (gs/next-state {:state :difficulty} 1)))
+    (should= :character (:state (gs/next-state {:state :difficulty} 1)))
+    (should= :medium (:difficulty (gs/next-state {:state :difficulty} 2)))
+    (should= :character (:state (gs/next-state {:state :difficulty} 2)))
+    (should= :hard (:difficulty (gs/next-state {:state :difficulty} 3)))
+    (should= :character (:state (gs/next-state {:state :difficulty} 3)))
+    (should= {:state :difficulty} (gs/next-state {:state :difficulty} 4)))
 
   (it "selects the character state"
     (let [state {:state :character
                  :board-size 3
                  :difficulty :hard}]
-      (should= \x (:character (gs/next-state state "1")))
-      (should= :done (:state (gs/next-state state "1")))
-      (should= (utils/empty-board 3) (:board (gs/next-state state "1")))
-      (should= \o (:character (gs/next-state state "2")))
-      (should= :done (:state (gs/next-state state "2")))
-      (should= [\_ \_ \_ \_ \_ \_ \_ \_ \x] (:board (gs/next-state state "2")))
-      (should= state (gs/next-state state "3"))))
+      (should= \x (:character (gs/next-state state 1)))
+      (should= :done (:state (gs/next-state state 1)))
+      (should= (utils/empty-board 3) (:board (gs/next-state state 1)))
+      (should= \o (:character (gs/next-state state 2)))
+      (should= :done (:state (gs/next-state state 2)))
+      (should= [\_ \_ \_ \_ \_ \_ \_ \_ \x] (:board (gs/next-state state 2)))
+      (should= state (gs/next-state state 3))))
 
   (it "stores the ui components to select the database"
     (let [db {:label "Database"

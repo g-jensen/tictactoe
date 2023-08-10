@@ -48,32 +48,32 @@
   (it "initializes the game"
     (let [s1 {:state :done :versus-type :pvp :board-size 3 :board [\_ \_ \_ \_ \_ \_ \_ \_ \_]}]
       (should= (game-mode/->PvPGame 3 [\x \_ \_ \_ \_ \_ \_ \_ \_])
-               (:gamemode (next-state s1 "1")))))
+               (:gamemode (next-state s1 1)))))
 
   (it "selects the tile to play"
     (let [s1 {:state :done :board [\_ \_ \_ \_ \_ \_ \_ \_ \_] :versus-type :pvp}
           s2 {:state :done :board [\_ \x \_ \_ \_ \_ \_ \_ \_] :versus-type :pvp}
           s3 {:state :done :board (repeat 3 [\_ \_ \_ \_ \_ \_ \_ \_ \_]) :versus-type :pvp}]
-      (should= [\x \_ \_ \_ \_ \_ \_ \_ \_] (:board (next-state s1 "1")))
-      (should= [\o \x \_ \_ \_ \_ \_ \_ \_] (:board (next-state s2 "1")))
-      (should= [\_ \_ \_ \_ \_ \_ \_ \_ \_] (:board (next-state s1 "10")))
-      (should= [\_ \x \_ \_ \_ \_ \_ \_ \_] (:board (next-state s2 "2")))
+      (should= [\x \_ \_ \_ \_ \_ \_ \_ \_] (:board (next-state s1 1)))
+      (should= [\o \x \_ \_ \_ \_ \_ \_ \_] (:board (next-state s2 1)))
+      (should= [\_ \_ \_ \_ \_ \_ \_ \_ \_] (:board (next-state s1 10)))
+      (should= [\_ \x \_ \_ \_ \_ \_ \_ \_] (:board (next-state s2 2)))
       (should= [[\_ \_ \_ \_ \x \_ \_ \_ \_] [\_ \_ \_ \_ \_ \_ \_ \_ \_] [\_ \_ \_ \_ \_ \_ \_ \_ \_]]
-               (:board (next-state s3 "5")))))
+               (:board (next-state s3 5)))))
 
   (it "plays computer move"
     (let [s1 {:state :done
               :board [\_ \_ \_ \_ \_ \_ \_ \_ \_]
               :difficulty :hard
               :gamemode (game-mode/->PvCGame 3 (:board [\_ \_ \_ \_ \_ \_ \_ \_ \_]) :hard)}]
-      (should= [\x \_ \_ \_ \o \_ \_ \_ \_] (:board (next-state s1 "1")))))
+      (should= [\x \_ \_ \_ \o \_ \_ \_ \_] (:board (next-state s1 1)))))
 
   (it "sets game to over"
     (let [s1 {:state :done
               :board [\_ \x \x \o \o \_ \_ \_ \_]
               :versus-type :pvp}]
-      (should= [\x \x \x \o \o \_ \_ \_ \_] (:board (next-state s1 "1")))
-      (should (:over? (next-state s1 "1")))))
+      (should= [\x \x \x \o \o \_ \_ \_ \_] (:board (next-state s1 1)))
+      (should (:over? (next-state s1 1)))))
 
   (with-stubs)
   (it "saves game to db"
@@ -83,7 +83,7 @@
                 :database :file
                 :board [\_ \_ \x \o \o \x \_ \_ \_]
                 :versus-type :pvp}]
-        (next-state s1 "1")
+        (next-state s1 1)
         (should-have-invoked :save-game))))
 
   (it "deletes game from db when over"
@@ -94,5 +94,5 @@
                 :database :file
                 :board [\_ \x \x \o \o \_ \_ \_ \_]
                 :versus-type :pvp}]
-        (next-state s1 "1")
+        (next-state s1 1)
         (should-have-invoked :delete-game)))))

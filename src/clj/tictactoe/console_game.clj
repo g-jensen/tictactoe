@@ -39,4 +39,6 @@
     (println (state->str state))
     (if (:over? state)
       (recur (gs/next-state {} nil))
-      (recur (gs/next-state state (read-line))))))
+      (let [input (read-line)]
+        (recur (gs/next-state state (if (utils/input-valid? input)
+                                      (Integer/parseInt input))))))))
