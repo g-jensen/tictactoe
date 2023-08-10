@@ -1,4 +1,4 @@
-(ns tictactoe.core
+(ns tictactoe.main
   (:gen-class)
   (:require [tictactoe.game-state :as game-state]
             [tictactoe.console-game]

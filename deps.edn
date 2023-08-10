@@ -10,10 +10,10 @@
  :aliases {
            :build {:deps {io.github.clojure/tools.build {:git/tag "v0.9.4" :git/sha "76b78fe"}}
                    :ns-default build}
-           :run {:main-opts ["-m" "clj.tictactoe.core" "console"]}
-           :console {:main-opts ["-m" "clj.tictactoe.core" "console"]}
-           :quil {:main-opts ["-m" "clj.tictactoe.core" "quil"]}
-           :web {:main-opts ["-m" "clj.tictactoe.core" "web"]}
+           :run {:main-opts ["-m" "tictactoe.main" "console"]}
+           :console {:main-opts ["-m" "tictactoe.main" "console"]}
+           :quil {:main-opts ["-m" "tictactoe.main" "quil"]}
+           :web {:main-opts ["-m" "tictactoe.main" "web"]}
            :test {:extra-deps {speclj/speclj {:mvn/version "3.3.2"}}
                   :extra-paths ["spec/clj"]}
            :spec {:main-opts ["-m" "speclj.main" "-c"]}
