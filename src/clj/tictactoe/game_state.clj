@@ -52,8 +52,7 @@
   (if (:gamemode state)
     state
     (as-> state state
-          (assoc state :gamemode (init-gamemode state))
-          (assoc state :date (now)))))
+          (assoc state :gamemode (init-gamemode state)))))
 
 (defn- update-computer [state]
   (let [board (:board state)

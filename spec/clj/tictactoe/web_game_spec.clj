@@ -108,7 +108,7 @@
                                   (.putHeader "Cookie" "state={:over? true}"))
           r4 (doto (HttpMessage.) (.setStartLine "GET /tictactoe HTTP/1.1")
                                   (.putHeader "Cookie" "random={:over? true}"))]
-      (should= {:database :file :state :load-type} (get-state r1))
+      (should= {:database :file :state :load-type :date (gs/now)} (get-state r1))
       (should= {:state :database} (get-state r2))
       (should= {:state :database} (get-state r3))
       (should= {:state :database} (get-state r4))))
@@ -150,7 +150,8 @@
                                    (.putHeader "Content-Type" "text/html")
                                    (.putHeader "Content-Length" (str (count html)))
                                    (.putHeader "Set-Cookie" (str "state={:state :load-type, "
-                                                                        ":database :file}"))
+                                                                        ":database :file, "
+                                                                        ":date \"" (gs/now) "\"}"))
                                    (.setBody (str html)))]
       (should= res (handle req))))
 
@@ -224,7 +225,6 @@
                                      ":board-size 3, "
                                      ":board [\\x \\x \\x \\o \\o \\_ \\_ \\_ \\_], "
                                      ":gamemode #tictactoe.game_mode.PvPGame{:size 3, :init-board [\\x \\x \\x \\o \\o \\_ \\_ \\_ \\_]}, "
-                                     ":date \"current-date\", "
                                      ":over? true}"))
                                      (.setBody (str html)))]
         (should= res (handle req))))))

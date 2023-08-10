@@ -12,9 +12,9 @@
 (defmethod gs/next-state :database [state input]
   (cond
     (= 1 input) (do (gs/db-initialize {:database :file})
-                      (assoc state :database :file :state :load-type))
+                      (assoc state :database :file :state :load-type :date (gs/now)))
     (= 2 input) (do (gs/db-initialize {:database :sql})
-                      (assoc state :database :sql :state :load-type))
+                      (assoc state :database :sql :state :load-type :date (gs/now)))
     :else state))
 
 (defmethod gs/next-state :load-type [state input]
