@@ -1,8 +1,7 @@
 (ns tictactoe.game-state
   (:require [tictactoe.board-state :as board-state]
             [tictactoe.move :as move]
-            [tictactoe.utils :as utils])
-  (:import (java.util Date)))
+            [tictactoe.utils :as utils]))
 
 (defmulti run-tictactoe :ui)
 (defmulti next-state :state)
@@ -11,9 +10,6 @@
 (defmulti db-fetch-games :database)
 (defmulti db-delete-game :database)
 (defmulti db-update-game (fn [state] (:database state)))
-
-(defn now []
-  (str (Date.)))
 
 (defn db-save-game [state]
   (db-delete-game state (:old-date state))

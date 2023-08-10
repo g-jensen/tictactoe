@@ -3,8 +3,11 @@
             [tictactoe.utils :as utils]
             [tictactoe.game-state :as gs]
             [tictactoe.file-database]
-            [tictactoe.sql-database]
-            [tictactoe.board-state :as board-state]))
+            [tictactoe.sql-database])
+  (:import (java.util Date)))
+
+(defn now []
+  (str (Date.)))
 
 (defmethod gs/next-state :default [state input]
   (assoc state :state :database))
@@ -12,9 +15,9 @@
 (defmethod gs/next-state :database [state input]
   (cond
     (= 1 input) (do (gs/db-initialize {:database :file})
-                      (assoc state :database :file :state :load-type :date (gs/now)))
+                      (assoc state :database :file :state :load-type :date (now)))
     (= 2 input) (do (gs/db-initialize {:database :sql})
-                      (assoc state :database :sql :state :load-type :date (gs/now)))
+                      (assoc state :database :sql :state :load-type :date (now)))
     :else state))
 
 (defmethod gs/next-state :load-type [state input]
@@ -78,7 +81,7 @@
         (not (nil? game))
           (assoc (merge state game) :state :done
                                     :old-date (:date game)
-                                    :date (gs/now))
+                                    :date (now))
         :else
           state))
     state))

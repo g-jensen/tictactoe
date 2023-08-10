@@ -1,6 +1,5 @@
 (ns tictactoe.menu-spec
   (:require [speclj.core :refer :all]
-            [tictactoe.game-mode :as game-mode]
             [tictactoe.menu :refer :all]
             [tictactoe.game-state :as gs]
             [tictactoe.file-database]
@@ -42,7 +41,7 @@
   (it "selects a game from a database"
     (with-redefs [gs/db-fetch-games (stub :fetch-all-games {:return games})
                   gs/db-initialize (stub :initialize {:return 0})
-                  gs/now (stub :now {:return "new-date"})]
+                  now (stub :now {:return "new-date"})]
       (should= {:date "new-date"
                 :board [\x \_ \_ \_ \_ \_ \_ \_ \_]
                 :versus-type :pvp

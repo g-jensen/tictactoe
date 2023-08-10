@@ -2,6 +2,7 @@
   (:require [speclj.core :refer :all])
   (:require [tictactoe.game-state :as gs]
             [tictactoe.utils :as utils]
+            [tictactoe.menu :as menu]
             [tictactoe.web-game :refer :all])
   (:import (org.httpserver HttpMessage)))
 
@@ -108,7 +109,7 @@
                                   (.putHeader "Cookie" "state={:over? true}"))
           r4 (doto (HttpMessage.) (.setStartLine "GET /tictactoe HTTP/1.1")
                                   (.putHeader "Cookie" "random={:over? true}"))]
-      (should= {:database :file :state :load-type :date (gs/now)} (get-state r1))
+      (should= {:database :file :state :load-type :date (menu/now)} (get-state r1))
       (should= {:state :database} (get-state r2))
       (should= {:state :database} (get-state r3))
       (should= {:state :database} (get-state r4))))
@@ -151,7 +152,7 @@
                                    (.putHeader "Content-Length" (str (count html)))
                                    (.putHeader "Set-Cookie" (str "state={:state :load-type, "
                                                                         ":database :file, "
-                                                                        ":date \"" (gs/now) "\"}"))
+                                                                        ":date \"" (menu/now) "\"}"))
                                    (.setBody (str html)))]
       (should= res (handle req))))
 
@@ -209,7 +210,7 @@
 
   (with-stubs)
   (it "handles game over form submit"
-    (with-redefs [gs/now (stub :now {:return "current-date"})]
+    (with-redefs [menu/now (stub :now {:return "current-date"})]
       (let [state (str "state={:state :done,:versus-type :pvp, :dimension 2, :board-size 3, :board [\\_ \\x \\x \\o \\o \\_ \\_ \\_ \\_]}")
             req (doto (HttpMessage.) (.setStartLine "POST /tictactoe HTTP/1.1")
                                      (.putHeader "Cookie" state)
