@@ -1,7 +1,6 @@
 (ns tictactoe.file-database
   (:require [clojure.string :as str]
-            [tictactoe.game-state :as gs]
-            [tictactoe.game-mode :as game-mode]))
+            [tictactoe.game-state :as gs]))
 
 (defn delete-date [string date]
   (if-not (empty? string)
@@ -24,13 +23,13 @@
   (let [data (slurp file-name)]
     (spit file-name (delete-date data date))))
 
-(defmethod gs/db-update-game :file [state date board game-mode]
-  (gs/db-delete-game state date)
+(defmethod gs/db-update-game :file [state]
+  (gs/db-delete-game state (:date state))
   (let [data (slurp file-name)]
     (if-not (empty? data)
       (as-> (str/split-lines data) games
             (map read-string games)
-            (conj games {:date date :board board :gamemode (game-mode/to-map game-mode)})
+            (conj games state)
             (str/join "\n" games)
             (spit file-name (str games "\n")))
-      (spit file-name (str {:date date :board board :gamemode (game-mode/to-map game-mode)} "\n")))))
+      (spit file-name (str state "\n")))))

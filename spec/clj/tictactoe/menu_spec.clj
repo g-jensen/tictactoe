@@ -8,8 +8,8 @@
             [tictactoe.utils :as utils]))
 
 (def games
-  [{:date "the-date", :board [\x \_ \_ \_ \_ \_ \_ \_ \_], :gamemode {:mode :pvp}}
-   {:date "another-date", :board (utils/empty-board 4), :gamemode {:mode :pvc, :difficulty :hard}}])
+  [{:date "the-date", :board [\x \_ \_ \_ \_ \_ \_ \_ \_], :versus-type :pvp}
+   {:date "another-date", :board (utils/empty-board 4), :versus-type :pvp :difficulty :hard}])
 
 (describe "A TicTacToe Menu"
   (it "sets the default state"
@@ -41,21 +41,19 @@
   (with-stubs)
   (it "selects a game from a database"
     (with-redefs [gs/db-fetch-games (stub :fetch-all-games {:return games})
-                  gs/db-initialize (stub :initialize {:return 0})]
-      (should= {:board-size 3
+                  gs/db-initialize (stub :initialize {:return 0})
+                  gs/now (stub :now {:return "new-date"})]
+      (should= {:date "new-date"
                 :board [\x \_ \_ \_ \_ \_ \_ \_ \_]
                 :versus-type :pvp
-                :character \o
-                :difficulty nil
-                :old-date "the-date"
-                :state :done} (gs/next-state {:state :select-game} 1))
-      (should= {:board-size 4
+                :state :done
+                :old-date "the-date"} (gs/next-state {:state :select-game} 1))
+      (should= {:date "new-date"
                 :board [\_ \_ \_ \_ \_ \_ \_ \_ \_ \_ \_ \_ \_ \_ \_ \_]
-                :versus-type :pvc
-                :character \x
+                :versus-type :pvp
                 :difficulty :hard
-                :old-date "another-date"
-                :state :done} (gs/next-state {:state :select-game} 2))
+                :state :done
+                :old-date "another-date"} (gs/next-state {:state :select-game} 2))
       (should= {:state :select-game} (gs/next-state {:state :select-game} 3))
       (should= {:state :select-game} (gs/next-state {:state :select-game} nil))))
 

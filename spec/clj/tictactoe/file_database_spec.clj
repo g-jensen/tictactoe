@@ -5,23 +5,22 @@
             [tictactoe.utils :as utils])
   (:import (tictactoe.game_mode PvPGame)))
 
-(def sample (str "{:date \"Tue Jun 19 12:46:29 EDT 1729\", :board [\\_ \\_ \\_ \\x \\_ \\_ \\o \\x \\_]}\n"
-                 "{:date \"Tue Jun 19 12:46:32 EDT 1729\", :board [\\_ \\_ \\_ \\x \\_ \\_ \\o \\x \\_]}\n"
-                 "{:date \"Tue Jun 19 12:46:35 EDT 1729\", :board [\\_ \\_ \\_ \\x \\_ \\_ \\o \\x \\_]}\n"))
+(def sample (str "{:date \"Tue Jun 19 12:46:29 EDT 1729\", :board [\\_ \\_ \\_ \\x \\_ \\_ \\o \\x \\_] :versus-type :pvp :difficulty nil}\n"
+                 "{:date \"Tue Jun 19 12:46:32 EDT 1729\", :board [\\_ \\_ \\_ \\x \\_ \\_ \\o \\x \\_] :versus-type :pvp :difficulty nil}\n"
+                 "{:date \"Tue Jun 19 12:46:35 EDT 1729\", :board [\\_ \\_ \\_ \\x \\_ \\_ \\o \\x \\_] :versus-type :pvp :difficulty nil}\n"))
 
 (describe "A File Database"
 
   (it "deletes a specific object with a given date from a string"
-    (should= (str "{:date \"Tue Jun 19 12:46:29 EDT 1729\", :board [\\_ \\_ \\_ \\x \\_ \\_ \\o \\x \\_]}\n"
-                  "{:date \"Tue Jun 19 12:46:35 EDT 1729\", :board [\\_ \\_ \\_ \\x \\_ \\_ \\o \\x \\_]}")
+    (should= "{:date \"Tue Jun 19 12:46:29 EDT 1729\", :board [\\_ \\_ \\_ \\x \\_ \\_ \\o \\x \\_], :versus-type :pvp, :difficulty nil}\n{:date \"Tue Jun 19 12:46:35 EDT 1729\", :board [\\_ \\_ \\_ \\x \\_ \\_ \\o \\x \\_], :versus-type :pvp, :difficulty nil}"
              (delete-date sample "Tue Jun 19 12:46:32 EDT 1729")))
 
   (it "fetches all games"
     (let [mock-file (atom {:content sample})]
       (with-redefs [slurp (fn [_] (:content @mock-file))]
-        (should= [{:date "Tue Jun 19 12:46:29 EDT 1729" :board [\_ \_ \_ \x \_ \_ \o \x \_]}
-                  {:date "Tue Jun 19 12:46:32 EDT 1729" :board [\_ \_ \_ \x \_ \_ \o \x \_]}
-                  {:date "Tue Jun 19 12:46:35 EDT 1729" :board [\_ \_ \_ \x \_ \_ \o \x \_]}]
+        (should= [{:date "Tue Jun 19 12:46:29 EDT 1729", :board [\_ \_ \_ \x \_ \_ \o \x \_], :versus-type :pvp, :difficulty nil}
+                  {:date "Tue Jun 19 12:46:32 EDT 1729", :board [\_ \_ \_ \x \_ \_ \o \x \_], :versus-type :pvp, :difficulty nil}
+                  {:date "Tue Jun 19 12:46:35 EDT 1729", :board [\_ \_ \_ \x \_ \_ \o \x \_], :versus-type :pvp, :difficulty nil}]
                  (gs/db-fetch-games {:database :file})))))
 
   (it "initializes the database"
@@ -34,15 +33,17 @@
     (let [mock-file (atom {})]
       (with-redefs [spit (fn [_ data] (swap! mock-file assoc :content data))
                     slurp (fn [_] (:content @mock-file))]
-        (gs/db-update-game {:database :file} "the-date"
-                           (utils/empty-board 3)
-                           (PvPGame. 3 (utils/empty-board 3)))
-        (should= [{:date "the-date", :board [\_ \_ \_ \_ \_ \_ \_ \_ \_], :gamemode {:mode :pvp}}]
+        (gs/db-update-game {:database :file
+                            :board [\_ \_ \_ \_ \_ \_ \_ \_ \_]
+                            :date "the-date"
+                            :versus-type :pvp})
+        (should= [{:database :file :board [\_ \_ \_ \_ \_ \_ \_ \_ \_] :date "the-date" :versus-type :pvp}]
                  (gs/db-fetch-games {:database :file}))
-        (gs/db-update-game {:database :file} "the-date"
-                          [\x \_ \_ \_ \_ \_ \_ \_ \_]
-                          (PvPGame. 3 (utils/empty-board 3)))
-        (should= [{:date "the-date", :board [\x \_ \_ \_ \_ \_ \_ \_ \_], :gamemode {:mode :pvp}}]
+        (gs/db-update-game {:database :file
+                            :board [\x \_ \_ \_ \_ \_ \_ \_ \_]
+                            :date "the-date"
+                            :versus-type :pvp})
+        (should= [{:database :file :board [\x \_ \_ \_ \_ \_ \_ \_ \_] :date "the-date" :versus-type :pvp}]
                  (gs/db-fetch-games {:database :file})))))
 
   (it "deletes a game"
@@ -50,6 +51,6 @@
       (with-redefs [spit (fn [_ data] (swap! mock-file assoc :content data))
                     slurp (fn [_] (:content @mock-file))]
         (gs/db-delete-game {:database :file} "Tue Jun 19 12:46:29 EDT 1729")
-        (should= [{:date "Tue Jun 19 12:46:32 EDT 1729" :board [\_ \_ \_ \x \_ \_ \o \x \_]}
-                  {:date "Tue Jun 19 12:46:35 EDT 1729" :board [\_ \_ \_ \x \_ \_ \o \x \_]}]
+        (should= [{:date "Tue Jun 19 12:46:32 EDT 1729", :board [\_ \_ \_ \x \_ \_ \o \x \_], :versus-type :pvp, :difficulty nil}
+                  {:date "Tue Jun 19 12:46:35 EDT 1729", :board [\_ \_ \_ \x \_ \_ \o \x \_], :versus-type :pvp, :difficulty nil}]
                  (gs/db-fetch-games {:database :file}))))))

@@ -224,7 +224,6 @@
                                      ":dimension 2, "
                                      ":board-size 3, "
                                      ":board [\\x \\x \\x \\o \\o \\_ \\_ \\_ \\_], "
-                                     ":gamemode #tictactoe.game_mode.PvPGame{:size 3, :init-board [\\x \\x \\x \\o \\o \\_ \\_ \\_ \\_]}, "
                                      ":over? true}"))
                                      (.setBody (str html)))]
         (should= res (handle req))))))
