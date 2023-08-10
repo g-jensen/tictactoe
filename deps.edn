@@ -1,5 +1,5 @@
 {
- :paths ["src/clj" "src/cljs" "resources"]
+ :paths ["src/clj" "src/cljs" "src/cljc" "resources"]
  :deps {
         org.clojure/clojure      {:mvn/version "1.11.1"}
         org.clojure/clojurescript {:mvn/version "1.10.764"}
@@ -19,7 +19,7 @@
            :console {:main-opts ["-m" "tictactoe.main" "console"]}
            :quil {:main-opts ["-m" "tictactoe.main" "quil"]}
            :web {:main-opts ["-m" "tictactoe.main" "web"]}
-           :test {:extra-paths ["spec/clj" "spec/cljs"]}
+           :test {:extra-paths ["spec/clj" "spec/cljs" "spec/cljc"]}
            :spec {:main-opts ["-m" "speclj.main" "-c"]}
            :cljs-spec {:main-opts ["-m" "runner.cljs" "auto" "development"]}
            :cljs-build {:main-opts ["-m" "runner.cljs" "once" "production"]}
