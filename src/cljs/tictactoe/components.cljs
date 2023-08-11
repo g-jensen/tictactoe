@@ -65,10 +65,9 @@
   (when (= 3 (:dimension @state))
     (change-state :board (repeat 3 (utils/empty-board 3)))
     (change-state :board-size 3))
-  ;(when ())
-  (change-state :over? false)
-  (if (= "o" (:character @state))
-    (change-state :board (move/play-move (:board @state) (move/get-computer-move (:difficulty @state) (:board @state))))))
+  (if (and (= :pvc (:versus-type @state)) (= "o" (:character @state)))
+    (change-state :board (move/play-move (:board @state) (move/get-computer-move (:difficulty @state) (:board @state)))))
+  (change-state :over? false))
 
 (defn main []
   [:div
