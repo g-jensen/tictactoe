@@ -60,11 +60,14 @@
 
 (defn greater-than-two [n] (> n 2))
 
-(defn- reset-board []
+(defn reset-state []
   (change-state :board (utils/empty-board (:board-size @state)))
   (when (= 3 (:dimension @state))
     (change-state :board (repeat 3 (utils/empty-board 3)))
     (change-state :board-size 3))
+  (when (= :pvp (:versus-type @state))
+    (change-state :difficulty :easy)
+    (change-state :character "x"))
   (if (and (= :pvc (:versus-type @state)) (= "o" (:character @state)))
     (change-state :board (move/play-move (:board @state) (move/get-computer-move (:difficulty @state) (:board @state)))))
   (change-state :over? false))
@@ -72,14 +75,14 @@
 (defn main []
   [:div
    (banner)
-   (menu :dimension ["2" "3"] reset-board)
+   (menu :dimension ["2" "3"] reset-state)
    (if (= 2 (:dimension @state))
-     (counter :board-size greater-than-two reset-board))
-   (menu :versus-type [":pvp" ":pvc"] reset-board)
+     (counter :board-size greater-than-two reset-state))
+   (menu :versus-type [":pvp" ":pvc"] reset-state)
    (if (= :pvc (:versus-type @state))
-     (menu :difficulty [":easy" ":medium" ":hard"] reset-board))
+     (menu :difficulty [":easy" ":medium" ":hard"] reset-state))
    (if (= :pvc (:versus-type @state))
-     (menu :character ["\"x\"" "\"o\""] reset-board))
+     (menu :character ["\"x\"" "\"o\""] reset-state))
    (board)
    (if (:over? @state)
-     [:input {:type "button" :value "Play Again" :on-click reset-board}])])
+     [:input {:type "button" :value "Play Again" :on-click reset-state}])])

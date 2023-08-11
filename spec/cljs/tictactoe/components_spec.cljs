@@ -35,7 +35,34 @@
                       [:option {:value "opt4"} opt4])
              (nth (components/menu :my-menu1 ["opt3" "opt4"] #()) 2)))
 
+  (it "checks if a board-size counter is valid"
+    (should (components/greater-than-two 3))
+    (should-not (components/greater-than-two 2))
+    (should (components/greater-than-two 4)))
+
   (it "has a board"
     (should= 12 (count (components/board)))
     (components/change-state :board (repeat 3 (utils/empty-board 3)))
-    (should= 36 (count (components/board)))))
+    (should= 36 (count (components/board))))
+
+  (it "resets state"
+    (let [init-2d {:state :done :dimension 2 :board-size 3 :board (utils/empty-board 3) :versus-type :pvp :difficulty :easy :character "x" :over? false}
+          init-2d-pvc {:state :done :dimension 2 :board-size 3 :board [\_ \_ \_ \_ \_ \_ \_ \_ \x] :versus-type :pvc :difficulty :hard :character "o" :over? false}
+          init-3d {:state :done :dimension 3 :board-size 3 :board (repeat 3 (utils/empty-board 3)) :versus-type :pvp :difficulty :easy :character "x" :over? false}]
+      (components/reset-state)
+      (should= init-2d @components/state)
+      (components/change-state :board [\x \_ \_ \_ \_ \_ \_ \_ \_])
+      (components/reset-state)
+      (should= init-2d @components/state)
+      (components/change-state :dimension 3)
+      (components/reset-state)
+      (should= init-3d @components/state)
+      (components/change-state :versus-type :pvp)
+      (components/reset-state)
+      (should= init-3d @components/state)
+      (components/change-state :dimension 2)
+      (components/change-state :versus-type :pvc)
+      (components/change-state :character "o")
+      (components/change-state :difficulty :hard)
+      (components/reset-state)
+      (should= init-2d-pvc @components/state))))
