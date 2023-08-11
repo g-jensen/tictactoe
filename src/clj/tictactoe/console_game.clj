@@ -21,18 +21,11 @@
 (defmethod state->str :counter [state]
   (:label (gs/ui-components state)))
 
-(defn- game-over-message [board]
-  (str
-    (if (board-state/win? board)
-      (str (board-state/winner board) " has won!")
-      "tie!")
-    "\nPlay Again:"))
-
 (defmethod state->str :board [state]
   (let [board (:board state)]
     (str (board->str board)
          (if (:over? state)
-           (str "\n" (game-over-message board))
+           (str "\n" (board-state/game-over-message board))
            ""))))
 (defmethod gs/run-tictactoe :console [_]
   (loop [state (gs/next-state {} nil)]

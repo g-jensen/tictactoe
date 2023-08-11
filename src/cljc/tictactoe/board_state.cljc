@@ -25,6 +25,12 @@
 (defn- all-planes [board]
   (concat board (rotated-planes board) (diagonal-planes board)))
 
+(defn game-over-message [board]
+  (str
+    (if (win? board)
+      (str (winner board) " has won!")
+      "tie!")))
+
 (defn rows [board]
   (if (utils/board-3d? board)
     (apply concat (map #(rows %) (all-planes board)))
