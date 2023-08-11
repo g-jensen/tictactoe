@@ -22,6 +22,6 @@
            :test {:extra-paths ["spec/clj" "spec/cljs" "spec/cljc"]}
            :spec {:main-opts ["-m" "speclj.main" "-c"]}
            :cljs-spec {:main-opts ["-m" "runner.cljs" "auto" "development"]}
-           :cljs-build {:main-opts ["-m" "runner.cljs" "once" "production"]}
+           :cljs-build {:main-opts ["-m" "runner.cljs" "auto" "production"]}
            }
  }
